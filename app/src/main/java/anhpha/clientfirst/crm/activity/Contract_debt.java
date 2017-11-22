@@ -99,7 +99,7 @@ public class Contract_debt extends BaseAppCompatActivity implements DatePickerDi
 
             getDebt();
         }
-
+//a
         radioButton1 = (RadioButton) findViewById(R.id.radioButton1);
         radioButton2 = (RadioButton) findViewById(R.id.radioButton2);
         radioButton3 = (RadioButton) findViewById(R.id.radioButton3);
@@ -191,7 +191,7 @@ public class Contract_debt extends BaseAppCompatActivity implements DatePickerDi
                     note.setText(mDebt.getNote());
                 } else {
                     note.setHint("");
-                } 
+                }
                 date.setText(mDebt.getDate_debt());
                 radioButton1.setChecked(false);
                 radioButton2.setChecked(false);

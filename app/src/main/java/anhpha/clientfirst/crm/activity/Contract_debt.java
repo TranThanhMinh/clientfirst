@@ -191,7 +191,7 @@ public class Contract_debt extends BaseAppCompatActivity implements DatePickerDi
                     note.setText(mDebt.getNote());
                 } else {
                     note.setHint("");
-                }
+                } 
                 date.setText(mDebt.getDate_debt());
                 radioButton1.setChecked(false);
                 radioButton2.setChecked(false);

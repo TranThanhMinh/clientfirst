@@ -99,7 +99,7 @@ public class Contract_debt extends BaseAppCompatActivity implements DatePickerDi
 
             getDebt();
         }
-//ab
+
         radioButton1 = (RadioButton) findViewById(R.id.radioButton1);
         radioButton2 = (RadioButton) findViewById(R.id.radioButton2);
         radioButton3 = (RadioButton) findViewById(R.id.radioButton3);

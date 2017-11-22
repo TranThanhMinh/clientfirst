@@ -1,0 +1,1095 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray"
+    tools:context="anhpha.clientfirst.crm.activity.ClientsActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/layout_toolbar1"></include>
+
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/btAdd"
+                android:layout_below="@id/include"
+                android:scrollbars="none">
+
+                <RelativeLayout
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusableInTouchMode="true">
+
+                    <LinearLayout
+                        android:id="@+id/layout_client1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/color1"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:visibility="visible"
+                                android:id="@+id/imCity"
+                                android:layout_width="20dp"
+                                android:layout_height="39.5dp"
+                                android:src="@mipmap/ic_crm_29"
+                                android:layout_marginLeft="25dp"
+                                android:layout_marginTop="6.5dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="20dp">
+
+                            <TextView
+                                android:id="@+id/tvClientName"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:gravity="center_vertical"
+                                android:text="ggg"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvAddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="10dp"
+                                android:text=""
+                                android:textSize="13sp"
+                                android:visibility="gone" />
+                        </LinearLayout>
+
+                        <ImageButton
+                            android:id="@+id/ibArrow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@color/transparent"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/ic_dms_79" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_client"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/layout_client1"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+                        <!--<android.support.v7.widget.SwitchCompat-->
+                        <!--android:id="@+id/switchButton"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_centerInParent="true"-->
+                        <!--android:checked="false"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                        <!--android:text="Switch example"-->
+                        <!--/>-->
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/white"
+                            android:paddingTop="5dp">
+
+                            <EditText
+                                android:id="@+id/etOrderName"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:hint="@string/order_name"
+                                android:visibility="gone" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/etOrderCode"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:focusable="false"
+                                android:hint="@string/order_code" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/tvType"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="50"
+                            android:gravity="right|center_vertical"
+                            android:paddingRight="10dp"
+                            android:text="@string/order_book"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tvOrderCodeParent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="@string/order_code"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tvPrepay"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="@string/order_code"
+                            android:visibility="gone" />
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/etSalesProcess"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:focusable="false"
+                                android:hint="@string/SalesProcess" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/etStatus"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:drawableRight="@mipmap/ic_dms_79"
+                                android:focusable="false"
+                                android:hint="@string/status" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/etSuccessRate"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:focusable="false"
+                                android:hint="@string/SuccessRate"
+                                android:singleLine="true" />
+                        </android.support.design.widget.TextInputLayout>
+
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/etCustomer"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:focusable="false"
+                                android:hint="@string/customer"
+                                android:drawableRight="@mipmap/ic_dms_79"
+                                android:singleLine="true" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/etAddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:focusable="false"
+                                android:hint="@string/address"
+                                android:singleLine="true" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/etContact"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:drawableRight="@mipmap/ic_dms_79"
+                                android:focusable="false"
+                                android:hint="@string/contact1"
+                                android:singleLine="true" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:padding="8dp"
+                                android:text="@string/date_plan_finish" />
+
+                            <TextView
+                                android:id="@+id/tvDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:gravity="center"
+                                android:padding="8dp"
+                                android:text="@string/choose_date" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:background="@color/color" />
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/etStaffincharge"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:focusable="false"
+                                android:hint="@string/Staffincharge"
+                                android:singleLine="true" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/etStaffSupport"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:drawableRight="@mipmap/ic_dms_79"
+                                android:focusable="false"
+                                android:hint="@string/support_personnel"
+                                android:singleLine="true" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@+id/relativeLayout2"
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/note"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:focusable="false"
+
+                                android:focusableInTouchMode="true"
+                                android:hint="@string/note1" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rvActivities"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/input_layout_2"
+                            android:background="@color/gray_dark"
+                            android:padding="5dp">
+
+                            <TextView
+                                android:id="@+id/textView17"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:text="@string/total_order_ii"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView19"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_below="@+id/textView17"
+                                android:padding="5dp"
+                                android:text="@string/contract_discount" />
+
+                            <TextView
+                                android:id="@+id/textView20"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_below="@+id/textView19"
+                                android:padding="5dp"
+                                android:text="@string/the_contact_value"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView24"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_below="@+id/textView20"
+                                android:padding="5dp"
+                                android:text="@string/debted" />
+
+                            <TextView
+                                android:id="@+id/textView25"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_below="@+id/textView24"
+                                android:padding="5dp"
+                                android:text="@string/total_rest_i" />
+
+                            <TextView
+                                android:id="@+id/textView21"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:padding="3dp"
+                                android:text="0"
+                                android:textStyle="bold" />
+
+                            <EditText
+                                android:id="@+id/textView22"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/textView21"
+                                android:layout_toRightOf="@+id/textView19"
+                                android:background="@drawable/border_edit1"
+                                android:focusable="false"
+                                android:gravity="right"
+                                android:inputType="number"
+                                android:padding="5dp"
+                                android:text="0" />
+
+                            <TextView
+                                android:id="@+id/textView23"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/textView22"
+                                android:padding="5dp"
+                                android:text="0"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView26"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/textView23"
+                                android:padding="5dp"
+                                android:text="0"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView27"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/textView26"
+                                android:padding="5dp"
+                                android:text="0"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:background="@color/gray_dark"
+                            android:layout_height="40dp"></LinearLayout>
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/layout_client2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/layout_client"
+                        android:visibility="gone">
+
+                        <RelativeLayout
+                            android:id="@+id/relativeLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/layout_client_parent"
+                            android:background="@color/colorWhite"
+                            android:paddingBottom="20dp">
+
+                            <LinearLayout
+                                android:id="@+id/top1"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/button_height"
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <LinearLayout
+                                    android:id="@+id/left"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvAmountDebt"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="10dp"
+                                        android:gravity="center"
+                                        android:text="0"
+                                        android:textColor="@color/colorApp"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/tvAmountDebt_number"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:text="0"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/tvAmountExpend"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="10dp"
+                                        android:gravity="center"
+                                        android:text="0"
+                                        android:textColor="@color/red"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/tvAmountExpend_number"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:text="0"
+                                        android:textSize="10sp" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/linearLayout1"
+                                android:layout_width="match_parent"
+                                android:layout_height="55dp"
+                                android:layout_below="@+id/top1">
+
+                                <LinearLayout
+                                    android:id="@+id/line1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="16"
+                                    android:orientation="vertical">
+
+                                    <ImageButton
+                                        android:id="@+id/imageButton1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:background="@color/transparent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:scaleType="centerInside"
+                                        android:src="@mipmap/ic_crm_16" />
+
+                                    <TextView
+                                        android:id="@+id/textView1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:text="0" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/line2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="16"
+                                    android:orientation="vertical"
+                                    android:visibility="gone">
+
+                                    <ImageButton
+                                        android:id="@+id/imageButton2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:background="@color/transparent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:scaleType="centerInside"
+                                        android:src="@mipmap/ic_crm_17" />
+
+                                    <TextView
+                                        android:id="@+id/textView2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:text="0" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/line3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="16"
+                                    android:orientation="vertical">
+
+                                    <ImageButton
+                                        android:id="@+id/imageButton3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:background="@color/transparent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:scaleType="centerInside"
+                                        android:src="@mipmap/ic_crm_96" />
+
+                                    <TextView
+                                        android:id="@+id/textView3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:text="0" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/line4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="16"
+                                    android:orientation="vertical">
+
+                                    <ImageButton
+                                        android:id="@+id/imageButton4"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:background="@color/transparent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:scaleType="centerInside"
+                                        android:src="@mipmap/ic_crm_18" />
+
+                                    <TextView
+                                        android:id="@+id/textView4"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:text="0" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/line7"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="16"
+                                    android:orientation="vertical">
+
+                                    <ImageButton
+                                        android:id="@+id/imageButton7"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:background="@color/transparent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:scaleType="centerInside"
+                                        android:src="@mipmap/ic_crm_20" />
+
+                                    <TextView
+                                        android:id="@+id/textView7"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:text="0" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/line5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="16"
+                                    android:orientation="vertical">
+
+                                    <ImageButton
+                                        android:id="@+id/imageButton5"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:background="@color/transparent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:scaleType="centerInside"
+                                        android:src="@mipmap/ic_comment0" />
+
+                                    <TextView
+                                        android:id="@+id/textView5"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:text="0" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/line6"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="16"
+                                    android:orientation="vertical">
+
+                                    <ImageButton
+                                        android:id="@+id/imageButton6"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="30dp"
+                                        android:background="@color/transparent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:scaleType="centerInside"
+                                        android:src="@mipmap/ic_document0" />
+
+                                    <TextView
+                                        android:id="@+id/textView6"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:clickable="false"
+                                        android:gravity="center"
+                                        android:text="0" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/relativeLayout2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/relativeLayout"
+                            android:layout_centerHorizontal="true"
+                            android:orientation="vertical">
+                            <GridLayout
+                                android:id="@+id/view_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="3dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_marginTop="5dp"
+                                android:columnCount="3" />
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rvActivities1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_below="@+id/relativeLayout"
+                                android:background="@color/white"
+                                android:visibility="visible" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:background="@color/colorWhite"></LinearLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentStart="true"
+                        android:background="@color/gray" />
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/input_layout_1"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/textView10"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:text="@string/client_pay"
+                        android:visibility="gone" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/textView10"
+                        android:layout_toEndOf="@+id/textView11"
+                        android:layout_toRightOf="@+id/textView11"
+                        android:background="@color/white"
+                        android:visibility="gone">
+
+                        <EditText
+                            android:id="@+id/etPrepay"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="right"
+                            android:inputType="number"
+                            android:maxLength="15" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/textView13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/input_layout_3"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/textView11"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:text="@string/order_code"
+                        android:visibility="gone" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/textView11"
+                        android:layout_toEndOf="@+id/textView13"
+                        android:layout_toRightOf="@+id/textView13"
+                        android:background="@color/white"
+                        android:visibility="gone">
+
+                        <EditText
+
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="right"
+                            android:maxLength="15" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/input_layout_4"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/textView13"
+                        android:background="@color/white"
+                        android:gravity="center_vertical"
+                        android:padding="8dp"
+                        android:singleLine="true"
+                        android:text="@string/order_code_parent"
+                        android:visibility="gone" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/textView13"
+                        android:layout_toEndOf="@+id/textView14"
+                        android:layout_toRightOf="@+id/textView14"
+                        android:background="@color/white"
+                        android:visibility="gone">
+
+
+                        <EditText
+                            android:id="@+id/etOrderCodeParent"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="right"
+                            android:maxLength="15" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/textView12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/input_layout_4"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/white"
+                        android:padding="8dp"
+                        android:text="@string/order_status"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/textView12"
+                        android:layout_alignTop="@+id/textView12"
+                        android:layout_toEndOf="@+id/textView12"
+                        android:layout_toRightOf="@+id/textView12"
+                        android:background="@color/white"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <Spinner
+                            android:id="@+id/spOrderStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"></Spinner>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvPromotion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="45dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+
+                        android:layout_marginTop="5dp"
+                        android:layout_toLeftOf="@+id/ibPromotion"
+                        android:layout_toStartOf="@+id/ibPromotion"
+                        android:background="@color/white"
+                        android:drawablePadding="2dp"
+                        android:gravity="center_vertical"
+                        android:padding="8dp"
+                        android:text="@string/promotion"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <ImageButton
+                        android:id="@+id/ibPromotion"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+
+                        android:layout_alignTop="@+id/tvPromotion"
+                        android:background="@color/white"
+                        android:padding="8dp"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/ic_dms_51"
+                        android:visibility="gone" />
+
+
+                </RelativeLayout>
+
+            </ScrollView>
+
+            <Button
+                android:id="@+id/btDone"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:background="@color/colorApp"
+                android:text="@string/done_order"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <anhpha.clientfirst.crm.fab.FloatingActionMenu
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        fab:menu_animationDelayPerItem="50"
+        fab:menu_backgroundColor="@android:color/transparent"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_colorNormal="@color/colorApp"
+        fab:menu_colorPressed="@color/colorApp"
+        fab:menu_colorRipple="#99FFFFFF"
+        fab:menu_fab_size="mini"
+        fab:menu_icon="@drawable/fab_add"
+        fab:menu_labels_colorNormal="#FFFFFF"
+        fab:menu_labels_colorPressed="#FFFFFF"
+        fab:menu_labels_colorRipple="@color/colorApp"
+        fab:menu_labels_showShadow="true"
+        fab:menu_labels_singleLine="false"
+        fab:menu_labels_textColor="@color/colorAppDark"
+        fab:menu_labels_textSize="14sp"
+        fab:menu_shadowColor="#66000000"
+        fab:menu_showShadow="true">
+
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item3"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_crm_document2"
+            android:padding="10dp"
+            fab:fab_label="@string/document" />
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item4"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="-32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-32dp"
+            android:padding="15dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_crm_debt2"
+            fab:fab_label="@string/get" />
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item5"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="-32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-32dp"
+
+            android:src="@mipmap/ic_crm_98"
+
+            fab:fab_label="@string/meet" />
+
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item6"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="-32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-32dp"
+
+
+            android:src="@mipmap/ic_crm_87"
+            fab:fab_label="@string/call" />
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item7"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:src="@mipmap/ic_crm_92"
+            fab:fab_label="@string/email" />
+
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item8"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+
+            android:src="@mipmap/ic_crm_comment2"
+            fab:fab_label="@string/note" />
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item9"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="-32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-32dp"
+
+
+            android:src="@mipmap/ic_cost"
+            fab:fab_label="@string/expenditure" />
+    </anhpha.clientfirst.crm.fab.FloatingActionMenu>
+</android.support.design.widget.CoordinatorLayout>

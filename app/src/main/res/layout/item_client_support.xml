@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginTop="15dp"
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Anh phap"
+            android:layout_marginBottom="15dp"
+            android:gravity="center_vertical"/>
+        <ImageView
+            android:id="@+id/imDelete"
+            android:layout_marginTop="6dp"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:padding="3dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/ic_crm_delete"/>
+    </RelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.4dp"
+        android:background="@color/color"/>
+</LinearLayout>

@@ -1,0 +1,1157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_dark"
+    tools:context="anhpha.clientfirst.crm.activity.ClientsActivity">
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/layout_toolbar"></include>
+
+        <anhpha.clientfirst.crm.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/segmented2"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:orientation="horizontal"
+            segmentedgroup:sc_border_width="1dp"
+            segmentedgroup:sc_checked_text_color="@color/colorApp"
+            segmentedgroup:sc_corner_radius="10dp"
+            segmentedgroup:sc_tint_color="@color/white">
+
+            <RadioButton
+                android:id="@+id/button1"
+                style="@style/MyRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detail" />
+
+            <RadioButton
+                android:id="@+id/button2"
+                style="@style/MyRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/activity" />
+        </anhpha.clientfirst.crm.segmented.SegmentedGroup>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/include"
+            android:orientation="vertical"
+            android:scrollbars="none">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/layout_client_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include
+                        android:id="@+id/layout_client"
+                        layout="@layout/layout_client1"></include>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/layout_client_parent"
+                    android:background="@color/gray"
+                    android:paddingBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:gravity="center"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:text="@string/all"
+                        android:textColor="@color/colorApp"
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <TextView
+                        android:id="@+id/tvAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/button_height"
+                        android:layout_above="@+id/linearLayout"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/tvDate"
+                        android:layout_toRightOf="@+id/tvDate"
+                        android:gravity="center|left"
+                        android:text="0"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvAmountExpend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/red"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_below="@+id/tvDate">
+
+                        <LinearLayout
+                            android:id="@+id/line1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="16"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/imageButton1"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:background="@color/transparent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:scaleType="centerInside"
+                                android:src="@mipmap/ic_crm_16" />
+
+                            <TextView
+                                android:id="@+id/textView1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:text="0" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/line2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="16"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <ImageButton
+                                android:id="@+id/imageButton2"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:background="@color/transparent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:scaleType="centerInside"
+                                android:src="@mipmap/ic_crm_17" />
+
+                            <TextView
+                                android:id="@+id/textView2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:text="0" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/line3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="16"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/imageButton3"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:background="@color/transparent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:scaleType="centerInside"
+                                android:src="@mipmap/ic_crm_96" />
+
+                            <TextView
+                                android:id="@+id/textView3"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:text="0" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/line4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="16"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/imageButton4"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:background="@color/transparent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:scaleType="centerInside"
+                                android:src="@mipmap/ic_crm_18" />
+
+                            <TextView
+                                android:id="@+id/textView4"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:text="0" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/line7"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="16"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/imageButton7"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:background="@color/transparent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:scaleType="centerInside"
+                                android:src="@mipmap/ic_crm_20" />
+
+                            <TextView
+                                android:id="@+id/textView7"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:text="0" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/line5"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="16"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/imageButton5"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:background="@color/transparent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:scaleType="centerInside"
+                                android:src="@mipmap/ic_crm_66" />
+
+                            <TextView
+                                android:id="@+id/textView5"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:text="0" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/line6"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="16"
+                            android:orientation="vertical">
+
+                            <ImageButton
+                                android:id="@+id/imageButton6"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:background="@color/transparent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:scaleType="centerInside"
+                                android:src="@mipmap/ic_crm_23" />
+
+                            <TextView
+                                android:id="@+id/textView6"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clickable="false"
+                                android:gravity="center"
+                                android:text="0" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/relativeLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/relativeLayout"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="vertical">
+
+                    <GridLayout
+                        android:id="@+id/view_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:columnCount="3" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rvActivities"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@+id/relativeLayout"
+                        android:background="@color/white"
+                        android:visibility="visible" />
+
+                    <RelativeLayout
+                        android:id="@+id/view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="5dp"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:id="@+id/view1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:visibility="visible">
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etCode"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/company"
+                                    android:visibility="gone">
+
+                                    <requestFocus />
+                                </EditText>
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_13"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etContact_client"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/contact1"
+                                    android:visibility="gone">
+
+                                    <requestFocus />
+                                </EditText>
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_11"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etCompany_partner"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/companyParent"
+                                    android:visibility="gone">
+
+                                    <requestFocus />
+                                </EditText>
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_12"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etCompany_Con"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/ChildCompanies"
+                                    android:visibility="gone">
+
+                                    <requestFocus />
+                                </EditText>
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_14"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etClient_support"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/support_personnel"
+                                    android:visibility="gone">
+
+                                    <requestFocus />
+                                </EditText>
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_16"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etNote"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/note1"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_15"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etPhone"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:drawableRight="@mipmap/ic_crm_87"
+                                    android:focusable="false"
+                                    android:hint="@string/phone"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white"
+                                android:visibility="gone">
+
+                                <EditText
+                                    android:id="@+id/etName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/client_name" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white"
+                                android:visibility="gone">
+
+                                <EditText
+                                    android:id="@+id/etContact"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/contact"
+                                    android:visibility="visible" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white">
+
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_5"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etEmail"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:drawableRight="@mipmap/ic_crm_92"
+                                    android:focusable="false"
+                                    android:hint="@string/email"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_10"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/input_layout_5"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etDateEstablished"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/DateEstablished"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/input_layout_5"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etBirthday"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/birtday"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_17"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etGender"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/gender"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/input_layout_5"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etPassport"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/passport"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/input_layout_5"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etTaxCode"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/tax_code"
+                                    android:inputType="number"
+                                    android:singleLine="true"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_6"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etWeb"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:drawableRight="@mipmap/ic_crm_95"
+                                    android:focusable="false"
+                                    android:hint="@string/website"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_7"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etAddress"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/address1"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/input_layout_e1d22"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etDescription"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/description"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <LinearLayout
+                                android:id="@+id/relManager"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="5dp"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:text="@string/Ownerby"
+                                    android:textColor="@color/color"
+                                    android:visibility="visible" />
+
+                                <TextView
+                                    android:id="@+id/tvManager"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:paddingTop="5dp"
+                                    android:visibility="visible" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/view2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@+id/view1"
+                            android:orientation="vertical"
+                            android:visibility="visible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="1dp"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="5dp">
+
+                                <TextView
+                                    android:id="@+id/textView34"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="50"
+                                    android:text="@string/type_client"
+                                    android:textColor="@color/color" />
+
+                                <TextView
+                                    android:id="@+id/spType"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="50"
+                                    android:paddingTop="5dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="1dp"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="5dp">
+
+                                <TextView
+                                    android:id="@+id/textView35"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="50"
+                                    android:text="@string/group_client"
+                                    android:textColor="@color/color" />
+
+                                <TextView
+                                    android:id="@+id/spGroup"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="50"
+                                    android:paddingTop="5dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="1dp"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="5dp">
+
+                                <TextView
+                                    android:id="@+id/textView36"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="50"
+                                    android:text="@string/status"
+                                    android:textColor="@color/color" />
+
+                                <TextView
+                                    android:id="@+id/spStatus"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="50"
+                                    android:paddingTop="5dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="1dp"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="5dp">
+
+                                <TextView
+                                    android:id="@+id/textView322"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="50"
+                                    android:text="@string/source"
+                                    android:textColor="@color/color" />
+
+                                <TextView
+                                    android:id="@+id/spArea"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="50"
+                                    android:paddingTop="5dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="1dp"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="5dp">
+
+                                <TextView
+                                    android:id="@+id/textView323"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="50"
+                                    android:text="@string/business_type"
+                                    android:textColor="@color/color" />
+
+                                <TextView
+                                    android:id="@+id/spBusinessType"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="50"
+                                    android:paddingTop="5dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layout_marital"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="1dp"
+                                android:background="@color/white"
+                                android:orientation="vertical"
+                                android:paddingBottom="5dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="8dp"
+                                android:paddingTop="5dp">
+
+                                <TextView
+                                    android:id="@+id/textView324"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_weight="50"
+                                    android:text="@string/marital"
+                                    android:textColor="@color/color" />
+
+                                <TextView
+                                    android:id="@+id/spMarital"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="50"
+                                    android:paddingTop="5dp" />
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.4dp"
+                                android:layout_marginBottom="5dp"
+                                android:background="@color/color1" />
+
+                            <android.support.design.widget.TextInputLayout
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etNumberDependent"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/number_dependent"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etIncome"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/income"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/layout_client"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etSalesYear"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/sales"
+                                    android:visibility="gone" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                xmlns:tools="http://schemas.android.com/tools"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@color/gray_dark"
+                                android:visibility="gone">
+
+                                <anhpha.clientfirst.crm.customs.CustomMapView
+                                    android:id="@+id/mapview"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="300dp" />
+
+                            </RelativeLayout>
+
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:background="@color/colorWhite"-->
+                <!--android:layout_height="10dp"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:layout_alignParentStart="true"></LinearLayout>-->
+            </RelativeLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
+    <anhpha.clientfirst.crm.fab.FloatingActionMenu
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        fab:menu_animationDelayPerItem="50"
+        fab:menu_backgroundColor="@android:color/transparent"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_colorNormal="@color/colorApp"
+        fab:menu_colorPressed="@color/colorApp"
+        fab:menu_colorRipple="#99FFFFFF"
+        fab:menu_fab_size="mini"
+        fab:menu_icon="@drawable/fab_add"
+        fab:menu_labels_colorNormal="#FFFFFF"
+        fab:menu_labels_colorPressed="#FFFFFF"
+        fab:menu_labels_colorRipple="@color/colorApp"
+        fab:menu_labels_showShadow="true"
+        fab:menu_labels_singleLine="false"
+        fab:menu_labels_textColor="@color/colorAppDark"
+        fab:menu_labels_textSize="14sp"
+        fab:menu_shadowColor="#66000000"
+        fab:menu_showShadow="true">
+
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item1"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="-32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-32dp"
+            android:padding="15dp"
+
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_crm_88"
+
+            fab:fab_label="@string/order" />
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item2"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:padding="15dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_crm_91"
+
+            fab:fab_label="@string/work" />
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item3"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="-32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-32dp"
+            android:padding="15dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_crm_98"
+
+            fab:fab_label="@string/meet" />
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item9"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="-32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-32dp"
+            android:padding="15dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_cost"
+
+            fab:fab_label="@string/costs" />
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item4"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="-32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-32dp"
+            android:padding="15dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_crm_87"
+            fab:fab_label="@string/call" />
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item5"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="-32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-32dp"
+            android:padding="15dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_crm_92"
+
+            fab:fab_label="@string/email" />
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item6"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="-32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-32dp"
+            android:padding="15dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_crm_90"
+
+            fab:fab_label="@string/event" />
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item7"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="-32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-32dp"
+            android:padding="15dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_crm_34"
+
+            fab:fab_label="@string/label" />
+
+        <anhpha.clientfirst.crm.fab.FloatingActionButton
+            android:id="@+id/menu_item8"
+            style="@style/MenuButtonsSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="-32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="-32dp"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_crm_101"
+
+            fab:fab_label="@string/srtFocus" />
+
+    </anhpha.clientfirst.crm.fab.FloatingActionMenu>
+</android.support.design.widget.CoordinatorLayout>

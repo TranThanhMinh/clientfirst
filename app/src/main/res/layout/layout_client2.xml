@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color1"
+    android:orientation="horizontal">
+    <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_marginTop="6.5dp"
+        android:layout_marginLeft="25dp"
+    android:layout_width="20dp"
+    android:layout_height="20dp"
+
+    android:id="@+id/imCity"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:orientation="vertical"
+        android:paddingRight="20dp">
+        <TextView
+            android:layout_marginTop="9dp"
+            android:id="@+id/tvClientName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textSize="13sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:paddingBottom="10dp"
+            android:textSize="13sp" />
+    </LinearLayout>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/ibArrow"
+        android:background="@color/transparent"
+        android:scaleType="centerInside"
+        android:src="@mipmap/ic_dms_79"
+        android:layout_gravity="center_horizontal" />
+</LinearLayout>

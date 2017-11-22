@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:id="@+id/coordinatorLayout"
+    android:background="@color/gray"
+    tools:context="anhpha.clientfirst.crm.activity.ClientsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/layout_toolbar"></include>
+
+        <anhpha.clientfirst.crm.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/segmented2"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="-5dp"
+            android:layout_marginRight="-5dp"
+            android:background="@color/gray_dark"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:weightSum="100"
+            segmentedgroup:sc_border_width="0dp"
+            segmentedgroup:sc_checked_text_color="@color/white"
+            segmentedgroup:sc_tint_color="@color/dark">
+
+            <RadioButton
+                android:id="@+id/button1"
+                style="@style/MyRadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="50"
+                android:text="@string/detail_information" />
+
+            <RadioButton
+                android:id="@+id/button2"
+                style="@style/MyRadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="50"
+                android:text="@string/detail_information_more" />
+        </anhpha.clientfirst.crm.segmented.SegmentedGroup>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp">
+
+                <include
+                    android:id="@+id/view1"
+                    layout="@layout/layout_client_edit_infomation"></include>
+
+                <include
+                    android:id="@+id/view2"
+
+                    layout="@layout/layout_client_edit_more"></include>
+            </RelativeLayout>
+        </ScrollView>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

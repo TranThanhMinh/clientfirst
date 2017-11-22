@@ -471,7 +471,7 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
             }
         } else {
             for (int i = 0; i < menu.size(); i++) {
-                if (menu.getItem(i).getItemId() == R.id.edit && mClient.is_permission_edit())
+                if (menu.getItem(i).getItemId() == R.id.edit)
                     menu.getItem(i).setVisible(true);
                 if (menu.getItem(i).getItemId() == R.id.calendar)
                     menu.getItem(i).setVisible(false);
@@ -1047,6 +1047,7 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
     @Override
     public void onFailure(Call<MAPIResponse<MActivity>> call, Throwable t) {
         LogUtils.d(TAG, "getUserActivities ", t.toString());
+        Utils.showDialogSuccess(mContext, R.string.srtNoti);
         box.hideAll();
 
     }
@@ -1161,7 +1162,7 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
                     mContext.startActivity(intent);
                 } else {
 
-                }
+                };
                 break;
             case R.id.etCode:
                 if (mClient.getParent_name() != null && mClient.getParent_name().length() > 0) {

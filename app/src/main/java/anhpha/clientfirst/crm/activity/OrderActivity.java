@@ -171,7 +171,7 @@ public class OrderActivity extends BaseAppCompatActivity implements Callback<MAP
             List<String> string = new ArrayList<String>();
             etStaffincharge.setText(client_name);
             object_id = user_id;
-            Log.d("user_id", user_id+"");
+            Log.d("user_id", user_id + "");
             string.add(preferences.getStringValue(Constants.ORDER_STATUS_1, ""));
             ArrayAdapter adapter = new ArrayAdapter<>(this, R.layout.simple_spinner_item, string);
             spOrderStatus.setAdapter(adapter);
@@ -199,7 +199,7 @@ public class OrderActivity extends BaseAppCompatActivity implements Callback<MAP
             idGroup_edit = mOrder.getOrder_contract_status_group_id();
             idByGroup_edit = mOrder.getOrder_contract_status_id();
             object_id = mOrder.getUser_id();
-
+            Rate = mOrder.getPercent_done();
             etSuccessRate.setText(mOrder.getPercent_done() + "%");
             //   etStaffincharge.setText(mOrder.getUser_name());
             mOrder.setDelivery_date(mOrder.getDelivery_date() == null ? "" : mOrder.getDelivery_date());
@@ -474,7 +474,7 @@ public class OrderActivity extends BaseAppCompatActivity implements Callback<MAP
                     mOrder.setNumber_user(0);//so nhan viên hổ trợ
                     mOrder.setOrder_contract_id(id);
                     mOrder.setDelivery_date(date);
-                    mOrder.setAmount_payment(totalAmountContract-Utils.tryParseDouble(textView22.getText().toString().replace(",", "")));
+                    mOrder.setAmount_payment(totalAmountContract - Utils.tryParseDouble(textView22.getText().toString().replace(",", "")));
                     mOrder.setOrder_amount(totalAmountContract);
                     mOrder.setOrder_type_id(type);
                     mOrder.setPartner_id(preferences.getIntValue(Constants.PARTNER_ID, 0));
@@ -519,6 +519,7 @@ public class OrderActivity extends BaseAppCompatActivity implements Callback<MAP
                                         }
                                     }
                                 }
+
                                 @Override
                                 public void onFailure(Call<MAPIResponse<MOrder>> call, Throwable t) {
                                     LogUtils.d(TAG, "getUserActivities ", t.toString());

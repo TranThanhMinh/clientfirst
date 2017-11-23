@@ -391,6 +391,8 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
         tvAmountExpend.setOnClickListener(this);
         etClient_support.setOnClickListener(this);
         tvAmountDebt.setOnClickListener(this);
+        tvAmount.setOnClickListener(this);
+        tvAmountFinish.setOnClickListener(this);
 
         menu_item1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -533,7 +535,7 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
             tvAmountFinish_number.setText(Utils.formatCurrency(mActivity.getOrder_finish_count()) + " " + mContext.getResources().getString(R.string.complete));
             tvAmountDebt_number.setText(Utils.formatCurrency(mActivity.getDebt_count()) + " " + mContext.getResources().getString(R.string.get_free));
 
-            textView1.setText(mActivity.getOrder_count() + "");
+            textView1.setText(mActivity.getOrder_status_count() + "");
             textView2.setText(mActivity.getAdd_client_count() + "");
             textView3.setText(mActivity.getCheckin_count() + "");
             textView4.setText(mActivity.getCall_count() + "");
@@ -1061,6 +1063,11 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
         imageButton5.setImageDrawable(getResources().getDrawable(R.mipmap.ic_crm_66));
         imageButton6.setImageDrawable(getResources().getDrawable(R.mipmap.ic_crm_23));
         imageButton7.setImageDrawable(getResources().getDrawable(R.mipmap.ic_crm_20));
+        tvAmount.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        tvAmountExpend.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        tvAmountFinish.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        tvAmountDebt.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+
         switch (view.getId()) {
             case R.id.line1:
                 if (type != Constants.ACTIVITY_TYPE_ORDER) type = Constants.ACTIVITY_TYPE_ORDER;
@@ -1179,6 +1186,24 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
             case R.id.etClient_support:
                 mContext.startActivity(new Intent(mContext, ActivityClientSupport.class).putExtra("mClient", mClient));
                 break;
+            case R.id.tvAmountFinish:
+                if (type != Constants.AmountFinish) type = Constants.AmountFinish;
+                else type = 0;
+                if (type != Constants.AmountFinish)
+                    tvAmountFinish.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                else tvAmountFinish.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                activityAdapter.setActivityItemList(getActivityItems(mActivityItems));
+                activityAdapter.notifyDataSetChanged();
+                break;
+            case R.id.tvAmount:
+                if (type != Constants.Amount) type = Constants.Amount;
+                else type = 0;
+                if (type != Constants.Amount)
+                    tvAmount.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                else tvAmount.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                activityAdapter.setActivityItemList(getActivityItems(mActivityItems));
+                activityAdapter.notifyDataSetChanged();
+                break;
             default:
                 break;
         }
@@ -1198,7 +1223,7 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
                 break;
             case 2:
                 for (MActivityItem i : mActivityItems) {
-                    if (i.getActivity_type() == 2)
+                    if (i.getActivity_type() == 15)
                         mActivityItems1.add(i);
                 }
                 break;
@@ -1250,6 +1275,20 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
                     if (i.getActivity_type() == 14)
                         mActivityItems1.add(i);
                 }
+                break;
+            case 15:
+                for (MActivityItem i : mActivityItems) {
+                    if (i.getActivity_type() == 15 && i.getOrder_status() == 2)
+                        mActivityItems1.add(i);
+                }
+
+                break;
+            case 16:
+                for (MActivityItem i : mActivityItems) {
+                    if (i.getActivity_type() == 2 )
+                        mActivityItems1.add(i);
+                }
+
                 break;
             default:
                 break;

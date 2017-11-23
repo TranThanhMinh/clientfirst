@@ -811,6 +811,7 @@
     <string name="srtSelectTypeCosts">Choose type expend </string>
     <string name="srtSort">Sort </string>
     <string name="srtFocus">Focus </string>
+    <string name="srtChanged">Not changed when the contract is </string>
     <string name="comment">Comment</string>
     <string name="srtExpense">Expense </string>
     <string name="srtUnknowntime">Unknown time </string>

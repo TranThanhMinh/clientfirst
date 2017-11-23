@@ -33,6 +33,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -247,6 +248,7 @@ public class OrderViewActivity extends BaseAppCompatActivity implements View.OnC
     List<MId> mIds = new ArrayList<>();
     MActivity mActivity = new MActivity();
     private ImageView imCity;
+    int status =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -455,7 +457,7 @@ public class OrderViewActivity extends BaseAppCompatActivity implements View.OnC
                 tvAmountExpend_number.setText(Utils.formatCurrency(mActivity.getExpend_count()) + " chi phi");
                 tvAmountDebt_number.setText(Utils.formatCurrency(mActivity.getDebt_count()) + " thu phi");
 
-                textView1.setText(mActivity.getOrder_count() + "");
+                textView1.setText(mActivity.getOrder_status_count() + "");
                 textView2.setText(mActivity.getAdd_client_count() + "");
                 textView3.setText(mActivity.getCheckin_count() + "");
                 textView4.setText(mActivity.getCall_count() + "");
@@ -510,7 +512,7 @@ public class OrderViewActivity extends BaseAppCompatActivity implements View.OnC
                 break;
             case 2:
                 for (MActivityItem i : mActivityItems) {
-                    if (i.getActivity_type() == 2)
+                    if (i.getActivity_type() == 15)
                         mActivityItems1.add(i);
                 }
                 break;
@@ -620,7 +622,7 @@ public class OrderViewActivity extends BaseAppCompatActivity implements View.OnC
                 }
                 tvClientName.setText(mOrder.getOrder_contract_name());
                 // etOrderName.setText(mOrder.getOrder_contract_name());
-
+                status =mOrder.getOrder_contract_status_type_id();
                 etSalesProcess.setText(mOrder.getOrder_contract_status_group_name());
                 etStatus.setText(mOrder.getOrder_contract_status_name());
                 etStaffincharge.setText(mOrder.getUser_manager_contract_name());
@@ -690,7 +692,7 @@ public class OrderViewActivity extends BaseAppCompatActivity implements View.OnC
                     MContract d = Utils.getPriceContract(pdd, mContext);
                     Log.d("getDiscount_percent", mOrder.getDiscount_percent() + "");
                     prePay = mOrder.getDiscount_contract_price();
-                    totalAmountContract += pdd.getDiscount_price();
+                    totalAmountContract += pdd.getPrice() * pdd.getNumber() - pdd.getDiscount_price();
                 }
                 totalAmountOrder += totalAmountContract;
                 tvPrepay.setText(Utils.formatCurrency((prePay)));
@@ -859,6 +861,8 @@ public class OrderViewActivity extends BaseAppCompatActivity implements View.OnC
         imageButton5.setImageDrawable(getResources().getDrawable(R.mipmap.ic_comment0));
         imageButton6.setImageDrawable(getResources().getDrawable(R.mipmap.ic_document0));
         imageButton7.setImageDrawable(getResources().getDrawable(R.mipmap.ic_crm_20));
+        tvAmountExpend.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        tvAmountDebt.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
         switch (view.getId()) {
             case R.id.line1:
                 if (type != Constants.ACTIVITY_TYPE_ORDER) type = Constants.ACTIVITY_TYPE_ORDER;
@@ -951,8 +955,11 @@ public class OrderViewActivity extends BaseAppCompatActivity implements View.OnC
                 mContext.startActivity(new Intent(mContext, ActivityClientSupport_Contract.class).putExtra("mOrder", mOrder));
                 break;
             case R.id.etStatus:
-                List<OrderContractStatus> orderStatus = new ArrayList<>();
-                mContext.startActivity(new Intent(mContext, ActivitySalesStatus.class).putExtra("idGroup", idGroup).putExtra("lvByGroup", (Serializable) orderStatus).putExtra("SalesProcess", mOrder.getClient_name()).putExtra("contract_order_id", mOrder.getOrder_contract_id()));
+                if(status == 1) {
+                    List<OrderContractStatus> orderStatus = new ArrayList<>();
+                    mContext.startActivity(new Intent(mContext, ActivitySalesStatus.class).putExtra("idGroup", idGroup).putExtra("lvByGroup", (Serializable) orderStatus).putExtra("SalesProcess", mOrder.getClient_name()).putExtra("contract_order_id", mOrder.getOrder_contract_id()));
+                }else Toast.makeText(mContext,getString(R.string.srtChanged)+" "+mOrder.getOrder_contract_status_name(), Toast.LENGTH_SHORT).show();
+
                 break;
             case R.id.etCustomer:
                 MClient mClient = new MClient();

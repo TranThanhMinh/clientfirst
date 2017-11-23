@@ -142,6 +142,8 @@ public class ActivityUserActivity extends BaseAppCompatActivity implements Recyc
         line7.setOnClickListener(this);
         tvAmountExpend.setOnClickListener(this);
         tvAmountDebt.setOnClickListener(this);
+        tvAmount.setOnClickListener(this);
+        tvAmountFinish.setOnClickListener(this);
     }
 
     @Override
@@ -183,7 +185,7 @@ public class ActivityUserActivity extends BaseAppCompatActivity implements Recyc
                 break;
             case 2:
                 for (MActivityItem i : mActivityItems) {
-                    if (i.getActivity_type() == 2)
+                    if (i.getActivity_type() == 15)
                         mActivityItems1.add(i);
                 }
                 break;
@@ -236,6 +238,20 @@ public class ActivityUserActivity extends BaseAppCompatActivity implements Recyc
                 }
 
                 break;
+            case 15:
+                for (MActivityItem i : mActivityItems) {
+                    if (i.getActivity_type() == 15 && i.getOrder_status() == 2)
+                        mActivityItems1.add(i);
+                }
+
+                break;
+            case 16:
+                for (MActivityItem i : mActivityItems) {
+                    if (i.getActivity_type() == 2)
+                        mActivityItems1.add(i);
+                }
+
+                break;
             default:
                 break;
         }
@@ -258,7 +274,7 @@ public class ActivityUserActivity extends BaseAppCompatActivity implements Recyc
 //        tvAmount.setText("$ " + Utils.formatCurrency(mActivity.getSales_amount()));
 //
 //        tvAmountExpend.setText("$ " + Utils.formatCurrency(mActivity.getExpend_amount()));
-        textView1.setText(mActivity.getOrder_count() + "");
+        textView1.setText(mActivity.getOrder_status_count() + "");
         textView2.setText(mActivity.getAdd_client_count() + "");
         textView3.setText(mActivity.getCheckin_count() + "");
         textView4.setText(mActivity.getCall_count() + "");
@@ -291,7 +307,10 @@ public class ActivityUserActivity extends BaseAppCompatActivity implements Recyc
         imageButton4.setImageDrawable(getResources().getDrawable(R.mipmap.ic_crm_18));
         imageButton5.setImageDrawable(getResources().getDrawable(R.mipmap.ic_crm_20));
         imageButton7.setImageDrawable(getResources().getDrawable(R.mipmap.ic_crm_23));
-
+        tvAmount.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        tvAmountExpend.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        tvAmountFinish.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        tvAmountDebt.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
         switch (view.getId()) {
             case R.id.line1:
                 if (type != Constants.ACTIVITY_TYPE_ORDER) type = Constants.ACTIVITY_TYPE_ORDER;
@@ -363,6 +382,24 @@ public class ActivityUserActivity extends BaseAppCompatActivity implements Recyc
                 if (type != Constants.ACTIVITY_TYPE_DEBT)
                     tvAmountDebt.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                 else tvAmountDebt.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                activityAdapter.setActivityItemList(getActivityItems(mActivityItems));
+                activityAdapter.notifyDataSetChanged();
+                break;
+            case R.id.tvAmountFinish:
+                if (type != Constants.AmountFinish) type = Constants.AmountFinish;
+                else type = 0;
+                if (type != Constants.AmountFinish)
+                    tvAmountFinish.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                else tvAmountFinish.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                activityAdapter.setActivityItemList(getActivityItems(mActivityItems));
+                activityAdapter.notifyDataSetChanged();
+                break;
+            case R.id.tvAmount:
+                if (type != Constants.Amount) type = Constants.Amount;
+                else type = 0;
+                if (type != Constants.Amount)
+                    tvAmount.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                else tvAmount.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                 activityAdapter.setActivityItemList(getActivityItems(mActivityItems));
                 activityAdapter.notifyDataSetChanged();
                 break;

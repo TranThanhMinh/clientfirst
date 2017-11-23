@@ -35,34 +35,19 @@ public class adapterOrderView extends RecyclerView.Adapter<adapterOrderView.MyVi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
+
         MContract activityItem = mData.get(position);
-        MContract p = Utils.getPriceContract(activityItem, mContext);
         holder.name.setText(activityItem.getContract_name());
         holder.type.setText(activityItem.getPrice_name().isEmpty()?mContext.getString(R.string.value):activityItem.getPrice_name());
-        holder.tvDiscount.setText(Utils.formatCurrency(activityItem.getDiscount_percent()));
+        holder.tvDiscount.setText(Utils.formatCurrency(activityItem.getDiscount_price()));
         if(!Utils.isEmpty(activityItem.getNote())){
             holder.note.setText(activityItem.getNote());
             holder.note.setVisibility(View.VISIBLE);
         }
-        if (p.getNumber() == 0 && p.getNumber_group()!=0) {
-            holder.number.setText(p.getContract_unit_group_name());
-            holder.total.setText(Utils.formatCurrency(activityItem.getDiscount_price()));
-            holder.price.setText(Utils.formatCurrency(p.getPrice_group()));
 
-        } else if (p.getNumber() != 0 && p.getNumber_group()!=0) {
-            holder.number.setText(p.getContract_unit_group_name() + "\n" + p.getContract_unit_name());
-            holder.total.setText(Utils.formatCurrency(activityItem.getDiscount_price()) + "\n" + Utils.formatCurrency(activityItem.getDiscount_price()));
-            holder.price.setText(Utils.formatCurrency(p.getPrice_group()) + "\n" + Utils.formatCurrency(p.getPrice()));
-        }else if (p.getNumber() != 0 && p.getNumber_group()==0) {
-            holder.number.setText( p.getContract_unit_name());
-            holder.total.setText(Utils.formatCurrency(activityItem.getDiscount_price()));
-            holder.price.setText(Utils.formatCurrency(p.getPrice()));
-
-        }else if (p.getNumber() == 0 && p.getNumber_group()==0) {
-            holder.number.setText("-");
-            holder.total.setText("-");
-            holder.price.setText("-");
-        }
+        holder.number.setText(activityItem.getNumber().toString());
+        holder.total.setText(Utils.formatCurrency(activityItem.getPrice() * activityItem.getNumber() - activityItem.getDiscount_price() ));
+        holder.price.setText(Utils.formatCurrency(activityItem.getPrice() * activityItem.getNumber()));
 
     }
 

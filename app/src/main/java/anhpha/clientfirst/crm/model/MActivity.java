@@ -42,6 +42,16 @@ public class MActivity {
 
     private int order_contract_id;
     private int add_client_count;
+
+    public int getOrder_status_count() {
+        return order_status_count;
+    }
+
+    public void setOrder_status_count(int order_status_count) {
+        this.order_status_count = order_status_count;
+    }
+
+    private int order_status_count;
     private int meeting_count;
     private int work_count;
     private int call_count;

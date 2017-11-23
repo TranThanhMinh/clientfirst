@@ -515,19 +515,18 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginRight="10dp"
                                         android:gravity="center"
-                                        android:text="0"
+                                        android:text="$ 0"
                                         android:textColor="@color/colorApp"
-                                        android:textSize="14sp" />
+                                        android:textSize="16sp" />
 
                                     <TextView
                                         android:id="@+id/tvAmountDebt_number"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
-                                        android:text="0"
+                                        android:text=""
                                         android:textSize="10sp" />
                                 </LinearLayout>
-
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -541,16 +540,16 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginRight="10dp"
                                         android:gravity="center"
-                                        android:text="0"
+                                        android:text="$ 0"
                                         android:textColor="@color/red"
-                                        android:textSize="14sp" />
+                                        android:textSize="16sp" />
 
                                     <TextView
                                         android:id="@+id/tvAmountExpend_number"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:gravity="center"
-                                        android:text="0"
+                                        android:text=""
                                         android:textSize="10sp" />
                                 </LinearLayout>
 

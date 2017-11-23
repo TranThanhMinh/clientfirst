@@ -17,6 +17,8 @@ public class Constants {
     public static final int ACTIVITY_TYPE_EMAIL = 7;
     public static final int ACTIVITY_TYPE_EXPEND = 11;
     public static final int ACTIVITY_TYPE_DEBT = 14;
+    public static final int AmountFinish = 15;
+    public static final int Amount = 16;
 
 
     public static final int PICK_FROM_CAMERA = 9;

@@ -14,6 +14,16 @@ public class MOrder implements Serializable {
     public int order_contract_id ;
     public String note ;
     public int user_id ;
+
+    public int getOrder_contract_status_type_id() {
+        return order_contract_status_type_id;
+    }
+
+    public void setOrder_contract_status_type_id(int order_contract_status_type_id) {
+        this.order_contract_status_type_id = order_contract_status_type_id;
+    }
+
+    public int order_contract_status_type_id ;
     public boolean isCheck() {
         return check;
     }

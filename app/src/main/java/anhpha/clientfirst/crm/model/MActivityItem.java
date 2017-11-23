@@ -126,6 +126,16 @@ public class MActivityItem implements Serializable {
     }
 
     private int user_call_id;
+
+    public int getOrder_status() {
+        return order_status;
+    }
+
+    public void setOrder_status(int order_status) {
+        this.order_status = order_status;
+    }
+
+    private int order_status;
     private int inventory_contract_client_id;
     private int user_checkin_id;
     private int user_email_id;

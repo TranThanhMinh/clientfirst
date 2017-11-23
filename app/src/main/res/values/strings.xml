@@ -826,6 +826,7 @@
     <string name="srtFrom">Đến </string>
     <string name="srtSort">Sắp xếp </string>
     <string name="srtFocus">Trọng tâm </string>
+    <string name="srtChanged">Không được thay đổi khi hợp đồng đã </string>
     <string name="srtExpense">Chi </string>
     <string name="srtPersonnel">Nhân viên: </string>
     <string name="srtStaus">Trạng thái: </string>

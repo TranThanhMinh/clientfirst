@@ -258,8 +258,8 @@ public class ContractsActivity extends BaseAppCompatActivity implements Recycler
                 activityAdapter.getItem(position).setNumber(unit_1);
                 activityAdapter.getItem(position).setPrice(unit_2);
                 activityAdapter.getItem(position).setNote(snote);
-                activityAdapter.getItem(position).setDiscount_percent(unit_3);
-                activityAdapter.getItem(position).setDiscount_price(totalMoney1);
+                activityAdapter.getItem(position).setDiscount_percent(totalMoney1);
+                activityAdapter.getItem(position).setDiscount_price(unit_3);
                 activityAdapter.getItem(position).setDiscount_type(1);
                 activityAdapter.notifyDataSetChanged();
 

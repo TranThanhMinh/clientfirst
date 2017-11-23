@@ -87,15 +87,6 @@
                     android:padding="1dp"
                     android:text="@string/unit_price" />
 
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/user"
-                    android:layout_weight="20"
-                    android:gravity="center_vertical|left"
-                    android:padding="1dp"
-                    android:text="@string/total" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -104,6 +95,15 @@
                     android:gravity="center_vertical|left"
                     android:padding="1dp"
                     android:text="@string/Discount" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/user"
+                    android:layout_weight="20"
+                    android:gravity="center_vertical|left"
+                    android:padding="1dp"
+                    android:text="@string/total" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -167,17 +167,6 @@
                     android:paddingLeft="1dp"
                     android:text="@string/unit_price" />
 
-
-                <TextView
-                    android:id="@+id/total"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/user"
-                    android:layout_weight="20"
-                    android:gravity="right|center_vertical"
-                    android:maxLines="1"
-                    android:paddingLeft="1dp"
-                    android:text="@string/total" />
                 <TextView
                     android:id="@+id/tvDiscount"
                     android:layout_width="match_parent"
@@ -190,7 +179,18 @@
                     android:maxLines="2"
                     android:padding="1dp"
                     android:text=""
-                   />
+                    />
+                <TextView
+                    android:id="@+id/total"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/user"
+                    android:layout_weight="20"
+                    android:gravity="right|center_vertical"
+                    android:maxLines="1"
+                    android:paddingLeft="1dp"
+                    android:text="@string/total" />
+
                 <TextView
                     android:id="@+id/note"
                     android:layout_width="match_parent"

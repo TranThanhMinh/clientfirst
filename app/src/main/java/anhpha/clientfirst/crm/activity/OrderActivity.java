@@ -140,6 +140,7 @@ public class OrderActivity extends BaseAppCompatActivity implements Callback<MAP
     private String SalesProcess;
     private String client_name;
     private int user_id;
+    private int status = 1;
 
 
     @Override
@@ -175,6 +176,7 @@ public class OrderActivity extends BaseAppCompatActivity implements Callback<MAP
             string.add(preferences.getStringValue(Constants.ORDER_STATUS_1, ""));
             ArrayAdapter adapter = new ArrayAdapter<>(this, R.layout.simple_spinner_item, string);
             spOrderStatus.setAdapter(adapter);
+            status = 1;
         } else {
 //            mOrder.setOrder_contract_name(etOrderName.getText().toString());//name contract
 //            mOrder.setOrder_contract_status_group_id(idGroup);//quy trinh
@@ -200,6 +202,8 @@ public class OrderActivity extends BaseAppCompatActivity implements Callback<MAP
             idByGroup_edit = mOrder.getOrder_contract_status_id();
             object_id = mOrder.getUser_id();
             Rate = mOrder.getPercent_done();
+            status = mOrder.getOrder_contract_status_type_id();
+            Log.d("status",status+"");
             etSuccessRate.setText(mOrder.getPercent_done() + "%");
             //   etStaffincharge.setText(mOrder.getUser_name());
             mOrder.setDelivery_date(mOrder.getDelivery_date() == null ? "" : mOrder.getDelivery_date());
@@ -622,7 +626,11 @@ public class OrderActivity extends BaseAppCompatActivity implements Callback<MAP
                 if (idGroup == 0)
                     Toast.makeText(mContext, R.string.sales_proces, Toast.LENGTH_SHORT).show();
                 else {
-                    startActivityForResult(new Intent(mContext, ActivitySalesStatus.class).putExtra("idGroup", idGroup).putExtra("lvByGroup", (Serializable) orderStatus).putExtra("SalesProcess", SalesProcess).putExtra("contract_order_id", 1), Constants.RESULT_USER);
+                    if (status == 1)
+                        startActivityForResult(new Intent(mContext, ActivitySalesStatus.class).putExtra("idGroup", idGroup).putExtra("lvByGroup", (Serializable) orderStatus).putExtra("SalesProcess", SalesProcess).putExtra("contract_order_id", 1), Constants.RESULT_USER);
+                    else
+                        Toast.makeText(mContext, getString(R.string.srtChanged) + " " + mOrder.getOrder_contract_status_name(), Toast.LENGTH_SHORT).show();
+
                 }
                 break;
             case R.id.tvDate:
@@ -670,7 +678,8 @@ public class OrderActivity extends BaseAppCompatActivity implements Callback<MAP
             MContract d = Utils.getPriceContract(pdd, mContext);
             Log.d("totalMoney", pdd.getDiscount_price() + "");
             Log.d("percent", pdd.getDiscount_type() + "");
-            totalAmountContract += pdd.getDiscount_price();
+            totalAmountContract += pdd.getPrice() * pdd.getNumber() - pdd.getDiscount_price();
+            ;
             prePay = mOrder.getDiscount_contract_price();
 
         }
@@ -817,8 +826,8 @@ public class OrderActivity extends BaseAppCompatActivity implements Callback<MAP
                         orderAdapter.getItem(position).setNumber(unit_1);
                         orderAdapter.getItem(position).setPrice(unit_2);
                         orderAdapter.getItem(position).setNote(snote);
-                        orderAdapter.getItem(position).setDiscount_percent(unit_3);
-                        orderAdapter.getItem(position).setDiscount_price(totalMoney1);
+                        orderAdapter.getItem(position).setDiscount_percent(totalMoney1);
+                        orderAdapter.getItem(position).setDiscount_price(unit_3);
                         orderAdapter.getItem(position).setDiscount_type(1);
                         //  orderAdapter.notifyDataSetChanged();
                         rvActivities.setAdapter(orderAdapter);
@@ -834,7 +843,7 @@ public class OrderActivity extends BaseAppCompatActivity implements Callback<MAP
                 total = (TextView) dialogView.findViewById(R.id.total);
                 etDiscount = (EditText) dialogView.findViewById(R.id.etDiscount);
                 totalMoney = (TextView) dialogView.findViewById(R.id.totalMoney);
-                prePayDiscount = mOrder.getOrder_detail_contracts().get(position).getDiscount_percent();
+                prePayDiscount = mOrder.getOrder_detail_contracts().get(position).getDiscount_price();
 
 
                 value.addTextChangedListener(new TextWatcher() {

@@ -69,17 +69,18 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.MyView
         }else holder.client_name.setText(activityItem.getClient_name());
         holder.user_name.setText(activityItem.getUser_name());
         holder.time.setText(Utils.formatTime(activityItem.getActivity_date()));
-        holder.imageButton.setPadding(12,12,12,12);
+        holder.imageButton.setPadding(15,15,15,15);
         switch (activityItem.getActivity_type()) {
             case 1:
                 holder.imageButton.setImageResource(R.mipmap.ic_crm_99);
                 break;
             case 2:
-                holder.imageButton.setPadding(12,12,12,12);
+                holder.imageButton.setPadding(15,15,15,15);
                 holder.imageButton.setImageResource(R.mipmap.ic_crm_29);
                 holder.content_activity.setText(Utils.formatCurrency(activityItem.getActivity_amount()));
                 break;
             case 3:
+                holder.imageButton.setPadding(15,15,15,15);
                 holder.imageButton.setImageResource(R.mipmap.ic_crm_28);
                 break;
             case 9:
@@ -87,21 +88,21 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.MyView
                 holder.content_activity.setText(activityItem.getActivity_content());
                 break;
             case 5:
-
+                holder.imageButton.setPadding(15,15,15,15);
                 holder.imageButton.setImageResource(R.mipmap.ic_crm_26);
                 // holder.content_activity.setText(activityItem.getActivity_phone());
                 holder.content_activity.setText("");
                 break;
             case 6:
-                holder.imageButton.setPadding(12,12,12,12);
+                holder.imageButton.setPadding(15,15,15,15);
                 holder.imageButton.setImageResource(R.mipmap.ic_crm_32);
                 break;
             case 7:
-                holder.imageButton.setPadding(12,12,12,12);
+                holder.imageButton.setPadding(15,15,15,15);
                 holder.imageButton.setImageResource(R.mipmap.ic_crm_58);
                 break;
             case 10:
-                holder.imageButton.setPadding(12,12,12,12);
+                holder.imageButton.setPadding(15,15,15,15);
                 holder.imageButton.setImageResource(R.mipmap.ic_crm_104);
                 if (activityItem.getFocus_status_id() == 1) {
                     if (activityItem.getActivity_content() != null && activityItem.getActivity_content().length() > 0) {
@@ -143,7 +144,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.MyView
                 holder.imageButton.setImageResource(R.mipmap.ic_crm_document2);
                 break;
             case 15:
-                holder.imageButton.setPadding(12,12,12,12);
+                holder.imageButton.setPadding(15,15,15,15);
                 holder.imageButton.setImageResource(R.mipmap.ic_crm_29);
                 holder.content_activity.setText(activityItem.getOrder_contract_status_name());
                 break;

@@ -571,6 +571,13 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan">
         </activity>
+        <activity
+            android:name=".activity.ClientExistContractActivity"
+            android:label="@string/email"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
     </application>
 
 </manifest>

@@ -127,7 +127,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="10dp"
                                 android:text="$ 0"
-                                android:textColor="@color/colorApp"
+                                android:textColor="@color/colorRed"
                                 android:textSize="16sp"
                                 />
                             <TextView
@@ -189,7 +189,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="10dp"
                                 android:text="$ 0"
-                                android:textColor="@color/colorRed"
+                                android:textColor="@color/colorApp"
                                 android:textSize="16sp"
                                 />
                             <TextView
@@ -428,6 +428,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="5dp"
+                        android:background="@color/colorWhite"
                         android:visibility="gone">
 
                         <LinearLayout
@@ -439,6 +440,7 @@
 
                             <android.support.design.widget.TextInputLayout
                                 android:id="@+id/input_layout_1"
+
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/white">
@@ -457,11 +459,13 @@
 
                             <android.support.design.widget.TextInputLayout
                                 android:id="@+id/input_layout_13"
+
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/white">
 
                                 <EditText
+
                                     android:id="@+id/etContact_client"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -786,7 +790,7 @@
                                 android:paddingBottom="5dp"
                                 android:paddingLeft="4dp"
                                 android:paddingRight="8dp"
-                                android:paddingTop="5dp"
+                                android:paddingTop="-5dp"
                                 android:visibility="gone">
 
                                 <TextView
@@ -801,7 +805,7 @@
                                     android:id="@+id/tvManager"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:paddingTop="5dp"
+                                    android:paddingTop="3dp"
                                     android:visibility="visible" />
                             </LinearLayout>
                         </LinearLayout>
@@ -813,17 +817,22 @@
                             android:layout_below="@+id/view1"
                             android:orientation="vertical"
                             android:visibility="visible">
-
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/dark_light"></View>
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="1dp"
+
                                 android:background="@color/white"
                                 android:orientation="vertical"
                                 android:paddingBottom="5dp"
                                 android:paddingLeft="4dp"
                                 android:paddingRight="8dp"
-                                android:paddingTop="5dp">
+                                android:paddingTop="4dp">
 
                                 <TextView
                                     android:id="@+id/textView34"
@@ -839,19 +848,24 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="50"
-                                    android:paddingTop="5dp" />
+                                    android:paddingTop="7dp" />
                             </LinearLayout>
-
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/dark_light"></View>
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="1dp"
+
                                 android:background="@color/white"
                                 android:orientation="vertical"
                                 android:paddingBottom="5dp"
                                 android:paddingLeft="4dp"
                                 android:paddingRight="8dp"
-                                android:paddingTop="5dp">
+                                android:paddingTop="4dp">
 
                                 <TextView
                                     android:id="@+id/textView35"
@@ -867,19 +881,24 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="50"
-                                    android:paddingTop="5dp" />
+                                    android:paddingTop="7dp" />
                             </LinearLayout>
-
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/dark_light"></View>
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="1dp"
+
                                 android:background="@color/white"
                                 android:orientation="vertical"
                                 android:paddingBottom="5dp"
                                 android:paddingLeft="4dp"
                                 android:paddingRight="8dp"
-                                android:paddingTop="5dp">
+                                android:paddingTop="4dp">
 
                                 <TextView
                                     android:id="@+id/textView36"
@@ -895,19 +914,24 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="50"
-                                    android:paddingTop="5dp" />
+                                    android:paddingTop="7dp" />
                             </LinearLayout>
-
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/dark_light"></View>
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_marginTop="1dp"
+
                                 android:background="@color/white"
                                 android:orientation="vertical"
                                 android:paddingBottom="5dp"
                                 android:paddingLeft="4dp"
                                 android:paddingRight="8dp"
-                                android:paddingTop="5dp">
+                                android:paddingTop="4dp">
 
                                 <TextView
                                     android:id="@+id/textView322"
@@ -923,19 +947,24 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="50"
-                                    android:paddingTop="5dp" />
+                                    android:paddingTop="7dp" />
                             </LinearLayout>
-
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/dark_light"></View>
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_marginTop="1dp"
+
                                 android:background="@color/white"
                                 android:orientation="vertical"
                                 android:paddingBottom="5dp"
                                 android:paddingLeft="4dp"
                                 android:paddingRight="8dp"
-                                android:paddingTop="5dp">
+                                android:paddingTop="4dp">
 
                                 <TextView
                                     android:id="@+id/textView323"
@@ -951,20 +980,25 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="50"
-                                    android:paddingTop="5dp" />
+                                    android:paddingTop="7dp" />
                             </LinearLayout>
-
+                            <View
+                                android:id="@+id/view11"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:background="@color/dark_light"></View>
                             <LinearLayout
                                 android:id="@+id/layout_marital"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_marginTop="1dp"
                                 android:background="@color/white"
                                 android:orientation="vertical"
                                 android:paddingBottom="5dp"
                                 android:paddingLeft="4dp"
                                 android:paddingRight="8dp"
-                                android:paddingTop="5dp">
+                                android:paddingTop="4dp">
 
                                 <TextView
                                     android:id="@+id/textView324"
@@ -974,20 +1008,22 @@
                                     android:layout_weight="50"
                                     android:text="@string/marital"
                                     android:textColor="@color/color" />
-
                                 <TextView
                                     android:id="@+id/spMarital"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="50"
-                                    android:paddingTop="5dp" />
+                                    android:paddingTop="7dp" />
                             </LinearLayout>
 
                             <View
                                 android:layout_width="match_parent"
-                                android:layout_height="0.4dp"
+                                android:layout_height="1dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
                                 android:layout_marginBottom="5dp"
-                                android:background="@color/color1" />
+                                android:background="@color/dark_light"></View>
+
 
                             <android.support.design.widget.TextInputLayout
 
@@ -1030,6 +1066,7 @@
                                 android:layout_alignParentEnd="true"
                                 android:layout_alignParentRight="true"
                                 android:layout_below="@+id/layout_client"
+                                android:paddingTop="5dp"
                                 android:background="@color/white">
 
                                 <EditText

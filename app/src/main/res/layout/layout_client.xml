@@ -49,6 +49,6 @@
         android:id="@+id/ibArrow"
         android:background="@color/transparent"
         android:scaleType="centerInside"
-        android:src="@mipmap/ic_dms_79"
         android:layout_gravity="center_horizontal" />
+    <!--android:src="@mipmap/ic_dms_79"-->
 </LinearLayout>

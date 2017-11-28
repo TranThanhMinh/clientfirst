@@ -76,7 +76,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Administrator on 9/5/2017.
  */
 
-public class AddCostsContractActivity extends BaseAppCompatActivity implements View.OnClickListener, adapter_cost.Click, adapter_photo_expend.funcDelete_lvImage,DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class AddCostsContractActivity extends BaseAppCompatActivity implements View.OnClickListener, adapter_cost.Click, adapter_photo_expend.funcDelete_lvImage, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     private EditText tvCosts, tvNote;
     private Toolbar toolbar;
     private ImageView imSelect_upload_photo;
@@ -92,7 +92,7 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
     private double prePay;
     private List<Photo> lvImage = new ArrayList<>();
     private boolean result;
-    private TextView tvName, tvAddress;
+    private TextView tvName, tvAddress, tvImage;
     EditText tvDate;
     private int add;
     private Expend expend;
@@ -110,31 +110,11 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
         realOff = (RelativeLayout) findViewById(R.id.realOff);
         lvPhoto = (RecyclerView) findViewById(R.id.lvPhoto);
         tvName = (TextView) findViewById(R.id.tvName);
+        tvImage = (TextView) findViewById(R.id.tvImage);
         tvDate = (EditText) findViewById(R.id.tvDate);
         realOff.setVisibility(View.GONE);
-        tvDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
 
-                Year = calendar.get(Calendar.YEAR);
-                Month = calendar.get(Calendar.MONTH);
-                Day = calendar.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
-                        AddCostsContractActivity.this, Year, Month, Day);
-                datePickerDialog.setThemeDark(false);
-
-                datePickerDialog.showYearPickerFirst(false);
-
-                datePickerDialog.setAccentColor(getResources().getColor(R.color.colorApp));
-                datePickerDialog.setCancelText(getString(R.string.no));
-                datePickerDialog.setOkText(getString(R.string.yes));
-                datePickerDialog.setTitle(getString(R.string.choose_date));
-                datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
-            }
-        });
-     //   tvAddress = (TextView) findViewById(R.id.tvAddress);
+        //   tvAddress = (TextView) findViewById(R.id.tvAddress);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         lvCost.setHasFixedSize(true);
@@ -150,7 +130,7 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
         add = (int) intent.getSerializableExtra("mAdd");
         mActivityItem = (MActivityItem) intent.getSerializableExtra("mExpend");
         tvName.setText(mClient.getOrder_contract_name());
-       // tvAddress.setText(mClient.getAddress());
+        // tvAddress.setText(mClient.getAddress());
         imSelect_upload_photo = (ImageView) findViewById(R.id.imSelect_upload_photo);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -196,12 +176,35 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
             getExpend();
             imSelect_upload_photo.setVisibility(View.GONE);
 
+
         } else {
             Calendar c = Calendar.getInstance();
             SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
             String formattedDate = df.format(c.getTime());
             tvDate.setText(formattedDate);
             getCost();
+            tvDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Calendar calendar = Calendar.getInstance();
+
+                    Year = calendar.get(Calendar.YEAR);
+                    Month = calendar.get(Calendar.MONTH);
+                    Day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                    DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
+                            AddCostsContractActivity.this, Year, Month, Day);
+                    datePickerDialog.setThemeDark(false);
+
+                    datePickerDialog.showYearPickerFirst(false);
+
+                    datePickerDialog.setAccentColor(getResources().getColor(R.color.colorApp));
+                    datePickerDialog.setCancelText(getString(R.string.no));
+                    datePickerDialog.setOkText(getString(R.string.yes));
+                    datePickerDialog.setTitle(getString(R.string.choose_date));
+                    datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
+                }
+            });
         }
     }
 
@@ -242,10 +245,19 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
                 } else {
                     tvNote.setHint("");
                 }
-                tvDate.setText(Utils.formatTime(expend.getExpendDate()));
+                tvDate.setText(expend.getExpendDate());
+                tvDate.setFocusable(false);
                 lvImage = expend.getPhotos();
                 listExpend.add(expend);
-                getLoad_photo();
+                if (lvImage != null && lvImage.size() > 0) {
+                    lvPhoto.setVisibility(View.VISIBLE);
+                    tvImage.setVisibility(View.VISIBLE);
+                    getLoad_photo();
+                } else {
+                    lvPhoto.setVisibility(View.GONE);
+                    tvImage.setVisibility(View.GONE);
+                }
+
                 adapter_expend adapter = new adapter_expend(AddCostsContractActivity.this, listExpend);
                 lvCost.setAdapter(adapter);
             }
@@ -404,8 +416,11 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
     }
 
     public void getLoad_photo() {
+
         adapter_photo_expend adapter = new adapter_photo_expend(this, lvImage, this);
         lvPhoto.setAdapter(adapter);
+
+
     }
 
     //upload photo đệ quy
@@ -558,6 +573,6 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
         tvDate.setText((Month) + "/" + Day + "/" + Year + " " + hourOfDay + ":" + minute);
-       // date.setText(tvDate.getText().toString());
+        // date.setText(tvDate.getText().toString());
     }
 }

@@ -59,7 +59,8 @@ public class CallContractActivity extends BaseAppCompatActivity implements Callb
     CoordinatorLayout coordinatorLayout;
     @Bind(R.id.lvTracking)
     RecyclerView lvTracking;
-
+    @Bind(R.id.tvShow)
+    TextView tvShow;
     private List<Tracking_value_defaults> listTracking;
     private List<Tracking_value_defaults> listTracking_userCall = new ArrayList<>();
     MCall mCall = new MCall();
@@ -96,24 +97,33 @@ public class CallContractActivity extends BaseAppCompatActivity implements Callb
 //        }
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
                 .switchButton);
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b == true) {
-                    display = 0;
-                    //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
-                } else {
-                    //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
-                    display = 1;
-                }
-            }
-        });
+
         retrofit = getConnect();
         if (mCall == null) {
+            tvShow.setVisibility(View.GONE);
             mCall = new MCall();
             getTracking_value_default();
+            switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b == true) {
+                        display = 0;
+                        //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
+                        display = 1;
+                    }
+                }
+            });
         }
         if (mCall.getCall_user_id() > 0) {
+            tvShow.setVisibility(View.VISIBLE);
+            tvShow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
             etContent.setText(mCall.getContent_call());
             if (mCall.getDisplay_type() == 0)
                 switchCompat.setChecked(true);

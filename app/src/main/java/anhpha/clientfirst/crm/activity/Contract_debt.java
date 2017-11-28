@@ -95,8 +95,29 @@ public class Contract_debt extends BaseAppCompatActivity implements DatePickerDi
             SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
             String formattedDate = df.format(c.getTime());
             date.setText(formattedDate);
-        } else {
+            date.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Calendar calendar = Calendar.getInstance();
 
+                    Year = calendar.get(Calendar.YEAR);
+                    Month = calendar.get(Calendar.MONTH);
+                    Day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                    DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
+                            Contract_debt.this, Year, Month, Day);
+                    datePickerDialog.setThemeDark(false);
+
+                    datePickerDialog.showYearPickerFirst(false);
+
+                    datePickerDialog.setAccentColor(getResources().getColor(R.color.colorApp));
+                    datePickerDialog.setCancelText(getString(R.string.no));
+                    datePickerDialog.setOkText(getString(R.string.yes));
+                    datePickerDialog.setTitle(getString(R.string.choose_date));
+                    datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
+                }
+            });
+        } else {
             getDebt();
         }
 
@@ -148,28 +169,7 @@ public class Contract_debt extends BaseAppCompatActivity implements DatePickerDi
 
             }
         });
-        date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
 
-                Year = calendar.get(Calendar.YEAR);
-                Month = calendar.get(Calendar.MONTH);
-                Day = calendar.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
-                        Contract_debt.this, Year, Month, Day);
-                datePickerDialog.setThemeDark(false);
-
-                datePickerDialog.showYearPickerFirst(false);
-
-                datePickerDialog.setAccentColor(getResources().getColor(R.color.colorApp));
-                datePickerDialog.setCancelText(getString(R.string.no));
-                datePickerDialog.setOkText(getString(R.string.yes));
-                datePickerDialog.setTitle(getString(R.string.choose_date));
-                datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
-            }
-        });
 
     }
 
@@ -193,15 +193,24 @@ public class Contract_debt extends BaseAppCompatActivity implements DatePickerDi
                     note.setHint("");
                 }
                 date.setText(mDebt.getDate_debt());
+                date.setFocusable(false);
                 radioButton1.setChecked(false);
                 radioButton2.setChecked(false);
                 radioButton3.setChecked(false);
+
                 if (mDebt.getDebt_type_id() == 1) {
                     radioButton1.setChecked(true);
+                    radioButton2.setVisibility(View.GONE);
+                    radioButton3.setVisibility(View.GONE);
+
                 } else if (mDebt.getDebt_type_id() == 2) {
                     radioButton2.setChecked(true);
+                    radioButton1.setVisibility(View.GONE);
+                    radioButton3.setVisibility(View.GONE);
                 } else if (mDebt.getDebt_type_id() == 3) {
                     radioButton3.setChecked(true);
+                    radioButton1.setVisibility(View.GONE);
+                    radioButton2.setVisibility(View.GONE);
                 }
 
 

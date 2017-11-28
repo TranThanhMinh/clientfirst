@@ -174,7 +174,8 @@ public class EditClientActivity extends BaseAppCompatActivity implements Compoun
     GoogleMap map;
     Preferences preferences;
     MClient mClient;
-
+    @Bind(R.id.view)
+    View view;
     private List<MProvince> mProvinces = new ArrayList<>();
     private List<MDistrict> mDistricts = new ArrayList<>();
     private List<MWard> mWards = new ArrayList<>();
@@ -309,9 +310,11 @@ public class EditClientActivity extends BaseAppCompatActivity implements Compoun
                 findViewById(R.id.input_layout_2).setVisibility(View.GONE);
                 findViewById(R.id.input_layout_12).setVisibility(View.GONE);
                 findViewById(R.id.input_layout_10).setVisibility(View.GONE);
+                view.setVisibility(View.GONE);
                 findViewById(R.id.input_layout_15).setVisibility(View.GONE);
                 actionBar.setTitle(R.string.title_activity_client_edit1);
                 tvBirthday.setText(R.string.DateEstablished);
+
 
             }
         } else {
@@ -331,6 +334,7 @@ public class EditClientActivity extends BaseAppCompatActivity implements Compoun
                 findViewById(R.id.input_layout_2).setVisibility(View.GONE);
                 findViewById(R.id.input_layout_12).setVisibility(View.GONE);
                 findViewById(R.id.input_layout_15).setVisibility(View.GONE);
+                view.setVisibility(View.GONE);
                 tvBirthday.setText(R.string.DateEstablished);
             }
             if (client_structure_id == 1)
@@ -360,6 +364,8 @@ public class EditClientActivity extends BaseAppCompatActivity implements Compoun
 //        });
 
         //    rvActivities.setAdapter(photosAdapter);
+
+
         GetRetrofit().create(ServiceAPI.class)
                 .getClientAreas(preferences.getStringValue(Constants.TOKEN, "")
                         , preferences.getIntValue(Constants.USER_ID, 0)
@@ -369,18 +375,27 @@ public class EditClientActivity extends BaseAppCompatActivity implements Compoun
                     @Override
                     public void onResponse(Call<MAPIResponse<List<MClientArea>>> call, Response<MAPIResponse<List<MClientArea>>> response) {
                         TokenUtils.checkToken(mContext, response.body().getErrors());
+                        mClientAreas =new ArrayList<>();
                         mClientAreas = response.body().getResult();
-                        ArrayAdapter adapter = new ArrayAdapter<>(mContext, R.layout.simple_spinner_item, mClientAreas);
-                        spArea.setAdapter(adapter);
-                        int i = 0;
-                        for (MClientArea mClientArea : mClientAreas) {
-                            if (mClient.getClient_area_id() == mClientArea.getClient_area_id()) {
-                                spArea.setSelection(i);
-                                break;
-                            } else if (mClient.getClient_area_id() == 0) {
-                                break;
+                        if (mClientAreas != null && mClientAreas.size() >0) {
+                            ArrayAdapter adapter = new ArrayAdapter<>(mContext, R.layout.simple_spinner_item, mClientAreas);
+                            spArea.setAdapter(adapter);
+                            int i = 0;
+                            for (MClientArea mClientArea : mClientAreas) {
+                                if (mClient.getClient_area_id() == mClientArea.getClient_area_id()) {
+                                    spArea.setSelection(i);
+                                    break;
+                                } else if (mClient.getClient_area_id() == 0) {
+                                    break;
+                                }
+                                i++;
                             }
-                            i++;
+                        }else {
+                            MClientArea m = new MClientArea();
+                            m.setClient_area_name("Không");
+                            mClientAreas.add(m);
+                            ArrayAdapter adapter = new ArrayAdapter<>(mContext, R.layout.simple_spinner_item, mClientAreas);
+                            spArea.setAdapter(adapter);
                         }
                     }
 

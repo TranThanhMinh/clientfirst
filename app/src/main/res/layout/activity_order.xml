@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinatorLayout"
     android:background="@color/gray"
     tools:context="anhpha.clientfirst.crm.activity.ClientsActivity">
 
@@ -32,6 +31,7 @@
                 android:layout_height="match_parent"
                 android:descendantFocusability="beforeDescendants"
                 android:focusableInTouchMode="true">
+
                 <LinearLayout
 
                     android:id="@+id/layout_client"
@@ -40,180 +40,237 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
+                    android:background="@color/colorWhite"
                     android:orientation="vertical">
-                    <!--<android.support.v7.widget.SwitchCompat-->
-                    <!--android:id="@+id/switchButton"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_centerInParent="true"-->
-                    <!--android:checked="false"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-                    <!--android:text="Switch example"-->
-                    <!--/>-->
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="5dp"
-                        android:background="@color/white">
-
-                        <EditText
-                            android:id="@+id/etOrderName"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:hint="@string/order_name" />
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:background="@color/white">
-
-                        <EditText
-                            android:id="@+id/etOrderCode"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:hint="@string/order_code" />
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:background="@color/white">
-
-                        <EditText
-                            android:id="@+id/etSalesProcess"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:focusable="false"
-                            android:drawableRight="@mipmap/ic_dms_79"
-                            android:hint="@string/SalesProcess" />
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:background="@color/white">
-
-                        <EditText
-                            android:id="@+id/etStatus"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:drawableRight="@mipmap/ic_dms_79"
-                            android:focusable="false"
-                            android:hint="@string/status" />
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:background="@color/white">
-
-                        <EditText
-                            android:id="@+id/etSuccessRate"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:focusable="false"
-                            android:hint="@string/SuccessRate"
-                            android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
-
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:background="@color/white">
-
-                        <EditText
-                            android:id="@+id/etCustomer"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:drawableRight="@mipmap/ic_dms_79"
-                            android:focusable="false"
-                            android:hint="@string/customer"
-                            android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/textView8"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:padding="8dp"
-                            android:text="@string/date_plan_finish" />
-
-                        <TextView
-                            android:id="@+id/tvDate"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+                        <!--<android.support.v7.widget.SwitchCompat-->
+                        <!--android:id="@+id/switchButton"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_centerInParent="true"-->
+                        <!--android:checked="false"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                        <!--android:text="Switch example"-->
+                        <!--/>-->
+                        <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:gravity="center"
-                            android:padding="8dp"
-                            android:text="@string/choose_date" />
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="5dp"
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/etOrderName"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:hint="@string/order_name" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/etOrderCode"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:hint="@string/order_code" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etSalesProcess"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/SalesProcess" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerInParent="true"
+                                android:src="@mipmap/ic_dms_79" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etStatus"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/status" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerInParent="true"
+                                android:src="@mipmap/ic_dms_79" />
+                        </RelativeLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/etSuccessRate"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:focusable="false"
+                                android:hint="@string/SuccessRate"
+                                android:singleLine="true" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etCustomer"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/customer"
+                                    android:singleLine="true" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerInParent="true"
+                                android:src="@mipmap/ic_dms_79" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7.5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:paddingBottom="8dp"
+                                android:paddingLeft="4dp"
+                                android:paddingTop="6dp"
+                                android:text="@string/date_plan_finish" />
+
+                            <TextView
+                                android:id="@+id/tvDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:gravity="center"
+                                android:paddingBottom="8dp"
+                                android:paddingLeft="4dp"
+                                android:paddingTop="6dp"
+                                android:text="@string/choose_date" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:background="@color/color" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="7.5dp"
+                                android:background="@color/white">
+
+                                <EditText
+                                    android:id="@+id/etStaffincharge"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:focusable="false"
+                                    android:hint="@string/Staffincharge"
+                                    android:singleLine="true" />
+                            </android.support.design.widget.TextInputLayout>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerInParent="true"
+                                android:src="@mipmap/ic_dms_79" />
+                        </RelativeLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@+id/relativeLayout2"
+
+                            android:background="@color/white">
+
+                            <EditText
+                                android:id="@+id/note"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:hint="@string/note" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <ListView
+                            android:id="@+id/rvActivities"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white" />
                     </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:background="@color/color" />
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/white">
-
-                        <EditText
-                            android:id="@+id/etStaffincharge"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:drawableRight="@mipmap/ic_dms_79"
-                            android:focusable="false"
-                            android:hint="@string/Staffincharge"
-                            android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/input_layout_2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/relativeLayout2"
-
-                        android:background="@color/white">
-
-                        <EditText
-                            android:id="@+id/note"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:hint="@string/note" />
-                    </android.support.design.widget.TextInputLayout>
-
-                    <ListView
-                        android:id="@+id/rvActivities"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/white" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"

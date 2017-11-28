@@ -287,9 +287,9 @@ public class ActivityUserActivity extends BaseAppCompatActivity implements Recyc
         tvAmountDebt.setText("$ " + Utils.formatCurrency(mActivity.getDebt_amount()));
 
         tvAmount_number.setText(Utils.formatCurrency(mActivity.getOrder_count()) + " " + mContext.getResources().getString(R.string.potential));
-        tvAmountExpend_number.setText(Utils.formatCurrency(mActivity.getExpend_count()) + " " + mContext.getResources().getString(R.string.costs));
+        tvAmountExpend_number.setText(Utils.formatCurrency(mActivity.getExpend_count()) + " " + mContext.getResources().getString(R.string.expenditure));
         tvAmountFinish_number.setText(Utils.formatCurrency(mActivity.getOrder_finish_count()) + " " + mContext.getResources().getString(R.string.complete));
-        tvAmountDebt_number.setText(Utils.formatCurrency(mActivity.getDebt_count()) + " " + mContext.getResources().getString(R.string.get_free));
+        tvAmountDebt_number.setText(Utils.formatCurrency(mActivity.getDebt_count()) + " " + mContext.getResources().getString(R.string.get));
 
     }
 

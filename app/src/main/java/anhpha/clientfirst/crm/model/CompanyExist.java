@@ -42,13 +42,18 @@ public class CompanyExist {
         this.parent_name = parent_name;
     }
 
-    @SerializedName("client_type_id")
-    @Expose
-    public int client_structure_id ;
     @SerializedName("client_structure_id")
     @Expose
-    private String   parent_name;
+    public int client_structure_id ;
+
+
+
+
+
     @SerializedName("parent_name")
+    @Expose
+    private String   parent_name;
+    @SerializedName("client_type_id")
     @Expose
     private Integer clientTypeId;
     @SerializedName("client_group_id")

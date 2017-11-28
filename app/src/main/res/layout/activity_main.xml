@@ -276,6 +276,7 @@
 
 
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/tvDebt"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/button_height"
@@ -288,6 +289,7 @@
                         />
 
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/tvTracking"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/button_height"

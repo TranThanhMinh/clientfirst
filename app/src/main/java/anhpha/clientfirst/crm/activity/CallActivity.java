@@ -78,7 +78,8 @@ public class CallActivity extends BaseAppCompatActivity implements Callback<MAPI
     @Bind(R.id.lvOrder)
     RecyclerView lvOrder;
     private int order_contract_id = 0;
-
+    @Bind(R.id.tvShow)
+    TextView tvShow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,10 +115,31 @@ public class CallActivity extends BaseAppCompatActivity implements Callback<MAPI
                 .switchButton);
         if (mCall == null) {
             mCall = new MCall();
+            tvShow.setVisibility(View.GONE);
             getTracking_value_default();
             getOrder();
+            switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b == true) {
+                        lvOrder.setVisibility(View.VISIBLE);
+                        //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
+                        order_contract_id = 0;
+                        lvOrder.setVisibility(View.GONE);
+                    }
+                }
+            });
         }
         if (mCall.getCall_user_id() > 0) {
+            tvShow.setVisibility(View.VISIBLE);
+            tvShow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
             etContent.setText(mCall.getContent_call());
             etContent.setFocusable(false);
             getUserCall();
@@ -129,19 +151,7 @@ public class CallActivity extends BaseAppCompatActivity implements Callback<MAPI
         }
 
 
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b == true) {
-                    lvOrder.setVisibility(View.VISIBLE);
-                    //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
-                } else {
-                    //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
-                    order_contract_id = 0;
-                    lvOrder.setVisibility(View.GONE);
-                }
-            }
-        });
+
 
     }
 

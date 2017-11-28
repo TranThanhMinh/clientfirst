@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,8 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
     TextView tvAddress;
     @Bind(R.id.tvContract)
     TextView tvContract;
+    @Bind(R.id.tvShow)
+    TextView tvShow;
     @Bind(R.id.include)
     Toolbar toolbar;
     @Bind(R.id.coordinatorLayout)
@@ -116,8 +119,17 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
             mEmail = new MEmail();
             getOrder();
             getTracking_value_default();
+            tvShow.setVisibility(View.GONE);
+
         }
         if (mEmail.getEmail_user_id() > 0) {
+            tvShow.setVisibility(View.VISIBLE);
+            tvShow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
             etContent.setText(mEmail.getContent_email());
             etContent.setFocusable(false);
             getUserEmail();

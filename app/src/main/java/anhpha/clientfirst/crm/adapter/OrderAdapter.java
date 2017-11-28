@@ -95,7 +95,7 @@ public class OrderAdapter extends BaseAdapter {
         }
         holder.number.setText(activityItem.getNumber().toString());
         holder.total.setText(Utils.formatCurrency(activityItem.getPrice() * activityItem.getNumber() - activityItem.getDiscount_price() ));
-        holder.price.setText(Utils.formatCurrency(activityItem.getPrice() * activityItem.getNumber()));
+        holder.price.setText(Utils.formatCurrency(activityItem.getPrice()));
 
 
 

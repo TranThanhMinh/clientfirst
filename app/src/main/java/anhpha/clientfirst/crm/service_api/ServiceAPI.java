@@ -347,6 +347,8 @@ public interface ServiceAPI {
 
     @GET("get_clients_by_parent")
     Call<MAPIResponse<List<CompanyExist>>> get_clients_by_parent(@Header("token") String token, @Header("user_id") int user_id, @Header("partner_id") int partner_id, @Header("object_id") int object_id, @Header("type") int type);
+    @GET("get_clients")
+    Call<MAPIResponse<List<CompanyExist>>> get_clients(@Header("token") String token, @Header("user_id") int user_id, @Header("partner_id") int partner_id, @Header("object_id") int object_id, @Header("type") int type);
 
     @GET("get_users_manager_delail")
     Call<MAPIResponse<List<MUser>>> get_users_manager_delail(@Header("token") String token, @Header("user_id") int user_id, @Header("partner_id") int partner_id, @Header("client_id") int client_id);

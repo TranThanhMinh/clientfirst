@@ -178,12 +178,7 @@ public class OrderActivity extends BaseAppCompatActivity implements Callback<MAP
             spOrderStatus.setAdapter(adapter);
             status = 1;
         } else {
-//            mOrder.setOrder_contract_name(etOrderName.getText().toString());//name contract
-//            mOrder.setOrder_contract_status_group_id(idGroup);//quy trinh
-//            mOrder.setPercent_done(Rate);//tỷ lệ
-//            mOrder.setOrder_contract_status_id(idByGroup);//trạng thái
-//            mOrder.setUser_manager_contract_id(object_id);//nhan viên pụ trách user_manager_contract_id
-//            mOrder.setDiscount_contract_price(Utils.tryParseDouble(textView22.getText().toString().replace(",", "")));
+//
             mClient = new MClient();
             mClient.setClient_id(mOrder.getClient_id());
             mClient.setClient_name(mOrder.getClient_name());

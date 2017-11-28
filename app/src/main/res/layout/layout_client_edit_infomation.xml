@@ -264,44 +264,15 @@
                 android:inputType="number"
                 android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_gender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:background="@color/white"
-            android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="8dp"
-            android:paddingTop="15dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="50"
-                android:text="@string/gender" />
-
-            <Spinner
-                android:id="@+id/spGender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="50" />
-        </LinearLayout>
-
         <LinearLayout
             android:id="@+id/layout_birthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
             android:paddingLeft="4dp"
-            android:paddingRight="8dp"
-            android:paddingTop="15dp">
+            android:paddingBottom="15.5dp"
+            android:paddingTop="7dp">
 
             <TextView
                 android:id="@+id/tvBirthday"
@@ -319,6 +290,43 @@
                 android:text="@string/choose_date" />
         </LinearLayout>
 
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/color" />
+        <LinearLayout
+            android:id="@+id/layout_gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:paddingLeft="4dp"
+            android:paddingBottom="8.5dp"
+            android:paddingTop="4.5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="50"
+                android:text="@string/gender" />
+
+            <Spinner
+                android:id="@+id/spGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="50" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/color" />
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_6"
             android:layout_width="match_parent"
@@ -326,7 +334,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/layout_client"
-            android:layout_marginTop="1dp"
+            android:paddingTop="7dp"
             android:background="@color/white">
 
             <EditText
@@ -343,15 +351,13 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
             android:paddingLeft="4dp"
-            android:paddingRight="8dp"
-            android:paddingTop="15dp">
+            android:paddingBottom="15.5dp"
+            android:paddingTop="6.5dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
                 android:text="@string/Ownerby" />
 
             <TextView
@@ -360,6 +366,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:gravity="right"
+                android:paddingRight="10dp"
                 android:maxLines="1" />
         </LinearLayout>
 
@@ -371,6 +378,7 @@
             android:background="@color/dark_light"></View>
 
         <android.support.design.widget.TextInputLayout
+            android:paddingTop="7dp"
             android:id="@+id/input_layout_7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -390,13 +398,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
             android:paddingLeft="4dp"
-            android:paddingRight="8dp"
-            android:paddingTop="15dp">
+            android:paddingBottom="8dp"
+            android:paddingTop="0dp">
 
             <TextView
                 android:id="@+id/textView31"
@@ -412,17 +418,20 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="50" />
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/dark_light"></View>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
             android:paddingLeft="4dp"
-            android:paddingRight="8dp"
-            android:paddingTop="15dp">
+            android:paddingBottom="9dp"
+            android:paddingTop="5.5dp">
 
             <TextView
                 android:id="@+id/textView321"
@@ -438,17 +447,21 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="50" />
         </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/dark_light"></View>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
+
             android:background="@color/white"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
             android:paddingLeft="4dp"
-            android:paddingRight="8dp"
-            android:paddingTop="15dp">
+            android:paddingBottom="9dp"
+            android:paddingTop="5.5dp">
 
             <TextView
                 android:id="@+id/textView313"
@@ -464,6 +477,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="50" />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/dark_light"></View>
         <!--&lt;!&ndash;android:text="@string/location"&ndash;&gt;-->
         <!--<TextView-->
             <!--android:id="@+id/dfdf"-->
@@ -511,10 +530,8 @@
                 android:layout_marginTop="1dp"
                 android:background="@color/white"
                 android:paddingLeft="4dp"
-                android:paddingRight="8dp"
-                android:visibility="gone"
-                android:paddingTop="15dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="9dp"
+                android:paddingTop="5.5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
@@ -532,15 +549,19 @@
                     android:id="@+id/spType"
                     android:layout_weight="50" />
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/dark_light"></View>
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_marginTop="1dp"
                 android:background="@color/white"
                 android:paddingLeft="4dp"
-                android:paddingRight="8dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="9dp"
+                android:paddingTop="5.5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
@@ -558,15 +579,18 @@
                     android:id="@+id/spGroup"
                     android:layout_weight="50" />
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/dark_light"></View>
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_marginTop="1dp"
                 android:background="@color/white"
                 android:paddingLeft="4dp"
-                android:paddingRight="8dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="9dp"
+                android:paddingTop="5.5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
@@ -584,15 +608,18 @@
                     android:id="@+id/spStatus"
                     android:layout_weight="50" />
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/dark_light"></View>
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_marginTop="1dp"
                 android:background="@color/white"
                 android:paddingLeft="4dp"
-                android:paddingRight="8dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="9dp"
+                android:paddingTop="5.5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -610,14 +637,19 @@
                     android:id="@+id/spArea"
                     android:layout_weight="50" />
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/dark_light"></View>
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_marginTop="1dp"
+
                 android:background="@color/white"
                 android:paddingLeft="4dp"
-                android:paddingRight="8dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="9dp"
+                android:paddingTop="5.5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -634,14 +666,19 @@
                     android:id="@+id/spBusinessType"
                     android:layout_weight="50" />
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/dark_light"></View>
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_marginTop="1dp"
+
                 android:background="@color/white"
                 android:paddingLeft="4dp"
-                android:paddingRight="8dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="9dp"
+                android:paddingTop="5.5dp"
                 android:id="@+id/layout_marital"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -659,10 +696,11 @@
                     android:id="@+id/spMarital"
                     android:layout_weight="50" />
             </LinearLayout>
+
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/input_layout_12"
                 android:layout_width="match_parent"
-                android:layout_marginTop="1dp"
+
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:background="@color/white"
@@ -696,6 +734,7 @@
                     android:singleLine="true"
                     android:id="@+id/etIncome" />
             </android.support.design.widget.TextInputLayout>
+
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/input_layout_16"
                 android:layout_width="match_parent"

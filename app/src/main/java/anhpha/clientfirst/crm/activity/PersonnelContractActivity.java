@@ -169,11 +169,7 @@ public class PersonnelContractActivity extends BaseAppCompatActivity implements 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.calendar:
-//                showDialog1(
-//                        Gravity.BOTTOM
-//                );
-                startActivityForResult(new Intent(PersonnelContractActivity.this, ClientExistActivity.class).putExtra("lvId", (Serializable) mIds), Constants.RESULT_CLIENT);
-
+                startActivityForResult(new Intent(PersonnelContractActivity.this, ClientExistContractActivity.class).putExtra("lvId", (Serializable) mIds), Constants.RESULT_CLIENT);
                 break;
             case android.R.id.home:
                 finish();
@@ -181,13 +177,10 @@ public class PersonnelContractActivity extends BaseAppCompatActivity implements 
         }
         return super.onOptionsItemSelected(item);
     }
-
     private void showDialog1(int gravity) {
 
         Holder holder;
-
             holder = new ViewHolder(R.layout.show_add_personnel);
-
         OnClickListener clickListener = new OnClickListener() {
             @Override
             public void onClick(DialogPlus dialog, View view) {

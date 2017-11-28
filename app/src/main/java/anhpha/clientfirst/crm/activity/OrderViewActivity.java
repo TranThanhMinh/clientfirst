@@ -453,9 +453,9 @@ public class OrderViewActivity extends BaseAppCompatActivity implements View.OnC
 
                 tvAmountExpend.setText("$ " + Utils.formatCurrency(mActivity.getExpend_amount()));
                 tvAmountDebt.setText("$ " + Utils.formatCurrency(mActivity.getDebt_amount()));
+                tvAmountExpend_number.setText(Utils.formatCurrency(mActivity.getExpend_count()) + " " + mContext.getResources().getString(R.string.expenditure));
+                tvAmountDebt_number.setText(Utils.formatCurrency(mActivity.getDebt_count()) + " " + mContext.getResources().getString(R.string.get));
 
-                tvAmountExpend_number.setText(Utils.formatCurrency(mActivity.getExpend_count()) + " chi phi");
-                tvAmountDebt_number.setText(Utils.formatCurrency(mActivity.getDebt_count()) + " thu phi");
 
                 textView1.setText(mActivity.getOrder_status_count() + "");
                 textView2.setText(mActivity.getAdd_client_count() + "");
@@ -744,21 +744,21 @@ public class OrderViewActivity extends BaseAppCompatActivity implements View.OnC
 //        }
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_edit_calenda, menu);
-        if (isHide) {
+//        if (isHide) {
             for (int i = 0; i < menu.size(); i++) {
                 if (menu.getItem(i).getItemId() == R.id.edit)
-                    menu.getItem(i).setVisible(false);
-                if (menu.getItem(i).getItemId() == R.id.calendar)
-                    menu.getItem(i).setVisible(true);
-            }
-        } else {
-            for (int i = 0; i < menu.size(); i++) {
-                if (menu.getItem(i).getItemId() == R.id.edit )
                     menu.getItem(i).setVisible(true);
                 if (menu.getItem(i).getItemId() == R.id.calendar)
                     menu.getItem(i).setVisible(false);
             }
-        }
+//        } else {
+//            for (int i = 0; i < menu.size(); i++) {
+//                if (menu.getItem(i).getItemId() == R.id.edit )
+//                    menu.getItem(i).setVisible(true);
+//                if (menu.getItem(i).getItemId() == R.id.calendar)
+//                    menu.getItem(i).setVisible(false);
+//            }
+//        }
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -255,7 +255,8 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
     LinearLayout layout_marital;
     CustomMapView mapView;
     GoogleMap map;
-
+    @Bind(R.id.view11)
+    View view11;
     private int mount = 0;
     boolean isHide = true;
     boolean isLoadClient = false;
@@ -397,7 +398,7 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
         menu_item1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mContext.startActivity(new Intent(mContext, OrderActivity.class).putExtra("mClient", mClient).putExtra("user_id", preferences.getIntValue(Constants.USER_ID,0)).putExtra("client_name", preferences.getStringValue(Constants.USER_NAME,"")));
+                mContext.startActivity(new Intent(mContext, OrderActivity.class).putExtra("mClient", mClient).putExtra("user_id", preferences.getIntValue(Constants.USER_ID, 0)).putExtra("client_name", preferences.getStringValue(Constants.USER_NAME, "")));
                 menu.close(true);
             }
         });
@@ -521,63 +522,62 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
         TokenUtils.checkToken(mContext, response.body().getErrors());
         mActivity = response.body().getResult();
         mActivityItems = mActivity.getActivies();
-        if (response.body().getErrors().getID() == 0) {
-            activityAdapter = new ActivityAdapter(ClientActivity.this, getActivityItems(mActivityItems));
-            rvActivities.setAdapter(activityAdapter);
-            activityAdapter.notifyDataSetChanged();
-            tvAmount.setText("$ " +Utils.formatCurrency(mActivity.getSales_amount()));
-            tvAmountExpend.setText("$ " + Utils.formatCurrency(mActivity.getExpend_amount()));
-            tvAmountFinish.setText("$ " + Utils.formatCurrency(mActivity.getFinish_amount()));
-            tvAmountDebt.setText("$ " + Utils.formatCurrency(mActivity.getDebt_amount()));
 
-            tvAmount_number.setText(Utils.formatCurrency(mActivity.getOrder_count()) + " " + mContext.getResources().getString(R.string.potential));
-            tvAmountExpend_number.setText(Utils.formatCurrency(mActivity.getExpend_count()) + " " + mContext.getResources().getString(R.string.costs));
-            tvAmountFinish_number.setText(Utils.formatCurrency(mActivity.getOrder_finish_count()) + " " + mContext.getResources().getString(R.string.complete));
-            tvAmountDebt_number.setText(Utils.formatCurrency(mActivity.getDebt_count()) + " " + mContext.getResources().getString(R.string.get_free));
+        activityAdapter = new ActivityAdapter(ClientActivity.this, getActivityItems(mActivityItems));
+        rvActivities.setAdapter(activityAdapter);
+        activityAdapter.notifyDataSetChanged();
+        tvAmount.setText("$ " + Utils.formatCurrency(mActivity.getSales_amount()));
+        tvAmountExpend.setText("$ " + Utils.formatCurrency(mActivity.getExpend_amount()));
+        tvAmountFinish.setText("$ " + Utils.formatCurrency(mActivity.getFinish_amount()));
+        tvAmountDebt.setText("$ " + Utils.formatCurrency(mActivity.getDebt_amount()));
 
-            textView1.setText(mActivity.getOrder_status_count() + "");
-            textView2.setText(mActivity.getAdd_client_count() + "");
-            textView3.setText(mActivity.getCheckin_count() + "");
-            textView4.setText(mActivity.getCall_count() + "");
-            textView5.setText(mActivity.getWork_count() + "");
-            textView7.setText(mActivity.getEmail_count() + "");
-            textView6.setText(mActivity.getClient_focus_count() + "");
+        tvAmount_number.setText(Utils.formatCurrency(mActivity.getOrder_count()) + " " + mContext.getResources().getString(R.string.potential));
+        tvAmountExpend_number.setText(Utils.formatCurrency(mActivity.getExpend_count()) + " " + mContext.getResources().getString(R.string.expenditure));
+        tvAmountFinish_number.setText(Utils.formatCurrency(mActivity.getOrder_finish_count()) + " " + mContext.getResources().getString(R.string.complete));
+        tvAmountDebt_number.setText(Utils.formatCurrency(mActivity.getDebt_count()) + " " + mContext.getResources().getString(R.string.get));
 
-            view_label.removeAllViews();
-            int width = (Utils.getWidth(mContext) / 3);
-            int height = (int) (width / 3.5);
-            for (MClientLabel mClientLabel : mClient.getLabels()) {
-                Button valueTV = new Button(mContext);
-                if (mClientLabel.getHex().isEmpty())
-                    valueTV.setBackgroundColor(Color.GRAY);
-                else
-                    valueTV.setBackgroundColor(Color.parseColor(mClientLabel.getHex()));
-                valueTV.setId((int) System.currentTimeMillis() + new Random().nextInt(255));
-                valueTV.setTextColor(Color.WHITE);
-                valueTV.setMaxLines(1);
-                valueTV.setTransformationMethod(null);
-                valueTV.setText(mClientLabel.getClient_label_name());
-                valueTV.setLayoutParams(new android.app.ActionBar.LayoutParams(width, height));
-                view_label.addView(valueTV);
+        textView1.setText(mActivity.getOrder_status_count() + "");
+        textView2.setText(mActivity.getAdd_client_count() + "");
+        textView3.setText(mActivity.getCheckin_count() + "");
+        textView4.setText(mActivity.getCall_count() + "");
+        textView5.setText(mActivity.getWork_count() + "");
+        textView7.setText(mActivity.getEmail_count() + "");
+        textView6.setText(mActivity.getClient_focus_count() + "");
 
+        view_label.removeAllViews();
+        int width = (Utils.getWidth(mContext) / 3);
+        int height = (int) (width / 3.5);
+        for (MClientLabel mClientLabel : mClient.getLabels()) {
+            Button valueTV = new Button(mContext);
+            if (mClientLabel.getHex().isEmpty())
+                valueTV.setBackgroundColor(Color.GRAY);
+            else
+                valueTV.setBackgroundColor(Color.parseColor(mClientLabel.getHex()));
+            valueTV.setId((int) System.currentTimeMillis() + new Random().nextInt(255));
+            valueTV.setTextColor(Color.WHITE);
+            valueTV.setMaxLines(1);
+            valueTV.setTransformationMethod(null);
+            valueTV.setText(mClientLabel.getClient_label_name());
+            valueTV.setLayoutParams(new android.app.ActionBar.LayoutParams(width, height));
+            view_label.addView(valueTV);
+
+        }
+        if (click == 1) {
+            if (!mClient.isShare_client() && mClient.getUser_manager_id() != preferences.getIntValue(Constants.USER_ID, 0)) {
+                Utils.showError(coordinatorLayout, R.string.client_not_share);
+                rvActivities.setVisibility(View.VISIBLE);
+                view.setVisibility(View.GONE);
+                isHide = true;
+                invalidateOptionsMenu();
+            } else {
+                rvActivities.setVisibility(View.GONE);
+                view.setVisibility(View.VISIBLE);
+                isHide = false;
+                invalidateOptionsMenu();
+                setViewClient();
             }
-            if (click == 1) {
-                if (!mClient.isShare_client() && mClient.getUser_manager_id() != preferences.getIntValue(Constants.USER_ID, 0)) {
-                    Utils.showError(coordinatorLayout, R.string.client_not_share);
-                    rvActivities.setVisibility(View.VISIBLE);
-                    view.setVisibility(View.GONE);
-                    isHide = true;
-                    invalidateOptionsMenu();
-                } else {
-                    rvActivities.setVisibility(View.GONE);
-                    view.setVisibility(View.VISIBLE);
-                    isHide = false;
-                    invalidateOptionsMenu();
-                    setViewClient();
-                }
-            }
-        } else if (response.body().getErrors().getID() == 3)
-            Utils.showDialogSuccess(mContext, R.string.srtNoti);
+        }
+
     }
 
     public Boolean isValidInteger(String value) {
@@ -920,7 +920,10 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
             else if (mClient.getMarital_status_id() == 7)
                 spMarital.setText(getString(R.string.widower));
             else layout_marital.setVisibility(View.GONE);
-        } else layout_marital.setVisibility(View.GONE);
+        } else {
+            layout_marital.setVisibility(View.GONE);
+            view11.setVisibility(View.GONE);
+        }
         spBusinessType.setText(mClient.getClient_business_name());
         etEmail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1169,7 +1172,8 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
                     mContext.startActivity(intent);
                 } else {
 
-                };
+                }
+                ;
                 break;
             case R.id.etCode:
                 if (mClient.getParent_name() != null && mClient.getParent_name().length() > 0) {
@@ -1285,7 +1289,7 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
                 break;
             case 16:
                 for (MActivityItem i : mActivityItems) {
-                    if (i.getActivity_type() == 2 )
+                    if (i.getActivity_type() == 2)
                         mActivityItems1.add(i);
                 }
 
@@ -1295,6 +1299,7 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
         }
         return mActivityItems1;
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1346,27 +1351,31 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
                         box.hideAll();
                         TokenUtils.checkToken(mContext, response.body().getErrors());
                         mClient = response.body().getResult();
-                        if (mClient.getClient_structure_id() == 2) {
-                            tvAddress.setText(mClient.getDetail());
-                            imCity.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_crm_40));
-                        } else {
-                            if (mClient.getPosition() != null) {
-                                if (mClient.getParent_name() != null) {
-                                    tvAddress.setText(mClient.getPosition() + " " + mClient.getParent_name());
-                                } else tvAddress.setText(mClient.getPosition());
+                        if (response.body().getErrors().getID() == 3)
+                            Utils.showDialogSuccess(mContext, R.string.srtNoti);
+                        else {
+                            if (mClient.getClient_structure_id() == 2) {
+                                tvAddress.setText(mClient.getDetail());
+                                imCity.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_crm_40));
                             } else {
-                                if (mClient.getParent_name() != null) {
-                                    tvAddress.setText(mClient.getParent_name());
-                                } else tvAddress.setText("");
+                                if (mClient.getPosition() != null) {
+                                    if (mClient.getParent_name() != null) {
+                                        tvAddress.setText(mClient.getPosition() + " " + mClient.getParent_name());
+                                    } else tvAddress.setText(mClient.getPosition());
+                                } else {
+                                    if (mClient.getParent_name() != null) {
+                                        tvAddress.setText(mClient.getParent_name());
+                                    } else tvAddress.setText("");
+                                }
+                                imCity.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_crm_26));
                             }
-                            imCity.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_crm_26));
-                        }
 
-                        // tvAddress
-                        if (mClient.getDetail() != null && !mClient.getDetail().isEmpty() || mClient.getPosition() != null && mClient.getPosition().length() > 0 || mClient.getParent_name() != null && mClient.getParent_name().length() > 0) {
-                            tvAddress.setVisibility(View.VISIBLE);
-                        } else tvAddress.setVisibility(View.VISIBLE);
-                        // setViewClient();
+                            // tvAddress
+                            if (mClient.getDetail() != null && !mClient.getDetail().isEmpty() || mClient.getPosition() != null && mClient.getPosition().length() > 0 || mClient.getParent_name() != null && mClient.getParent_name().length() > 0) {
+                                tvAddress.setVisibility(View.VISIBLE);
+                            } else tvAddress.setVisibility(View.VISIBLE);
+                            // setViewClient();
+                        }
                     }
 
                     @Override
@@ -1438,15 +1447,16 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
                 mCheckin.setOrder_contract_id(activityItem.getOrder_contract_id());
                 mCheckin.setOrder_contract_name(activityItem.getOrder_contract_name());
                 if (activityItem.getType() == 0)
-                mContext.startActivity(new Intent(mContext, CheckinActivity.class).putExtra("mClient", mClient).putExtra("mCheckin", mCheckin));
-               else {
+                    mContext.startActivity(new Intent(mContext, CheckinActivity.class).putExtra("mClient", mClient).putExtra("mCheckin", mCheckin));
+                else {
                     MOrder mOrder1 = new MOrder();
                     mOrder1.setOrder_contract_id(activityItem.getOrder_contract_id());
                     mOrder1.setOrder_contract_name(activityItem.getOrder_contract_name());
                     mOrder1.setClient_id(activityItem.getClient_id());
                     mContext.startActivity(new Intent(mContext, CheckinContractActivity.class).putExtra("mOrder", mOrder1).putExtra("mCheckin", mCheckin));
 
-                } break;
+                }
+                break;
             case Constants.ACTIVITY_TYPE_CALL:
                 MCall mCall = new MCall();
                 mCall.setCall_user_id(activityItem.getUser_call_id());
@@ -1454,8 +1464,8 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
                 mCall.setOrder_contract_id(activityItem.getOrder_contract_id());
                 mCall.setOrder_contract_name(activityItem.getOrder_contract_name());
                 if (activityItem.getType() == 0)
-                mContext.startActivity(new Intent(mContext, CallActivity.class).putExtra("mClient", mClient).putExtra("mCall", mCall));
-               else {
+                    mContext.startActivity(new Intent(mContext, CallActivity.class).putExtra("mClient", mClient).putExtra("mCall", mCall));
+                else {
                     MOrder mOrder1 = new MOrder();
                     mOrder1.setOrder_contract_id(activityItem.getOrder_contract_id());
                     mOrder1.setOrder_contract_name(activityItem.getOrder_contract_name());
@@ -1470,14 +1480,23 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
                 mEmail.setOrder_contract_id(activityItem.getOrder_contract_id());
                 mEmail.setOrder_contract_name(activityItem.getOrder_contract_name());
                 if (activityItem.getType() == 0)
-                mContext.startActivity(new Intent(mContext, EmailActivity.class).putExtra("mClient", mClient).putExtra("mEmail", mEmail));
-               else {
+                    mContext.startActivity(new Intent(mContext, EmailActivity.class).putExtra("mClient", mClient).putExtra("mEmail", mEmail));
+                else {
                     MOrder mOrder1 = new MOrder();
                     mOrder1.setOrder_contract_id(activityItem.getOrder_contract_id());
                     mOrder1.setOrder_contract_name(activityItem.getOrder_contract_name());
                     mOrder1.setClient_id(activityItem.getClient_id());
                     mContext.startActivity(new Intent(mContext, EmailContractActivity.class).putExtra("mOrder", mOrder1).putExtra("mEmail", mEmail));
                 }
+                break;
+            case 15:
+                MOrder mOrder2 = new MOrder();
+                mOrder2.setClient_id(mClient.getClient_id());
+                mOrder2.setClient_name(mClient.getClient_name());
+                mOrder2.setAddress(mClient.getAddress());
+                mOrder2.setOrder_sheet_id(-1);
+                mOrder2.setOrder_contract_id(activityItem.getOrder_contract_id());
+                mContext.startActivity(new Intent(mContext, OrderViewActivity.class).putExtra("mClient", mClient).putExtra("mOrder", mOrder2));
                 break;
             case Constants.ACTIVITY_TYPE_EVENT:
                 MEvent mEvent = new MEvent();
@@ -1516,10 +1535,10 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
                 mContext.startActivity(new Intent(mContext, AddDocumentActivity.class).putExtra("mOrder", mOrder1).putExtra("Document", activityItem).putExtra("mAdd", 0));
                 break;
             case Constants.ACTIVITY_TYPE_COMMENT:
-                MOrder mOrder2 = new MOrder();
-                mOrder2.setOrder_contract_name(activityItem.getOrder_contract_name());
-                mOrder2.setOrder_contract_id(activityItem.getOrder_contract_id());
-                mContext.startActivity(new Intent(mContext, AddCommentActivity.class).putExtra("mOrder", mOrder2).putExtra("Comment", activityItem).putExtra("mAdd", 0));
+                MOrder mOrder4 = new MOrder();
+                mOrder4.setOrder_contract_name(activityItem.getOrder_contract_name());
+                mOrder4.setOrder_contract_id(activityItem.getOrder_contract_id());
+                mContext.startActivity(new Intent(mContext, AddCommentActivity.class).putExtra("mOrder", mOrder4).putExtra("Comment", activityItem).putExtra("mAdd", 0));
                 break;
             default:
                 break;

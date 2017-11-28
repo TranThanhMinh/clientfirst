@@ -81,7 +81,8 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
     CoordinatorLayout coordinatorLayout;
     MCheckin mCheckin = new MCheckin();
     MOrder mClient = new MOrder();
-
+    @Bind(R.id.tvShow)
+    TextView tvShow;
     Preferences preferences;
     protected List<MPhoto> photos;
     protected PhotosAdapter photosAdapter;
@@ -121,29 +122,38 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
         rvActivities.setAdapter(photosAdapter);
 
         tvClientName.setText(mClient.getOrder_contract_name());
-
-        retrofit =getConnect();
-        if(mCheckin == null) {
-            mCheckin = new MCheckin();
-            getTracking_value_default();
-        }
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
                 .switchButton);
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b == true) {
-                    display = 0;
-                  //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
+        retrofit =getConnect();
+        if(mCheckin == null) {
+            tvShow.setVisibility(View.GONE);
+            mCheckin = new MCheckin();
+            getTracking_value_default();
+            switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b == true) {
+                        display = 0;
+                        //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
+                        display = 1;
+                    }
                 }
-                else {
-                    //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
-                    display = 1;
-                }
-            }
-        });
+            });
+        }
+
+
         ivCamera.setOnClickListener(this);
         if(mCheckin.getUser_checkin_id() > 0){
+            tvShow.setVisibility(View.VISIBLE);
+            tvShow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
             getUserCheckin();
             if(mCheckin.getDisplay_type()== 0)
                 switchCompat.setChecked(true);

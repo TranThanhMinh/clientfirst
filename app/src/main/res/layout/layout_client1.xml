@@ -15,7 +15,7 @@
             android:layout_width="20dp"
             android:layout_height="40dp"
             android:src="@mipmap/ic_crm_29"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="6.5dp" />
     </LinearLayout>
 
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="20dp"
+        android:paddingLeft="10dp"
         android:paddingRight="20dp">
 
         <TextView

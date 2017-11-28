@@ -99,7 +99,8 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
     @Bind(R.id.realOff)
     RelativeLayout realOff;
     private int order_contract_id = 0;
-
+    @Bind(R.id.tvShow)
+    TextView tvShow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,11 +143,32 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                 .switchButton);
         if (mCheckin == null) {
             mCheckin = new MCheckin();
+            tvShow.setVisibility(View.GONE);
             getTracking_value_default();
             getOrder();
+            switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b == true) {
+                        lvOrder.setVisibility(View.VISIBLE);
+                        //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
+                        order_contract_id = 0;
+                        lvOrder.setVisibility(View.GONE);
+                    }
+                }
+            });
         }
         ivCamera.setOnClickListener(this);
         if (mCheckin.getUser_checkin_id() > 0) {
+            tvShow.setVisibility(View.VISIBLE);
+            tvShow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
             if (mCheckin.getOrder_contract_id() > 0) {
                 tvContract.setText(mCheckin.getOrder_contract_name());
                 layout_order.setVisibility(View.VISIBLE);
@@ -167,8 +189,11 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                             TokenUtils.checkToken(mContext, response.body().getErrors());
                             mCheckin = response.body().getResult();
                             photos = mCheckin.getPhotos();
-                            photosAdapter.setPhotoList(photos);
-                            photosAdapter.notifyDataSetChanged();
+                            if(photos != null && photos.size()>0) {
+                                photosAdapter.setPhotoList(photos);
+                                photosAdapter.notifyDataSetChanged();
+                                rvActivities.setVisibility(View.VISIBLE);
+                            }else  rvActivities.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -194,19 +219,7 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
         });
         rvActivities.setAdapter(photosAdapter);
 
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b == true) {
-                    lvOrder.setVisibility(View.VISIBLE);
-                    //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
-                } else {
-                    //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
-                    order_contract_id = 0;
-                    lvOrder.setVisibility(View.GONE);
-                }
-            }
-        });
+
 
     }
 

@@ -96,13 +96,16 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
     private double prePay;
     private List<Photo> lvImage = new ArrayList<>();
     private boolean result;
-    private TextView tvName, tvAddress;
+    private TextView tvName, tvAddress, tvImage;
     EditText tvDate;
     private int add;
     private Expend expend;
     LinearLayout coordinatorLayout;
     int Year, Month, Day, order_contract_id = 0;
-   private TextView tvContract;
+    private TextView tvContract;
+
+    TextView tvShow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,33 +117,14 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
         lvOrder = (RecyclerView) findViewById(R.id.lvOrder);
         tvName = (TextView) findViewById(R.id.tvName);
         tvAddress = (TextView) findViewById(R.id.tvAddress);
+        tvShow = (TextView) findViewById(R.id.tvShow);
+        tvImage = (TextView) findViewById(R.id.tvImage);
         tvContract = (TextView) findViewById(R.id.tvContract);
         tvDate = (EditText) findViewById(R.id.tvDate);
         LinearLayout layout_order = (LinearLayout) findViewById(R.id.layout_order);
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
                 .switchButton);
-        tvDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
 
-                Year = calendar.get(Calendar.YEAR);
-                Month = calendar.get(Calendar.MONTH);
-                Day = calendar.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
-                        AddCostsActivity.this, Year, Month, Day);
-                datePickerDialog.setThemeDark(false);
-
-                datePickerDialog.showYearPickerFirst(false);
-
-                datePickerDialog.setAccentColor(getResources().getColor(R.color.colorApp));
-                datePickerDialog.setCancelText(getString(R.string.no));
-                datePickerDialog.setOkText(getString(R.string.yes));
-                datePickerDialog.setTitle(getString(R.string.choose_date));
-                datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
-            }
-        });
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         lvCost.setHasFixedSize(true);
@@ -209,9 +193,39 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
                 layout_order.setVisibility(View.VISIBLE);
                 switchCompat.setChecked(true);
             }
+            tvShow.setVisibility(View.VISIBLE);
+            tvShow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
             imSelect_upload_photo.setVisibility(View.GONE);
         } else {
+            tvShow.setVisibility(View.GONE);
 
+            tvDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Calendar calendar = Calendar.getInstance();
+
+                    Year = calendar.get(Calendar.YEAR);
+                    Month = calendar.get(Calendar.MONTH);
+                    Day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                    DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
+                            AddCostsActivity.this, Year, Month, Day);
+                    datePickerDialog.setThemeDark(false);
+
+                    datePickerDialog.showYearPickerFirst(false);
+
+                    datePickerDialog.setAccentColor(getResources().getColor(R.color.colorApp));
+                    datePickerDialog.setCancelText(getString(R.string.no));
+                    datePickerDialog.setOkText(getString(R.string.yes));
+                    datePickerDialog.setTitle(getString(R.string.choose_date));
+                    datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
+                }
+            });
             getCost();
             getOrder();
             Calendar c = Calendar.getInstance();
@@ -273,10 +287,19 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
                 } else {
                     tvNote.setHint("");
                 }
-                tvDate.setText(Utils.formatTime(expend.getExpendDate()));
+                tvDate.setText(expend.getExpendDate());
                 lvImage = expend.getPhotos();
+                if (lvImage != null && lvImage.size() > 0) {
+                    lvPhoto.setVisibility(View.VISIBLE);
+                    tvImage.setVisibility(View.VISIBLE);
+
+                    getLoad_photo();
+                } else {
+                    lvPhoto.setVisibility(View.GONE);
+                    tvImage.setVisibility(View.GONE);
+                }
                 listExpend.add(expend);
-                getLoad_photo();
+
                 adapter_expend adapter = new adapter_expend(AddCostsActivity.this, listExpend);
                 lvCost.setAdapter(adapter);
             }
@@ -333,7 +356,7 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
         call.enqueue(new Callback<MAPIResponse<List<MOrders>>>() {
             @Override
             public void onResponse(Call<MAPIResponse<List<MOrders>>> call, Response<MAPIResponse<List<MOrders>>> response) {
-               TokenUtils.checkToken(AddCostsActivity.this, response.body().getErrors());
+                TokenUtils.checkToken(AddCostsActivity.this, response.body().getErrors());
                 LogUtils.api("", call, response);
                 List<MOrders> orders = response.body().getResult();
                 if (orders != null && orders.size() > 0) {
@@ -342,6 +365,7 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
                     lvOrder.setAdapter(adapter);
                 }
             }
+
             @Override
             public void onFailure(Call<MAPIResponse<List<MOrders>>> call, Throwable t) {
 
@@ -441,7 +465,7 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
         int id = item.getItemId();
         if (id == R.id.actionDone) {
             if (Expend_type_id > 0)
-                    funcSendExpend();
+                funcSendExpend();
             else Toast.makeText(mContext, R.string.srtSelectTypeCosts, Toast.LENGTH_SHORT).show();
             //   funcAddFocus(mClient.getClient_id());
         }
@@ -621,6 +645,6 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
     @Override
     public void Click(int id) {
         order_contract_id = id;
-        Log.d("order_contract_id",id+"");
+        Log.d("order_contract_id", id + "");
     }
 }

@@ -75,7 +75,7 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
     private Retrofit retrofit, retrofit_photo;
     private ImageView imSelect_upload_photo;
     private RecyclerView lvPhoto;
-    private TextView tvClientName;
+    private TextView tvClientName,tvImage;
     private boolean result;
     private EditText etContent;
     MActivityItem mActivityItem;
@@ -87,6 +87,7 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
         box = new DynamicBox(this, R.layout.activity_add_document);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tvClientName = (TextView) findViewById(R.id.tvClientName);
+        tvImage = (TextView) findViewById(R.id.tvImage);
         lvPhoto = (RecyclerView) findViewById(R.id.lvPhoto);
         etContent = (EditText) findViewById(R.id.etContent);
         imSelect_upload_photo = (ImageView) findViewById(R.id.imSelect_upload_photo);
@@ -147,7 +148,15 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
                 if (image != null && image.size()>0){
                     adapter_Photo_document adapter = new adapter_Photo_document(AddDocumentActivity.this, image);
                     lvPhoto.setAdapter(adapter);
+                    lvPhoto.setVisibility(View.VISIBLE);
+                    tvImage.setVisibility(View.GONE);
+                    imSelect_upload_photo.setVisibility(View.GONE);
+                }else {
+                    tvImage.setVisibility(View.GONE);
+                    lvPhoto.setVisibility(View.GONE);
+                    imSelect_upload_photo.setVisibility(View.GONE);
                 }
+
             }
 
             @Override

@@ -12,85 +12,139 @@
     <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="12dp"
         android:layout_marginRight="10dp"
-        android:padding="8dp"
+        android:padding="4dp"
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_marginTop="7dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/date"
-            android:id="@+id/textView9" />
+            android:textStyle="bold"
+            android:id="@+id/textView9"
+            android:layout_alignBaseline="@+id/date"
+            android:layout_alignBottom="@+id/date"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
             android:layout_alignParentRight="true"
-            android:textStyle="bold"
             android:text="@string/choose_date"
             android:focusable="false"
+
             android:id="@+id/date" />
     </RelativeLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:id="@+id/input_layout_3"
+    <!--<android.support.design.widget.TextInputLayout-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:id="@+id/input_layout_3"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/white"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true">-->
+        <!--<EditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:hint="@string/money"-->
+            <!--android:inputType="number"-->
+            <!--android:id="@+id/value" />-->
+    <!--</android.support.design.widget.TextInputLayout>-->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/money"
-            android:inputType="number"
-            android:id="@+id/value" />
-    </android.support.design.widget.TextInputLayout>
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="15dp">
 
-<LinearLayout
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
-        android:text="@string/srtForm"
-        android:padding="8dp"
-        />
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center_vertical"
+            android:text="@string/money"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv">
+
+            <EditText
+                android:id="@+id/value"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/border_edit"
+                android:inputType="number"
+                android:paddingLeft="15dp"
+                android:text="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:text="$"
+                android:textSize="13sp"
+
+                />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
 
-        <RadioButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/srtCash"
-            android:layout_weight="50"
-            android:id="@+id/radioButton1" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center_vertical"
+            android:padding="4dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
+            android:text="@string/srtForm" />
 
-        <RadioButton
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_weight="50"
             android:layout_height="wrap_content"
-            android:text="@string/srtTransfer"
-            android:id="@+id/radioButton2" />
-        <RadioButton
-            android:layout_width="match_parent"
-            android:layout_weight="50"
-            android:layout_height="wrap_content"
-            android:text="@string/other"
-            android:id="@+id/radioButton3" />
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radioButton1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/srtCash" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/srtTransfer" />
+
+            <RadioButton
+                android:id="@+id/radioButton3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/other" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
     <android.support.design.widget.TextInputLayout
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"

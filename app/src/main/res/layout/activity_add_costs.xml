@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/color1"
                 android:orientation="vertical"
-                android:paddingLeft="20dp"
+                android:paddingLeft="10dp"
                 android:paddingRight="15dp">
 
                 <TextView
@@ -147,6 +147,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/tvImage"
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:gravity="center_vertical"
@@ -215,6 +216,15 @@
                         android:gravity="right"
                         android:text=""
                         android:textAppearance="?android:attr/textAppearanceMedium" />
+                    <TextView
+                        android:id="@+id/tvShow"
+                        android:layout_width="50dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentRight="true"
+                        android:background="#00000000"
+                        android:gravity="right"
+
+                        />
                 </RelativeLayout>
                 <LinearLayout
                     android:id="@+id/layout_order"

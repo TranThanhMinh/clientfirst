@@ -57,6 +57,8 @@ public class EmailContractActivity extends BaseAppCompatActivity implements Call
     Toolbar toolbar;
     @Bind(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
+    @Bind(R.id.tvShow)
+    TextView tvShow;
     MEmail mEmail = new MEmail();
     MOrder mClient = new MOrder();
     Retrofit retrofit;
@@ -109,9 +111,17 @@ public class EmailContractActivity extends BaseAppCompatActivity implements Call
         });
         if (mEmail == null) {
             mEmail = new MEmail();
+            tvShow.setVisibility(View.GONE);
             getTracking_value_default();
         }
         if (mEmail.getEmail_user_id() > 0) {
+            tvShow.setVisibility(View.VISIBLE);
+            tvShow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
             etContent.setText(mEmail.getContent_email());
             if (mEmail.getDisplay_type() == 0)
                 switchCompat.setChecked(true);

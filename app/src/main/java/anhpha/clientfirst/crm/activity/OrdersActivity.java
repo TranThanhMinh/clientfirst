@@ -96,7 +96,7 @@ public class OrdersActivity extends BaseAppCompatActivity implements RecyclerTou
     private Retrofit retrofit;
     Dialog dialog;
     List<OrderContractStatus> lvByGroup = new ArrayList<>();
-
+    ActionBar actionBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,8 +108,8 @@ public class OrdersActivity extends BaseAppCompatActivity implements RecyclerTou
         lvStatus = (RecyclerView) findViewById(R.id.lvStatus);
         mDrawerList.getLayoutParams().width = Utils.getWidth(mContext) - 100;
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(R.string.title_activity_order);
+        actionBar = getSupportActionBar();
+
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
@@ -222,6 +222,7 @@ public class OrdersActivity extends BaseAppCompatActivity implements RecyclerTou
                         if (a < list.size()) {
                             mO.setCheck(true);
                             id_group = mO.getOrderContractStatusGroupId();
+                            actionBar.setTitle(mO.getOrderContractStatusGroupName());
                             getContractStatus(mO.getOrderContractStatusGroupId());
                             Log.d("getOrderContractStatusGroupId", mO.getOrderContractStatusGroupId() + "");
                             a = list.size();
@@ -537,6 +538,7 @@ public class OrdersActivity extends BaseAppCompatActivity implements RecyclerTou
         //  Toast.makeText(mContext, idGroup + " " + name, Toast.LENGTH_SHORT).show();
         id_group = idGroup;
         getContractStatus(idGroup);
+        actionBar.setTitle(name);
         dialog.cancel();
     }
 

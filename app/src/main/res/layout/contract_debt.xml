@@ -35,26 +35,8 @@
             android:layout_alignParentRight="true"
             android:text="@string/choose_date"
             android:focusable="false"
-
             android:id="@+id/date" />
     </RelativeLayout>
-
-    <!--<android.support.design.widget.TextInputLayout-->
-        <!--android:layout_marginLeft="10dp"-->
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:id="@+id/input_layout_3"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@color/white"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentEnd="true">-->
-        <!--<EditText-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="@string/money"-->
-            <!--android:inputType="number"-->
-            <!--android:id="@+id/value" />-->
-    <!--</android.support.design.widget.TextInputLayout>-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

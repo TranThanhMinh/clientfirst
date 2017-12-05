@@ -70,7 +70,6 @@ public class WorksActivity extends BaseAppCompatActivity implements AdapterInter
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_alter_add, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 

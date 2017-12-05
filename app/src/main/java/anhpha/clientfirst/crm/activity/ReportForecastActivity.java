@@ -21,7 +21,6 @@ import java.util.List;
 
 import anhpha.clientfirst.crm.R;
 import anhpha.clientfirst.crm.adapter.adapter_report_costs;
-import anhpha.clientfirst.crm.adapter.adapter_report_focus;
 import anhpha.clientfirst.crm.charting.charts.PieChart;
 import anhpha.clientfirst.crm.charting.data.Entry;
 import anhpha.clientfirst.crm.charting.data.PieData;
@@ -37,8 +36,8 @@ import anhpha.clientfirst.crm.interfaces.Url;
 import anhpha.clientfirst.crm.model.MAPIResponse;
 import anhpha.clientfirst.crm.model.MId;
 import anhpha.clientfirst.crm.model.MReportCosts;
-import anhpha.clientfirst.crm.model.MReportFocus;
-import anhpha.clientfirst.crm.model.MRequestFocus;
+import anhpha.clientfirst.crm.model.MRequestDebt;
+import anhpha.clientfirst.crm.model.MRequestDebtForecast;
 import anhpha.clientfirst.crm.model.User;
 import anhpha.clientfirst.crm.service_api.ServiceAPI;
 import anhpha.clientfirst.crm.utils.DynamicBox;
@@ -55,7 +54,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Administrator on 8/30/2017.
  */
 
-public class ReportCostsActivity extends BaseAppCompatActivity implements OnChartValueSelectedListener {
+public class ReportForecastActivity extends BaseAppCompatActivity implements OnChartValueSelectedListener {
     private RecyclerView rvView;
     private Retrofit retrofit;
     private Preferences preferences;
@@ -89,14 +88,14 @@ public class ReportCostsActivity extends BaseAppCompatActivity implements OnChar
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.costs);
+            getSupportActionBar().setTitle(R.string.forecast);
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
         }
         list = new ArrayList<>();
         lvUser = new ArrayList<>();
         User user = new User();
-        user.setUser_id(preferences.getIntValue(Constants.USER_ID, 0));
-        lvUser.add(user);
+        //user.setUser_id(preferences.getIntValue(Constants.USER_ID, 0));
+       // lvUser.add(user);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         rvView.setHasFixedSize(true);
@@ -142,27 +141,29 @@ public class ReportCostsActivity extends BaseAppCompatActivity implements OnChar
         tvAmount.setText("");
         tvSelect.setText("");
         amount = 0;
-        MRequestFocus mRequestBody = new MRequestFocus();
-        mRequestBody.setFrom_date(fromDate);
-        mRequestBody.setTo_date(toDate);
+        MRequestDebtForecast mRequestBody = new MRequestDebtForecast();
         mRequestBody.setUser_ids(lvUser);
+        mRequestBody.setTo_date(toDate);
+        mRequestBody.setFrom_date(fromDate);
+
+
         getReportCosts(mRequestBody);
         Log.d("date", mRequestBody.toString());
     }
 
-    public void getReportCosts(MRequestFocus mRequestBody) {
+    public void getReportCosts(MRequestDebtForecast mRequestDebt) {
         ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
-        Call<MAPIResponse<List<MReportCosts>>> call = serviceAPI.get_partner_expends(preferences.getIntValue(Constants.USER_ID, 0), preferences.getIntValue(Constants.PARTNER_ID, 0), preferences.getStringValue(Constants.TOKEN, ""), mRequestBody);
+        Call<MAPIResponse<List<MReportCosts>>> call = serviceAPI.get_sales_amount_by_percent_done(preferences.getIntValue(Constants.USER_ID, 0), preferences.getIntValue(Constants.PARTNER_ID, 0), preferences.getStringValue(Constants.TOKEN, ""), mRequestDebt);
         call.enqueue(new Callback<MAPIResponse<List<MReportCosts>>>() {
             @Override
             public void onResponse(Call<MAPIResponse<List<MReportCosts>>> call, Response<MAPIResponse<List<MReportCosts>>> response) {
                 list = response.body().getResult();
-                TokenUtils.checkToken(ReportCostsActivity.this, response.body().getErrors());
+                TokenUtils.checkToken(ReportForecastActivity.this, response.body().getErrors());
                 box.hideAll();
                 LogUtils.api("", call, response);
                 setData(list);
                 if (list != null && list.size() > 0) {
-                    adapter_report_costs adapter = new adapter_report_costs(ReportCostsActivity.this, list);
+                    adapter_report_costs adapter = new adapter_report_costs(ReportForecastActivity.this, list);
                     rvView.setAdapter(adapter);
                 } else rvView.setAdapter(null);
 
@@ -190,7 +191,7 @@ public class ReportCostsActivity extends BaseAppCompatActivity implements OnChar
         }
 
         PieDataSet dataSet = new PieDataSet(entries, "AP DMS");
-        dataSet.setSliceSpace(3f);
+        dataSet.setSliceSpace(1f);
         dataSet.setSelectionShift(5f);
         // add a lot of colors
 
@@ -205,32 +206,29 @@ public class ReportCostsActivity extends BaseAppCompatActivity implements OnChar
             amount = amount + mReports.get(i).getValue();
         }
         tvAmount.setText("$ "+Utils.formatCurrency(amount) + "");
-
         dataSet.setColors(colors);
-
         PieData data = new PieData(dataSet);
         data.setValueFormatter(new PercentFormatter());
-
         mChart.setData(data);
-
         mChart.setExtraOffsets(5, 10, 5, 5);
         // add a selection listener
         // add a selection listener
         mChart.setOnChartValueSelectedListener(this);
-
         for (IDataSet<?> set : mChart.getData().getDataSets())
             set.setDrawValues(!set.isDrawValuesEnabled());
-
         mChart.invalidate();
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.menu_activity, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getItemId() == R.id.user)
+                menu.getItem(i).setVisible(true);
+            if (menu.getItem(i).getItemId() == R.id.calendar)
+                menu.getItem(i).setVisible(false);
+        }
         return super.onCreateOptionsMenu(menu);
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

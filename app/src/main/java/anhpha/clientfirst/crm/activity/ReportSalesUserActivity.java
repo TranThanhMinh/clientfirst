@@ -74,7 +74,7 @@ public class ReportSalesUserActivity extends BaseAppCompatActivity implements Ca
 
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(R.string.title_activity_report);
+        actionBar.setTitle(R.string.sales_user);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         preferences = new Preferences(mContext);

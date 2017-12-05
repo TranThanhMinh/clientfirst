@@ -21,7 +21,6 @@ import java.util.List;
 
 import anhpha.clientfirst.crm.R;
 import anhpha.clientfirst.crm.adapter.adapter_report_costs;
-import anhpha.clientfirst.crm.adapter.adapter_report_focus;
 import anhpha.clientfirst.crm.charting.charts.PieChart;
 import anhpha.clientfirst.crm.charting.data.Entry;
 import anhpha.clientfirst.crm.charting.data.PieData;
@@ -37,7 +36,7 @@ import anhpha.clientfirst.crm.interfaces.Url;
 import anhpha.clientfirst.crm.model.MAPIResponse;
 import anhpha.clientfirst.crm.model.MId;
 import anhpha.clientfirst.crm.model.MReportCosts;
-import anhpha.clientfirst.crm.model.MReportFocus;
+import anhpha.clientfirst.crm.model.MRequestDebt;
 import anhpha.clientfirst.crm.model.MRequestFocus;
 import anhpha.clientfirst.crm.model.User;
 import anhpha.clientfirst.crm.service_api.ServiceAPI;
@@ -55,7 +54,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by Administrator on 8/30/2017.
  */
 
-public class ReportCostsActivity extends BaseAppCompatActivity implements OnChartValueSelectedListener {
+public class ReportDebtActivity extends BaseAppCompatActivity implements OnChartValueSelectedListener {
     private RecyclerView rvView;
     private Retrofit retrofit;
     private Preferences preferences;
@@ -89,7 +88,7 @@ public class ReportCostsActivity extends BaseAppCompatActivity implements OnChar
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.costs);
+            getSupportActionBar().setTitle(R.string.get_free);
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
         }
         list = new ArrayList<>();
@@ -142,27 +141,29 @@ public class ReportCostsActivity extends BaseAppCompatActivity implements OnChar
         tvAmount.setText("");
         tvSelect.setText("");
         amount = 0;
-        MRequestFocus mRequestBody = new MRequestFocus();
-        mRequestBody.setFrom_date(fromDate);
-        mRequestBody.setTo_date(toDate);
+        MRequestDebt mRequestBody = new MRequestDebt();
         mRequestBody.setUser_ids(lvUser);
+        mRequestBody.setTo_date(toDate);
+        mRequestBody.setFrom_date(fromDate);
+
+
         getReportCosts(mRequestBody);
         Log.d("date", mRequestBody.toString());
     }
 
-    public void getReportCosts(MRequestFocus mRequestBody) {
+    public void getReportCosts(MRequestDebt mRequestDebt) {
         ServiceAPI serviceAPI = retrofit.create(ServiceAPI.class);
-        Call<MAPIResponse<List<MReportCosts>>> call = serviceAPI.get_partner_expends(preferences.getIntValue(Constants.USER_ID, 0), preferences.getIntValue(Constants.PARTNER_ID, 0), preferences.getStringValue(Constants.TOKEN, ""), mRequestBody);
+        Call<MAPIResponse<List<MReportCosts>>> call = serviceAPI.get_partner_debts(preferences.getIntValue(Constants.USER_ID, 0), preferences.getIntValue(Constants.PARTNER_ID, 0), preferences.getStringValue(Constants.TOKEN, ""), mRequestDebt);
         call.enqueue(new Callback<MAPIResponse<List<MReportCosts>>>() {
             @Override
             public void onResponse(Call<MAPIResponse<List<MReportCosts>>> call, Response<MAPIResponse<List<MReportCosts>>> response) {
                 list = response.body().getResult();
-                TokenUtils.checkToken(ReportCostsActivity.this, response.body().getErrors());
+                TokenUtils.checkToken(ReportDebtActivity.this, response.body().getErrors());
                 box.hideAll();
                 LogUtils.api("", call, response);
                 setData(list);
                 if (list != null && list.size() > 0) {
-                    adapter_report_costs adapter = new adapter_report_costs(ReportCostsActivity.this, list);
+                    adapter_report_costs adapter = new adapter_report_costs(ReportDebtActivity.this, list);
                     rvView.setAdapter(adapter);
                 } else rvView.setAdapter(null);
 

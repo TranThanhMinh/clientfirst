@@ -91,7 +91,7 @@ public class ReportFocusActivity extends BaseAppCompatActivity implements OnChar
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_activity_report);
+            getSupportActionBar().setTitle(R.string.srtFocus);
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
         }
         list = new ArrayList<>();

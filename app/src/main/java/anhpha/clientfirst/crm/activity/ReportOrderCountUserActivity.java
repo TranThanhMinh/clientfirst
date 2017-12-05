@@ -76,7 +76,7 @@ public class ReportOrderCountUserActivity extends BaseAppCompatActivity implemen
         preferences =new Preferences(mContext);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(R.string.title_activity_report);
+        actionBar.setTitle(R.string.order_user);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         Preferences preferences = new Preferences(mContext);

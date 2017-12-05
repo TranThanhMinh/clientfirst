@@ -109,8 +109,9 @@ public class ContractsActivity extends BaseAppCompatActivity implements Recycler
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
         rvActivities.setLayoutManager(mLayoutManager);
 
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(mContext);
+        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false);
         mLayoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
+        rvCategory.setHasFixedSize(true);
         rvCategory.setLayoutManager(mLayoutManager2);
         rvCategory.setItemAnimator(new DefaultItemAnimator());
         rvCategory.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));

@@ -2,6 +2,7 @@ package anhpha.clientfirst.crm.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ public class GroupContractsAdapter extends RecyclerView.Adapter<GroupContractsAd
     public void onBindViewHolder(MyViewHolder holder, int position) {
         MGroupContract activityItem = mGroupContractList.get(position);
         holder.name.setText(activityItem.getContract_group_name());
+        Log.d("group",activityItem.getContract_group_name());
 
     }
 

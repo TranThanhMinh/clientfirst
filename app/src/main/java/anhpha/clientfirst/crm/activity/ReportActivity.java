@@ -30,6 +30,10 @@ public class ReportActivity extends BaseAppCompatActivity implements View.OnClic
 
     @Bind(R.id.textView6)
     TextView textView6;
+    @Bind(R.id.textView7)
+    TextView textView7;
+    @Bind(R.id.textView8)
+    TextView textView8;
     @Bind(R.id.include)
     Toolbar toolbar;
     DynamicBox box;
@@ -52,6 +56,8 @@ public class ReportActivity extends BaseAppCompatActivity implements View.OnClic
         textView4.setOnClickListener(this);
         textView5.setOnClickListener(this);
         textView6.setOnClickListener(this);
+        textView7.setOnClickListener(this);
+        textView8.setOnClickListener(this);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,6 +106,14 @@ public class ReportActivity extends BaseAppCompatActivity implements View.OnClic
             case R.id.textView6:
                 Intent it6 = new Intent(mContext,ReportCostsActivity.class);
                 startActivity(it6);
+                break;
+            case R.id.textView7:
+                Intent it7 = new Intent(mContext,ReportDebtActivity.class);
+                startActivity(it7);
+                break;
+            case R.id.textView8:
+                Intent it8 = new Intent(mContext,ReportForecastActivity.class);
+                startActivity(it8);
                 break;
             default:
                 break;

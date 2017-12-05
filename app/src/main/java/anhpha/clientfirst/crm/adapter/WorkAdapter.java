@@ -32,6 +32,7 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.MyViewHolder>{
         public ImageButton imageButton;
         public LinearLayout linearLayout2;
         public RelativeLayout views,view1;
+        RelativeLayout real;
         public MyViewHolder(View view) {
             super(view);
             views = (RelativeLayout) view.findViewById(R.id.view);
@@ -46,6 +47,7 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.MyViewHolder>{
             done = (TextView) view.findViewById(R.id.done);
             delete = (TextView) view.findViewById(R.id.delete);
             client = (TextView) view.findViewById(R.id.client);
+            real = (RelativeLayout) view.findViewById(R.id.real);
         }
     }
 
@@ -71,6 +73,10 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.MyViewHolder>{
         holder.content.setText(activityItem.getContent_work());
         holder.time.setText(activityItem.getWork_begin_date());
         holder.user.setText(activityItem.getUser_name());
+        if(activityItem.getStatus_id() == 2){
+            holder.real.setBackgroundColor(Color.parseColor("#FFFFCC"));
+        }
+        else  holder.real.setBackgroundColor(Color.parseColor("#FFFFFF"));
         if(activityItem.getUser_id() != user_id){
             holder.delete.setVisibility(View.GONE);
         }

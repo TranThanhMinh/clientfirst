@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
+    android:id="@+id/real"
     android:padding="5dp">
 
     <anhpha.clientfirst.crm.swipe.SwipeLayout

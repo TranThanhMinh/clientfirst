@@ -749,14 +749,15 @@
     <string name="get_money">Collect money</string>
     <string name="document">Document</string>
     <string name="meet">Metting</string>
-    <string name="costs">Expenditure</string>
+    <string name="costs">Expenes</string>
     <string name="expenditure">Chi</string>
     <string name="potential">Potential</string>
     <string name="complete">Complete</string>
     <string name="addCost">Add expend</string>
     <string name="get_order">Order contract</string>
     <string name="order_get">Sign a contract</string>
-    <string name="get_free">Get the cost</string>
+    <string name="get_free">Debt</string>
+    <string name="forecast">Forecast complete</string>
     <string name="delivery_do">Delivery</string>
     <string name="address_point">Location</string>
     <string name="number_invite">Attendants</string>

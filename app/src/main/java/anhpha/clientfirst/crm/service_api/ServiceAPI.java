@@ -48,6 +48,8 @@ import anhpha.clientfirst.crm.model.MReport;
 import anhpha.clientfirst.crm.model.MReportCosts;
 import anhpha.clientfirst.crm.model.MReportFocus;
 import anhpha.clientfirst.crm.model.MRequestBody;
+import anhpha.clientfirst.crm.model.MRequestDebt;
+import anhpha.clientfirst.crm.model.MRequestDebtForecast;
 import anhpha.clientfirst.crm.model.MRequestFocus;
 import anhpha.clientfirst.crm.model.MResult_order_history;
 import anhpha.clientfirst.crm.model.MTracking;
@@ -340,6 +342,13 @@ public interface ServiceAPI {
 
     @POST("get_partner_expends")
     Call<MAPIResponse<List<MReportCosts>>> get_partner_expends(@Header("user_id") int user_id, @Header("partner_id") int partner_id, @Header("token") String token, @Body MRequestFocus mRequestBody);
+
+    @POST("get_partner_debts")
+    Call<MAPIResponse<List<MReportCosts>>> get_partner_debts(@Header("user_id") int user_id, @Header("partner_id") int partner_id, @Header("token") String token, @Body MRequestDebt mRequestBody);
+
+
+    @POST("get_sales_amount_by_percent_done")
+    Call<MAPIResponse<List<MReportCosts>>> get_sales_amount_by_percent_done(@Header("user_id") int user_id, @Header("partner_id") int partner_id, @Header("token") String token, @Body MRequestDebtForecast mRequestBody);
 
     //    get_clients_by_parent
     @GET("get_clients_parent")

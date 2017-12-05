@@ -74,7 +74,7 @@ public class ReportSalesMonthActivity extends BaseAppCompatActivity implements C
 
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(R.string.title_activity_report);
+        actionBar.setTitle(R.string.sales_month);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         preferences = new Preferences(mContext);

@@ -169,6 +169,53 @@
                         android:padding="12dp"
                         android:text="@string/costs" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="16"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/imageButton7"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray"
+                        android:gravity="center_vertical"
+                        android:scaleType="centerInside" />
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableRight="@mipmap/ic_dms_79"
+                        android:gravity="center_vertical"
+                        android:padding="12dp"
+                        android:text="@string/get_free" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="16"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/imageButton8"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray"
+                        android:gravity="center_vertical"
+                        android:scaleType="centerInside" />
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:drawableRight="@mipmap/ic_dms_79"
+                        android:gravity="center_vertical"
+                        android:padding="12dp"
+                        android:text="@string/forecast" />
+                </LinearLayout>
                 <View
                     android:background="@color/gray"
                     android:layout_width="match_parent"

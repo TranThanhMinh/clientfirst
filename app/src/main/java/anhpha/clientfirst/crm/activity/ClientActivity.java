@@ -1459,7 +1459,7 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
                 break;
             case Constants.ACTIVITY_TYPE_CALL:
                 MCall mCall = new MCall();
-                mCall.setCall_user_id(activityItem.getUser_call_id());
+                mCall.setUser_call_id(activityItem.getUser_call_id());
                 mCall.setContent_call(activityItem.getActivity_content());
                 mCall.setOrder_contract_id(activityItem.getOrder_contract_id());
                 mCall.setOrder_contract_name(activityItem.getOrder_contract_name());
@@ -1475,7 +1475,7 @@ public class ClientActivity extends BaseAppCompatActivity implements RecyclerTou
                 break;
             case Constants.ACTIVITY_TYPE_EMAIL:
                 MEmail mEmail = new MEmail();
-                mEmail.setEmail_user_id(activityItem.getUser_email_id());
+                mEmail.setUser_email_id(activityItem.getUser_email_id());
                 mEmail.setContent_email(activityItem.getActivity_content());
                 mEmail.setOrder_contract_id(activityItem.getOrder_contract_id());
                 mEmail.setOrder_contract_name(activityItem.getOrder_contract_name());

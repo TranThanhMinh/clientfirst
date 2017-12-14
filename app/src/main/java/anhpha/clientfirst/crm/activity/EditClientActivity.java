@@ -516,7 +516,12 @@ public class EditClientActivity extends BaseAppCompatActivity implements Compoun
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_done, menu);
-
+        for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getItemId() == R.id.done)
+                menu.getItem(i).setVisible(true);
+            if (menu.getItem(i).getItemId() == R.id.edit)
+                menu.getItem(i).setVisible(false);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

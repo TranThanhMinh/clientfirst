@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CheckinActivity extends BaseAppCompatActivity implements Callback<MAPIResponse<MCheckin>>, View.OnClickListener,adapter_orders.Onclick {
+public class CheckinActivity extends BaseAppCompatActivity implements Callback<MAPIResponse<MCheckin>>, View.OnClickListener, adapter_orders.Onclick {
     @Bind(R.id.rvActivities)
     RecyclerView rvActivities;
     @Bind(R.id.etContent)
@@ -96,18 +97,28 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
     private Retrofit retrofit;
     List<Tracking_value_defaults> listTracking;
     private List<Tracking_value_defaults> listTracking_userCheckin = new ArrayList<>();
+    private int check = 0;
     @Bind(R.id.realOff)
     RelativeLayout realOff;
     private int order_contract_id = 0;
+    private int id = 0;
+    int user = 0;
     @Bind(R.id.tvShow)
     TextView tvShow;
+    private boolean isHide = false;
+    LinearLayout layout_order;
+    LinearLayout layCamera;
+    adapter_orders adapter;
+    private boolean edit = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         box = new DynamicBox(this, R.layout.activity_checkin);
         ButterKnife.bind(this);
         preferences = new Preferences(mContext);
-        LinearLayout layout_order = (LinearLayout) findViewById(R.id.layout_order);
+        layout_order = (LinearLayout) findViewById(R.id.layout_order);
+        layCamera = (LinearLayout) findViewById(R.id.layCamera);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.meet);
@@ -118,7 +129,6 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         lvTracking.setHasFixedSize(true);
         lvTracking.setLayoutManager(manager);
-
         Intent intent = getIntent();
         mCheckin = (MCheckin) intent.getSerializableExtra("mCheckin");
         mClient = (MClient) intent.getSerializableExtra("mClient");
@@ -141,27 +151,34 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
         retrofit = getConnect();
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
                 .switchButton);
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    lvOrder.setVisibility(View.VISIBLE);
+                    order_contract_id = id;
+                    //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
+                } else {
+                    //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
+                    order_contract_id = 0;
+                    lvOrder.setVisibility(View.GONE);
+                }
+            }
+        });
         if (mCheckin == null) {
+            user = 0;
+            isHide = true;
+            edit = true;
             mCheckin = new MCheckin();
             tvShow.setVisibility(View.GONE);
             getTracking_value_default();
             getOrder();
-            switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b == true) {
-                        lvOrder.setVisibility(View.VISIBLE);
-                        //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
-                    } else {
-                        //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
-                        order_contract_id = 0;
-                        lvOrder.setVisibility(View.GONE);
-                    }
-                }
-            });
         }
         ivCamera.setOnClickListener(this);
         if (mCheckin.getUser_checkin_id() > 0) {
+            edit = false;
+            user = mCheckin.getUser_checkin_id();
+            isHide = false;
             tvShow.setVisibility(View.VISIBLE);
             tvShow.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -170,6 +187,8 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                 }
             });
             if (mCheckin.getOrder_contract_id() > 0) {
+                id = mCheckin.getOrder_contract_id();
+                order_contract_id = mCheckin.getOrder_contract_id();
                 tvContract.setText(mCheckin.getOrder_contract_name());
                 layout_order.setVisibility(View.VISIBLE);
                 switchCompat.setChecked(true);
@@ -189,11 +208,11 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                             TokenUtils.checkToken(mContext, response.body().getErrors());
                             mCheckin = response.body().getResult();
                             photos = mCheckin.getPhotos();
-                            if(photos != null && photos.size()>0) {
+                            if (photos != null && photos.size() > 0) {
                                 photosAdapter.setPhotoList(photos);
                                 photosAdapter.notifyDataSetChanged();
-                                rvActivities.setVisibility(View.VISIBLE);
-                            }else  rvActivities.setVisibility(View.GONE);
+                                layCamera.setVisibility(View.VISIBLE);
+                            } else layCamera.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -202,9 +221,7 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                         }
                     });
         }
-
         photos = new ArrayList<>();
-
         photosAdapter = new PhotosAdapter(this, photos, new PhotosAdapter.IPhotoCallback() {
             @Override
             public void select(int position) {
@@ -220,7 +237,6 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
         rvActivities.setAdapter(photosAdapter);
 
 
-
     }
 
     public Retrofit getConnect() {
@@ -230,6 +246,7 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                 .build();
         return retrofit;
     }
+
     public void getOrder() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Url.URL_exchange)
@@ -243,18 +260,37 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                 TokenUtils.checkToken(CheckinActivity.this, response.body().getErrors());
                 LogUtils.api("", call, response);
                 List<MOrders> orders = response.body().getResult();
+                List<MOrders> orders1 = new ArrayList<MOrders>();
                 if (orders != null && orders.size() > 0) {
                     orders.get(0).getOrderContractName();
-                    adapter_orders adapter = new adapter_orders(CheckinActivity.this, orders, CheckinActivity.this);
-                    lvOrder.setAdapter(adapter);
+//                    adapter_orders adapter = new adapter_orders(CheckinActivity.this, orders, CheckinActivity.this);
+//                    lvOrder.setAdapter(adapter);
+                    if (order_contract_id > 0) {
+                        lvOrder.setVisibility(View.VISIBLE);
+                        for (MOrders mOrders : orders) {
+                            if (mOrders.getOrderContractId() == order_contract_id) {
+                                mOrders.setCheck(true);
+                            } else {
+                                mOrders.setCheck(false);
+                            }
+                            orders1.add(mOrders);
+                        }
+                        adapter = new adapter_orders(CheckinActivity.this, orders1, CheckinActivity.this);
+                        lvOrder.setAdapter(adapter);
+                    } else {
+                        adapter = new adapter_orders(CheckinActivity.this, orders, CheckinActivity.this);
+                        lvOrder.setAdapter(adapter);
+                    }
                 }
             }
+
             @Override
             public void onFailure(Call<MAPIResponse<List<MOrders>>> call, Throwable t) {
 
             }
         });
     }
+
     public void getTracking_value_default() {
         ServiceAPI apiTracking = retrofit.create(ServiceAPI.class);
         Call<MAPIResponse<List<Tracking_value_defaults>>> tracking_value_defaults = apiTracking.getTracking_value_defaults(preferences.getIntValue(Constants.USER_ID, 0), preferences.getIntValue(Constants.PARTNER_ID, 0), 1, preferences.getStringValue(Constants.TOKEN, ""));
@@ -263,8 +299,31 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
             public void onResponse(Call<MAPIResponse<List<Tracking_value_defaults>>> call, Response<MAPIResponse<List<Tracking_value_defaults>>> response) {
                 listTracking = response.body().getResult();
                 LogUtils.api("", call, response);
-                TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CheckinActivity.this, listTracking);
-                lvTracking.setAdapter(adapte);
+//                TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CheckinActivity.this, listTracking);
+//                lvTracking.setAdapter(adapte);
+                if (listTracking_userCheckin != null && listTracking_userCheckin.size() > 0) {
+                    List<Tracking_value_defaults> list = new ArrayList<>();
+                    for (Tracking_value_defaults email : listTracking) {
+                        for (int i = 0; i < listTracking_userCheckin.size(); i++) {
+                            if (email.getTracking_value_default_id() == listTracking_userCheckin.get(i).getTracking_value_default_id()) {
+                                email.setTracking(true);
+                                list.add(email);
+                                i = listTracking_userCheckin.size();
+                            } else {
+                                if (i == listTracking_userCheckin.size() - 1) {
+                                    email.setTracking(false);
+                                    list.add(email);
+                                }
+                            }
+                        }
+                    }
+                    listTracking = list;
+                    TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CheckinActivity.this, listTracking);
+                    lvTracking.setAdapter(adapte);
+                } else {
+                    TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CheckinActivity.this, listTracking);
+                    lvTracking.setAdapter(adapte);
+                }
             }
 
             @Override
@@ -282,13 +341,13 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
             public void onResponse(Call<MAPIResponse<UserEmail>> call, Response<MAPIResponse<UserEmail>> response) {
                 LogUtils.api("", call, response);
                 listTracking_userCheckin = response.body().getResult().getValuesDefault();
+                check = response.body().getResult().getUserId();
                 ValueDefautAdapter adapte = new ValueDefautAdapter(CheckinActivity.this, listTracking_userCheckin);
                 lvTracking.setAdapter(adapte);
             }
 
             @Override
             public void onFailure(Call<MAPIResponse<UserEmail>> call, Throwable t) {
-
             }
         });
     }
@@ -297,11 +356,18 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_done, menu);
-        if (mCheckin.getUser_checkin_id() > 0) {
+        if (isHide == false) {
             for (int i = 0; i < menu.size(); i++) {
                 if (menu.getItem(i).getItemId() == R.id.done)
                     menu.getItem(i).setVisible(false);
+                if (menu.getItem(i).getItemId() == R.id.edit)
+                    menu.getItem(i).setVisible(true);
             }
+        } else for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getItemId() == R.id.done)
+                menu.getItem(i).setVisible(true);
+            if (menu.getItem(i).getItemId() == R.id.edit)
+                menu.getItem(i).setVisible(false);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -326,7 +392,6 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                         tracking.setTracking(false);
                     }
                 }
-
                 mCheckin.setValues_default(list);
                 mCheckin.setClient_id(mClient.getClient_id());
                 mCheckin.setUser_id(preferences.getIntValue(Constants.USER_ID, 0));
@@ -334,6 +399,7 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                 mCheckin.setLatitude(mLastLocation.getLatitude());
                 mCheckin.setLongitude(mLastLocation.getLongitude());
                 mCheckin.setOrder_contract_id(order_contract_id);
+                mCheckin.setUser_checkin_id(user);
                 mCheckin.setDisplay_type(0);
                 mCheckin.setActivity_type(0);
                 GetRetrofit().create(ServiceAPI.class)
@@ -343,23 +409,38 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                                 , mClient.getClient_id()
                                 , mCheckin)
                         .enqueue(this);
-
                 return true;
-
             case android.R.id.home:
                 onBackPressed();
                 return true;
-
+            case R.id.edit:
+                Log.d("User_id1", check + "");
+                if (preferences.getIntValue(Constants.USER_ID, 0) == check) {
+                    tvShow.setVisibility(View.GONE);
+                    etContent.setFocusable(true);
+                    etContent.setFocusableInTouchMode(true);
+                    etContent.requestFocus();
+                    isHide = true;
+                    invalidateOptionsMenu();
+                    getTracking_value_default();
+                    getOrder();
+                    ivCamera.setVisibility(View.VISIBLE);
+                    layCamera.setVisibility(View.VISIBLE);
+                    layout_order.setVisibility(View.GONE);
+                } else {
+                    Toast.makeText(mContext, R.string.edit_activity, Toast.LENGTH_SHORT).show();
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
     private void uploadImage(final List<MPhoto> photos) {
         if (photos.size() == 0) {
-            Utils.showDialogSuccess(mContext, R.string.checkin_client_done);
+            if (edit == true)
+                Utils.showDialogSuccess(mContext, R.string.checkin_client_done);
+            else Utils.showDialogSuccess(mContext, R.string.checkin_client_done1);
         }
-
         for (final MPhoto p : photos) {
             if (p.local != null) {
                 File file = new File(p.local);
@@ -412,20 +493,20 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
         if (!response.body().isHasErrors()) {
             uploadImage(photos);
         }
-
     }
 
     @Override
     public void onFailure(Call<MAPIResponse<MCheckin>> call, Throwable t) {
         LogUtils.d(TAG, "getUserActivities ", t.toString());
         box.hideAll();
-        Utils.showError(coordinatorLayout, R.string.checkin_client_fail);
+        if (edit == true)
+            Utils.showError(coordinatorLayout, R.string.checkin_client_fail);
+        else Utils.showError(coordinatorLayout, R.string.checkin_client_fail1);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-
             case R.id.ivCamera:
                 CharSequence[] charSequences = new CharSequence[2];
                 charSequences[0] = getString(R.string.camera);
@@ -461,15 +542,11 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
 
     private void openCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
         mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
                 "tmp_avatar_" + String.valueOf(System.currentTimeMillis()) + ".jpg"));
-
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-
         try {
             intent.putExtra("return-data", true);
-
             startActivityForResult(intent, Constants.PICK_FROM_CAMERA);
         } catch (ActivityNotFoundException e) {
             LogUtils.e(TAG, "openCamera", e);
@@ -485,13 +562,14 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
             }
         } else if (requestCode == Crop.REQUEST_CROP) {
             if (data != null) {
-
                 filePath = data.getStringExtra("file").toString();
                 MPhoto p = new MPhoto();
                 p.local = filePath;
                 photos.add(p);
                 photosAdapter.setPhotoList(photos);
                 photosAdapter.notifyDataSetChanged();
+                layCamera.setVisibility(View.VISIBLE);
+
             }
         } else if (requestCode == Constants.PICK_FROM_CAMERA) {
             if (mImageCaptureUri != null) {
@@ -508,6 +586,7 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
 
     @Override
     public void Click(int id) {
+        this.id = id;
         order_contract_id = id;
     }
 }

@@ -99,13 +99,17 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
     private TextView tvName, tvAddress, tvImage;
     EditText tvDate;
     private int add;
+    private int check;
     private Expend expend;
     LinearLayout coordinatorLayout;
     int Year, Month, Day, order_contract_id = 0;
     private TextView tvContract;
-
+    SwitchCompat switchCompat;
     TextView tvShow;
-
+    private int edit;
+    private int id;
+    adapter_orders adapter;
+    LinearLayout layout_order;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,8 +125,8 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
         tvImage = (TextView) findViewById(R.id.tvImage);
         tvContract = (TextView) findViewById(R.id.tvContract);
         tvDate = (EditText) findViewById(R.id.tvDate);
-        LinearLayout layout_order = (LinearLayout) findViewById(R.id.layout_order);
-        SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
+        layout_order = (LinearLayout) findViewById(R.id.layout_order);
+        switchCompat = (SwitchCompat) findViewById(R.id
                 .switchButton);
 
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -187,11 +191,17 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
         retrofit = getConnect();
         retrofit_photo = func_Upload_photo();
         if (add == 0) {
+            Expend_id = mActivityItem.getExpend_id();
+            edit = 0;
             getExpend();
             if (mActivityItem.getOrder_contract_id() > 0) {
+                order_contract_id = mActivityItem.getOrder_contract_id();
+                Log.d("order_contract_id",order_contract_id+"");
+                id = mActivityItem.getOrder_contract_id();
                 tvContract.setText(mActivityItem.getOrder_contract_name());
                 layout_order.setVisibility(View.VISIBLE);
                 switchCompat.setChecked(true);
+
             }
             tvShow.setVisibility(View.VISIBLE);
             tvShow.setOnClickListener(new View.OnClickListener() {
@@ -202,8 +212,26 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
             });
             imSelect_upload_photo.setVisibility(View.GONE);
         } else {
+            edit = 1;
+            id=0;
+            switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b == true) {
+                        lvOrder.setVisibility(View.VISIBLE);
+                        order_contract_id = id;
+                        //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
+                        order_contract_id = 0;
+                        lvOrder.setVisibility(View.GONE);
+                    }
+                }
+            });
+            layout_order.setVisibility(View.GONE);
             tvShow.setVisibility(View.GONE);
-
+            Expend_id = 0;
+            check = 0;
             tvDate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -234,19 +262,7 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
             tvDate.setText(formattedDate);
         }
 
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b == true) {
-                    lvOrder.setVisibility(View.VISIBLE);
-                    //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
-                } else {
-                    //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
-                    order_contract_id = 0;
-                    lvOrder.setVisibility(View.GONE);
-                }
-            }
-        });
+
     }
 
     public Retrofit func_Upload_photo() {
@@ -281,6 +297,10 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
             public void onResponse(Call<MAPIResponse<Expend>> call, Response<MAPIResponse<Expend>> response) {
                 expend = response.body().getResult();
                 LogUtils.api("", call, response);
+                Expend_group_type_id = expend.getExpendGroupTypeId();
+                Expend_type_id = expend.getExpendTypeId();
+                Status_id = expend.getStatusId();
+                check = expend.getUserId();
                 tvCosts.setText(Utils.formatCurrency(expend.getAmount()) + "");
                 if (expend.getNote() != null && expend.getNote().length() > 0) {
                     tvNote.setText(expend.getNote());
@@ -311,7 +331,6 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
         });
 
     }
-
     public void getCost() {
         ServiceAPI api = retrofit.create(ServiceAPI.class);
         Call<MAPIResponse<List<Cost>>> call = api.get_expend_group_type(preferences.getIntValue(Constants.USER_ID, 0), preferences.getIntValue(Constants.PARTNER_ID, 0), preferences.getStringValue(Constants.TOKEN, ""));
@@ -323,11 +342,11 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
                 if (response.body() != null) {
                     listCost = new ArrayList<>();
                     listCost = response.body().getResult();
-                    if (add == 0) {
+                    if (edit == 0) {
                         for (Cost cost : listCost) {
                             List<Expend> expends = cost.getExpends();
                             for (int i = 0; i < expends.size(); i++) {
-                                if (expends.get(i).getExpendGroupTypeId() == expend.getExpendGroupTypeId() && expends.get(i).getExpendTypeId() == expend.getExpendTypeId()) {
+                                if (expends.get(i).getExpendGroupTypeId() == Expend_group_type_id && expends.get(i).getExpendTypeId() == Expend_type_id) {
                                     expends.get(i).setCheck(true);
                                 } else expends.get(i).setCheck(false);
                             }
@@ -359,11 +378,29 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
                 TokenUtils.checkToken(AddCostsActivity.this, response.body().getErrors());
                 LogUtils.api("", call, response);
                 List<MOrders> orders = response.body().getResult();
+                List<MOrders> orders1 = new ArrayList<MOrders>();
                 if (orders != null && orders.size() > 0) {
                     orders.get(0).getOrderContractName();
-                    adapter_orders adapter = new adapter_orders(AddCostsActivity.this, orders, AddCostsActivity.this);
-                    lvOrder.setAdapter(adapter);
+//                    adapter_orders adapter = new adapter_orders(AddCostsActivity.this, orders, AddCostsActivity.this);
+//                    lvOrder.setAdapter(adapter);
+                    if (order_contract_id > 0) {
+                        lvOrder.setVisibility(View.VISIBLE);
+                        for (MOrders mOrders : orders) {
+                            if (mOrders.getOrderContractId() == order_contract_id) {
+                                mOrders.setCheck(true);
+                            } else {
+                                mOrders.setCheck(false);
+                            }
+                            orders1.add(mOrders);
+                        }
+                        adapter = new adapter_orders(AddCostsActivity.this, orders1, AddCostsActivity.this);
+                        lvOrder.setAdapter(adapter);
+                    } else {
+                        adapter = new adapter_orders(AddCostsActivity.this, orders, AddCostsActivity.this);
+                        lvOrder.setAdapter(adapter);
+                    }
                 }
+
             }
 
             @Override
@@ -446,14 +483,29 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_edit_history_order, menu);
+
         if (add == 0) {
-            menu.getItem(0).setVisible(false);
             tvCosts.setEnabled(false);
             tvNote.setEnabled(false);
             tvCosts.setTextColor(getResources().getColor(R.color.colorBlack));
             tvNote.setTextColor(getResources().getColor(R.color.color));
+            for (int i = 0; i < menu.size(); i++) {
+                if (menu.getItem(i).getItemId() == R.id.actionDone) {
+                    menu.getItem(i).setVisible(false);
+                }
+                if (menu.getItem(i).getItemId() == R.id.edit) {
+                    menu.getItem(i).setVisible(true);
+                }
+            }
         } else {
-            menu.getItem(0).setVisible(true);
+            for (int i = 0; i < menu.size(); i++) {
+                if (menu.getItem(i).getItemId() == R.id.actionDone) {
+                    menu.getItem(i).setVisible(true);
+                }
+                if (menu.getItem(i).getItemId() == R.id.edit) {
+                    menu.getItem(i).setVisible(false);
+                }
+            }
             tvCosts.setEnabled(true);
             tvNote.setEnabled(true);
         }
@@ -462,15 +514,68 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.actionDone) {
+//        int id1 = item.getItemId();
+        if (item.getItemId() == R.id.actionDone) {
             if (Expend_type_id > 0)
+
                 funcSendExpend();
+
             else Toast.makeText(mContext, R.string.srtSelectTypeCosts, Toast.LENGTH_SHORT).show();
             //   funcAddFocus(mClient.getClient_id());
         }
         if (item.getItemId() == android.R.id.home) {
             finish();
+            return true;
+        }
+        if (item.getItemId() == R.id.edit) {
+            if (preferences.getIntValue(Constants.USER_ID, 0) == check) {
+                tvImage.setVisibility(View.VISIBLE);
+                lvPhoto.setVisibility(View.VISIBLE);
+                tvShow.setVisibility(View.GONE);
+                imSelect_upload_photo.setVisibility(View.VISIBLE);
+                layout_order.setVisibility(View.GONE);
+                add = 1;
+                invalidateOptionsMenu();
+                getCost();
+                getOrder();
+                tvDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Calendar calendar = Calendar.getInstance();
+
+                        Year = calendar.get(Calendar.YEAR);
+                        Month = calendar.get(Calendar.MONTH);
+                        Day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                        DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
+                                AddCostsActivity.this, Year, Month, Day);
+                        datePickerDialog.setThemeDark(false);
+
+                        datePickerDialog.showYearPickerFirst(false);
+
+                        datePickerDialog.setAccentColor(getResources().getColor(R.color.colorApp));
+                        datePickerDialog.setCancelText(getString(R.string.no));
+                        datePickerDialog.setOkText(getString(R.string.yes));
+                        datePickerDialog.setTitle(getString(R.string.choose_date));
+                        datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
+                    }
+                });
+
+                switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        if (b == true) {
+                            lvOrder.setVisibility(View.VISIBLE);
+                            order_contract_id = id;
+                            //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
+                        } else {
+                            //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
+                            order_contract_id = 0;
+                            lvOrder.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            } else Toast.makeText(mContext, R.string.edit_activity, Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -591,7 +696,7 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
     public void radioButton(int expend_group_type_id, int expend_type_id, int expend_id, int status_id) {
         Expend_group_type_id = expend_group_type_id;
         Expend_type_id = expend_type_id;
-        Expend_id = expend_id;
+//        Expend_id = expend_id;
         Status_id = status_id;
     }
 
@@ -645,6 +750,7 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
     @Override
     public void Click(int id) {
         order_contract_id = id;
+        this.id = id;
         Log.d("order_contract_id", id + "");
     }
 }

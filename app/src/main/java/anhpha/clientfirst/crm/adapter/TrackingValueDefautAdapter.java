@@ -50,6 +50,7 @@ public class TrackingValueDefautAdapter extends RecyclerView.Adapter<TrackingVal
                     tracking.setTracking(true);
                 }
                 else tracking.setTracking(false);
+
             }
         });
     }

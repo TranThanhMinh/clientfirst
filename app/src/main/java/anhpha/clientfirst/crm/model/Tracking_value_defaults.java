@@ -15,9 +15,19 @@ public class Tracking_value_defaults {
     }
 
     private boolean isTracking = false;
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
+    }
+
+    private boolean check = false;
     @SerializedName("user_id")
     @Expose
-    private Integer user_id;
+    private int user_id;
     @SerializedName("partner_id")
     @Expose
     private Integer partner_id;
@@ -36,11 +46,11 @@ public class Tracking_value_defaults {
     @SerializedName("tracking_user_type_id")
     @Expose
     private Integer tracking_user_type_id;
-    public Integer getUser_id() {
+    public int getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(Integer user_id) {
+    public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
 

@@ -276,7 +276,6 @@ public class ReportForecastActivity extends BaseAppCompatActivity implements OnC
         tvSelect.setText(list.get((int) h.getX()).getName() + "\n" +"$ "+ Utils.formatCurrency(list.get((int) h.getX()).getValue()) + "\n" + Utils.formatPercent(percent) + " %");
 
     }
-
     @Override
     public void onNothingSelected() {
         tvSelect.setText("");

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,12 +35,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AddCommentActivity extends BaseAppCompatActivity {
     private Toolbar toolbar;
     int add = 1;
+    int edit = 0;
     MOrder mOrder = new MOrder();
     private EditText tvNote;
     private TextView tvClientName;
     private Preferences preferences;
     private Retrofit retrofit;
     MActivityItem mActivityItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,13 +59,15 @@ public class AddCommentActivity extends BaseAppCompatActivity {
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
         }
         retrofit = getConnect();
-        Intent intent =getIntent();
+        Intent intent = getIntent();
         mOrder = (MOrder) intent.getSerializableExtra("mOrder");
         add = (int) intent.getSerializableExtra("mAdd");
         mActivityItem = (MActivityItem) intent.getSerializableExtra("Comment");
         if (add == 1) {
+            edit = 1;
             tvClientName.setText(mOrder.getOrder_contract_name());
         } else {
+            edit = 0;
             tvClientName.setText(mOrder.getOrder_contract_name());
             getComment();
         }
@@ -79,6 +84,7 @@ public class AddCommentActivity extends BaseAppCompatActivity {
         call.enqueue(new Callback<MAPIResponse<MComment>>() {
             @Override
             public void onResponse(Call<MAPIResponse<MComment>> call, Response<MAPIResponse<MComment>> response) {
+                LogUtils.api("", call, response);
                 MComment comment = response.body().getResult();
                 tvNote.setText(comment.getContent_comment());
             }
@@ -95,7 +101,10 @@ public class AddCommentActivity extends BaseAppCompatActivity {
         mComment.setUser_id(preferences.getIntValue(Constants.USER_ID, 0));
         mComment.setOrder_contract_id(mOrder.getOrder_contract_id());
         mComment.setContent_comment(tvNote.getText().toString());
-        mComment.setUser_comment_id(0);
+        if (edit == 0) {
+            mComment.setUser_comment_id(mActivityItem.getUser_comment_id());
+        } else mComment.setUser_comment_id(0);
+
         ServiceAPI api = retrofit.create(ServiceAPI.class);
         Call<Result> call = api.set_user_comment(preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.USER_ID, 0), preferences.getIntValue(Constants.PARTNER_ID, 0), mComment);
         call.enqueue(new Callback<Result>() {
@@ -116,15 +125,27 @@ public class AddCommentActivity extends BaseAppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_edit_history_order, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_edit_history_order, menu);
         if (add == 0) {
-            menu.getItem(0).setVisible(false);
+            for (int i = 0; i < menu.size(); i++) {
+                if (menu.getItem(i).getItemId() == R.id.actionDone)
+                    menu.getItem(i).setVisible(false);
+                if (menu.getItem(i).getItemId() == R.id.edit)
+                    menu.getItem(i).setVisible(true);
+            }
+
 //            tvCosts.setEnabled(false);
             tvNote.setEnabled(false);
 //            tvCosts.setTextColor(getResources().getColor(R.color.colorBlack));
             tvNote.setTextColor(getResources().getColor(R.color.color));
         } else {
-            menu.getItem(0).setVisible(true);
+            for (int i = 0; i < menu.size(); i++) {
+                if (menu.getItem(i).getItemId() == R.id.actionDone)
+                    menu.getItem(i).setVisible(true);
+                if (menu.getItem(i).getItemId() == R.id.edit)
+                    menu.getItem(i).setVisible(false);
+            }
 //            tvCosts.setEnabled(true);
             tvNote.setEnabled(true);
         }
@@ -140,6 +161,10 @@ public class AddCommentActivity extends BaseAppCompatActivity {
                 break;
             case R.id.actionDone:
                 funcAddComment();
+                break;
+            case R.id.edit:
+                add = 1;
+                invalidateOptionsMenu();
                 break;
         }
         return super.onOptionsItemSelected(item);

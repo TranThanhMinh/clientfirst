@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -69,13 +70,14 @@ import static anhpha.clientfirst.crm.R.id.tvNote;
 public class AddDocumentActivity extends BaseAppCompatActivity implements View.OnClickListener, adapter_photo_expend.funcDelete_lvImage {
     private Toolbar toolbar;
     int add = 1;
+    int edit = 0;
     MOrder mOrder = new MOrder();
     private Uri selectedImage;
     private Preferences preferences;
     private Retrofit retrofit, retrofit_photo;
     private ImageView imSelect_upload_photo;
     private RecyclerView lvPhoto;
-    private TextView tvClientName,tvImage;
+    private TextView tvClientName, tvImage;
     private boolean result;
     private EditText etContent;
     MActivityItem mActivityItem;
@@ -107,15 +109,16 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
 //        tvClientName.setText(R.string.document);
         retrofit = getConnect();
 
-        Intent intent =getIntent();
+        Intent intent = getIntent();
         mOrder = (MOrder) intent.getSerializableExtra("mOrder");
         add = (int) intent.getSerializableExtra("mAdd");
         mActivityItem = (MActivityItem) intent.getSerializableExtra("Document");
         retrofit_photo = func_Upload_photo();
         tvClientName.setText(mOrder.getOrder_contract_name());
         if (add == 1) {
-
+            edit = 1;
         } else {
+            edit = 0;
             getComment();
         }
         imSelect_upload_photo.setOnClickListener(this);
@@ -136,7 +139,7 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
 
     public void getComment() {
         ServiceAPI api = retrofit.create(ServiceAPI.class);
-        Call<MAPIResponse<Document>> call =api.get_user_document(preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.USER_ID, 0), preferences.getIntValue(Constants.PARTNER_ID, 0), mActivityItem.getUser_document_id());
+        Call<MAPIResponse<Document>> call = api.get_user_document(preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.USER_ID, 0), preferences.getIntValue(Constants.PARTNER_ID, 0), mActivityItem.getUser_document_id());
         call.enqueue(new Callback<MAPIResponse<Document>>() {
             @Override
             public void onResponse(Call<MAPIResponse<Document>> call, Response<MAPIResponse<Document>> response) {
@@ -144,14 +147,30 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
                 Document mDocument = response.body().getResult();
                 etContent.setText(mDocument.getDocumentSubject());
 
-                List<MDocuments> image= mDocument.getDocuments();
-                if (image != null && image.size()>0){
-                    adapter_Photo_document adapter = new adapter_Photo_document(AddDocumentActivity.this, image);
+                List<MDocuments> image = mDocument.getDocuments();
+                if (image != null && image.size() > 0) {
+                    for (int i = 0; i < image.size(); i++) {
+                        Photo photo = new Photo();
+                        photo.setCode("");
+                        photo.setHeight(0);
+                        photo.setWidth(0);
+                        photo.setObjectId(0);
+                        photo.setOrderNo(0);
+                        photo.setPhotoId(0);
+                        photo.setType(0);
+                        photo.setName( image.get(i).getName());
+                        photo.setUrl(image.get(i).getUrl());
+                        photo.setFilePart(null);
+                        lvImage.add(photo);
+                    }
+                    adapter_photo_expend adapter = new adapter_photo_expend(AddDocumentActivity.this, lvImage, AddDocumentActivity.this);
                     lvPhoto.setAdapter(adapter);
+//                    adapter_Photo_document adapter = new adapter_Photo_document(AddDocumentActivity.this, image);
+//                    lvPhoto.setAdapter(adapter);
                     lvPhoto.setVisibility(View.VISIBLE);
-                    tvImage.setVisibility(View.GONE);
+//                    tvImage.setVisibility(View.GONE);
                     imSelect_upload_photo.setVisibility(View.GONE);
-                }else {
+                } else {
                     tvImage.setVisibility(View.GONE);
                     lvPhoto.setVisibility(View.GONE);
                     imSelect_upload_photo.setVisibility(View.GONE);
@@ -172,6 +191,9 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
         mComment.setOrder_contract_id(mOrder.getOrder_contract_id());
         mComment.setDocument_subject(etContent.getText().toString());
         mComment.setUser_documnet_id(0);
+        if (edit == 0) {
+            mComment.setUser_documnet_id(mActivityItem.getUser_document_id());
+        } else mComment.setUser_documnet_id(0);
         ServiceAPI api = retrofit.create(ServiceAPI.class);
         Call<MAPIResponse<MDocument>> call = api.set_user_document(preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.USER_ID, 0), preferences.getIntValue(Constants.PARTNER_ID, 0), mComment);
         call.enqueue(new Callback<MAPIResponse<MDocument>>() {
@@ -186,9 +208,12 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
 
                         if (b == true) {
                             Utils.showDialogSuccess(mContext, R.string.srtFalse);
-                            Log.d("Upload","That bai");
-                        } else {Utils.showDialogSuccess(mContext, R.string.srtDone);Log.d("Upload","Thanh cong");}
-                    }else Utils.showDialogSuccess(mContext, R.string.srtDone);
+                            Log.d("Upload", "That bai");
+                        } else {
+                            Utils.showDialogSuccess(mContext, R.string.srtDone);
+                            Log.d("Upload", "Thanh cong");
+                        }
+                    } else Utils.showDialogSuccess(mContext, R.string.srtDone);
                 } else Utils.showDialogSuccess(mContext, R.string.srtFalse);
             }
 
@@ -241,15 +266,26 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_edit_history_order, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_edit_history_order, menu);
+
         if (add == 0) {
-            menu.getItem(0).setVisible(false);
+            for (int i = 0; i < menu.size(); i++) {
+                if (menu.getItem(i).getItemId() == R.id.actionDone)
+                    menu.getItem(i).setVisible(false);
+                if (menu.getItem(i).getItemId() == R.id.edit)
+                    menu.getItem(i).setVisible(true);
+            }
             etContent.setEnabled(false);
             etContent.setTextColor(getResources().getColor(R.color.colorBlack));
 
         } else {
-
-            menu.getItem(0).setVisible(true);
+            for (int i = 0; i < menu.size(); i++) {
+                if (menu.getItem(i).getItemId() == R.id.actionDone)
+                    menu.getItem(i).setVisible(true);
+                if (menu.getItem(i).getItemId() == R.id.edit)
+                    menu.getItem(i).setVisible(false);
+            }
             etContent.setEnabled(true);
 
         }
@@ -265,6 +301,13 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
                 break;
             case R.id.actionDone:
                 funcAddDocument();
+                break;
+            case R.id.edit:
+                add = 1;
+                invalidateOptionsMenu();
+                lvPhoto.setVisibility(View.VISIBLE);
+                tvImage.setVisibility(View.VISIBLE);
+                imSelect_upload_photo.setVisibility(View.VISIBLE);
                 break;
         }
         return super.onOptionsItemSelected(item);

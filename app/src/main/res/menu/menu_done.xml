@@ -7,4 +7,10 @@
         android:title="@string/done"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/edit"
+        android:icon="@mipmap/ic_dms_38"
+        android:title="@string/edit"
+        app:showAsAction="always" />
+
 </menu>

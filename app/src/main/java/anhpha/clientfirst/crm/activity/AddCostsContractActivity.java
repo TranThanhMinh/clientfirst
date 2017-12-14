@@ -95,6 +95,8 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
     private TextView tvName, tvAddress, tvImage;
     EditText tvDate;
     private int add;
+    private int edit;
+    private int check;
     private Expend expend;
     LinearLayout coordinatorLayout;
     int Year, Month, Day;
@@ -173,11 +175,16 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
         retrofit = getConnect();
         retrofit_photo = func_Upload_photo();
         if (add == 0) {
+            edit = 0;
+
             getExpend();
             imSelect_upload_photo.setVisibility(View.GONE);
 
-
+            Expend_id = mActivityItem.getExpend_id();
         } else {
+            edit = 1;
+            Expend_id = 0;
+            check = 0;
             Calendar c = Calendar.getInstance();
             SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm");
             String formattedDate = df.format(c.getTime());
@@ -187,7 +194,6 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
                 @Override
                 public void onClick(View v) {
                     Calendar calendar = Calendar.getInstance();
-
                     Year = calendar.get(Calendar.YEAR);
                     Month = calendar.get(Calendar.MONTH);
                     Day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -239,6 +245,10 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
             public void onResponse(Call<MAPIResponse<Expend>> call, Response<MAPIResponse<Expend>> response) {
                 expend = response.body().getResult();
                 LogUtils.api("", call, response);
+                Expend_group_type_id = expend.getExpendGroupTypeId();
+                Expend_type_id = expend.getExpendTypeId();
+                Status_id = expend.getStatusId();
+                check = expend.getUserId();
                 tvCosts.setText(Utils.formatCurrency(expend.getAmount()) + "");
                 if (expend.getNote() != null && expend.getNote().length() > 0) {
                     tvNote.setText(expend.getNote());
@@ -281,11 +291,11 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
                 if (response.body() != null) {
                     listCost = new ArrayList<>();
                     listCost = response.body().getResult();
-                    if (add == 0) {
+                    if (edit == 0) {
                         for (Cost cost : listCost) {
                             List<Expend> expends = cost.getExpends();
                             for (int i = 0; i < expends.size(); i++) {
-                                if (expends.get(i).getExpendGroupTypeId() == expend.getExpendGroupTypeId() && expends.get(i).getExpendTypeId() == expend.getExpendTypeId()) {
+                                if (expends.get(i).getExpendGroupTypeId() == Expend_group_type_id && expends.get(i).getExpendTypeId() == Expend_type_id) {
                                     expends.get(i).setCheck(true);
                                 } else expends.get(i).setCheck(false);
                             }
@@ -378,13 +388,27 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_edit_history_order, menu);
         if (add == 0) {
-            menu.getItem(0).setVisible(false);
             tvCosts.setEnabled(false);
             tvNote.setEnabled(false);
             tvCosts.setTextColor(getResources().getColor(R.color.colorBlack));
             tvNote.setTextColor(getResources().getColor(R.color.color));
+            for (int i = 0; i < menu.size(); i++) {
+                if (menu.getItem(i).getItemId() == R.id.actionDone) {
+                    menu.getItem(i).setVisible(false);
+                }
+                if (menu.getItem(i).getItemId() == R.id.edit) {
+                    menu.getItem(i).setVisible(true);
+                }
+            }
         } else {
-            menu.getItem(0).setVisible(true);
+            for (int i = 0; i < menu.size(); i++) {
+                if (menu.getItem(i).getItemId() == R.id.actionDone) {
+                    menu.getItem(i).setVisible(true);
+                }
+                if (menu.getItem(i).getItemId() == R.id.edit) {
+                    menu.getItem(i).setVisible(false);
+                }
+            }
             tvCosts.setEnabled(true);
             tvNote.setEnabled(true);
         }
@@ -402,6 +426,37 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
         }
         if (item.getItemId() == android.R.id.home) {
             finish();
+            return true;
+        }
+        if (item.getItemId() == R.id.edit) {
+            if (preferences.getIntValue(Constants.USER_ID, 0) == check) {
+                tvImage.setVisibility(View.VISIBLE);
+                lvPhoto.setVisibility(View.VISIBLE);
+                imSelect_upload_photo.setVisibility(View.VISIBLE);
+                add = 1;
+                invalidateOptionsMenu();
+                getCost();
+                tvDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Calendar calendar = Calendar.getInstance();
+
+                        Year = calendar.get(Calendar.YEAR);
+                        Month = calendar.get(Calendar.MONTH);
+                        Day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                        DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
+                                AddCostsContractActivity.this, Year, Month, Day);
+                        datePickerDialog.setThemeDark(false);
+                        datePickerDialog.showYearPickerFirst(false);
+                        datePickerDialog.setAccentColor(getResources().getColor(R.color.colorApp));
+                        datePickerDialog.setCancelText(getString(R.string.no));
+                        datePickerDialog.setOkText(getString(R.string.yes));
+                        datePickerDialog.setTitle(getString(R.string.choose_date));
+                        datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
+                    }
+                });
+            } else Toast.makeText(mContext, R.string.edit_activity, Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -525,7 +580,7 @@ public class AddCostsContractActivity extends BaseAppCompatActivity implements V
     public void radioButton(int expend_group_type_id, int expend_type_id, int expend_id, int status_id) {
         Expend_group_type_id = expend_group_type_id;
         Expend_type_id = expend_type_id;
-        Expend_id = expend_id;
+//        Expend_id = expend_id;
         Status_id = status_id;
     }
 

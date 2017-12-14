@@ -7,7 +7,8 @@ import java.util.List;
  * Created by mc975 on 2/9/17.
  */
 public class MCall implements Serializable{
-    private int call_user_id;
+
+    private int  user_call_id;
     private int  client_id;
     private int client_delivery_id;
     private String content_call;
@@ -15,6 +16,13 @@ public class MCall implements Serializable{
     private double longitude;
     private int         user_id;
     private String user_name;
+    public int getUser_call_id() {
+        return user_call_id;
+    }
+
+    public void setUser_call_id(int user_call_id) {
+        this.user_call_id = user_call_id;
+    }
 
     public String getOrder_contract_name() {
         return order_contract_name;
@@ -63,13 +71,7 @@ public class MCall implements Serializable{
 
     private List<Tracking_value_defaults> values_default;
 
-    public int getCall_user_id() {
-        return call_user_id;
-    }
 
-    public void setCall_user_id(int call_user_id) {
-        this.call_user_id = call_user_id;
-    }
 
     public int getClient_id() {
         return client_id;

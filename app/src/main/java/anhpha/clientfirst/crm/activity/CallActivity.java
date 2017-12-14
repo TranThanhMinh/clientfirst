@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,15 +79,21 @@ public class CallActivity extends BaseAppCompatActivity implements Callback<MAPI
     @Bind(R.id.lvOrder)
     RecyclerView lvOrder;
     private int order_contract_id = 0;
+    private int id = 0;
+    private int check = 0;
     @Bind(R.id.tvShow)
     TextView tvShow;
+    private boolean isHide = false;
+    LinearLayout layout_order;
+    adapter_orders adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         box = new DynamicBox(this, R.layout.activity_call);
         ButterKnife.bind(this);
         preferences = new Preferences(mContext);
-        LinearLayout layout_order = (LinearLayout) findViewById(R.id.layout_order);
+        layout_order = (LinearLayout) findViewById(R.id.layout_order);
         setSupportActionBar(toolbar);
         tvSwitch.setText(R.string.srtContent1);
         ActionBar actionBar = getSupportActionBar();
@@ -114,25 +121,29 @@ public class CallActivity extends BaseAppCompatActivity implements Callback<MAPI
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
                 .switchButton);
         if (mCall == null) {
+            isHide = true;
             mCall = new MCall();
             tvShow.setVisibility(View.GONE);
             getTracking_value_default();
             getOrder();
-            switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b == true) {
-                        lvOrder.setVisibility(View.VISIBLE);
-                        //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
-                    } else {
-                        //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
-                        order_contract_id = 0;
-                        lvOrder.setVisibility(View.GONE);
-                    }
-                }
-            });
+
         }
-        if (mCall.getCall_user_id() > 0) {
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b == true) {
+                    lvOrder.setVisibility(View.VISIBLE);
+                    order_contract_id = id;
+                    //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
+                } else {
+                    //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
+                    order_contract_id = 0;
+                    lvOrder.setVisibility(View.GONE);
+                }
+            }
+        });
+        if (mCall.getUser_call_id() > 0) {
+            isHide = false;
             tvShow.setVisibility(View.VISIBLE);
             tvShow.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -144,13 +155,13 @@ public class CallActivity extends BaseAppCompatActivity implements Callback<MAPI
             etContent.setFocusable(false);
             getUserCall();
             if (mCall.getOrder_contract_id() > 0) {
+                id = mCall.getOrder_contract_id();
+                order_contract_id = mCall.getOrder_contract_id();
                 tvContract.setText(mCall.getOrder_contract_name());
                 layout_order.setVisibility(View.VISIBLE);
                 switchCompat.setChecked(true);
             }
         }
-
-
 
 
     }
@@ -176,10 +187,27 @@ public class CallActivity extends BaseAppCompatActivity implements Callback<MAPI
                 TokenUtils.checkToken(CallActivity.this, response.body().getErrors());
                 LogUtils.api("", call, response);
                 List<MOrders> orders = response.body().getResult();
+                List<MOrders> orders1 = new ArrayList<MOrders>();
                 if (orders != null && orders.size() > 0) {
                     orders.get(0).getOrderContractName();
-                    adapter_orders adapter = new adapter_orders(CallActivity.this, orders, CallActivity.this);
-                    lvOrder.setAdapter(adapter);
+//                    adapter_orders adapter = new adapter_orders(CallActivity.this, orders, CallActivity.this);
+//                    lvOrder.setAdapter(adapter);
+                    if (order_contract_id > 0) {
+                        lvOrder.setVisibility(View.VISIBLE);
+                        for (MOrders mOrders : orders) {
+                            if (mOrders.getOrderContractId() == order_contract_id) {
+                                mOrders.setCheck(true);
+                            } else {
+                                mOrders.setCheck(false);
+                            }
+                            orders1.add(mOrders);
+                        }
+                        adapter = new adapter_orders(CallActivity.this, orders1, CallActivity.this);
+                        lvOrder.setAdapter(adapter);
+                    } else {
+                        adapter = new adapter_orders(CallActivity.this, orders, CallActivity.this);
+                        lvOrder.setAdapter(adapter);
+                    }
                 }
             }
 
@@ -198,8 +226,33 @@ public class CallActivity extends BaseAppCompatActivity implements Callback<MAPI
             public void onResponse(Call<MAPIResponse<List<Tracking_value_defaults>>> call, Response<MAPIResponse<List<Tracking_value_defaults>>> response) {
                 listTracking = response.body().getResult();
                 LogUtils.api("", call, response);
-                TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CallActivity.this, listTracking);
-                lvTracking.setAdapter(adapte);
+//                TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CallActivity.this, listTracking);
+//                lvTracking.setAdapter(adapte);
+                if (listTracking_userCall != null && listTracking_userCall.size() > 0) {
+                    List<Tracking_value_defaults> list = new ArrayList<>();
+                    for (Tracking_value_defaults email : listTracking) {
+                        for (int i = 0; i < listTracking_userCall.size(); i++) {
+                            if (email.getTracking_value_default_id() == listTracking_userCall.get(i).getTracking_value_default_id()) {
+                                email.setTracking(true);
+                                list.add(email);
+                                i = listTracking_userCall.size();
+                            } else {
+                                if (i == listTracking_userCall.size() - 1) {
+                                    email.setTracking(false);
+                                    list.add(email);
+                                }
+
+                            }
+                        }
+
+                    }
+                    listTracking = list;
+                    TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CallActivity.this, listTracking);
+                    lvTracking.setAdapter(adapte);
+                } else {
+                    TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CallActivity.this, listTracking);
+                    lvTracking.setAdapter(adapte);
+                }
             }
 
             @Override
@@ -211,12 +264,13 @@ public class CallActivity extends BaseAppCompatActivity implements Callback<MAPI
 
     public void getUserCall() {
         ServiceAPI apiTracking = retrofit.create(ServiceAPI.class);
-        Call<MAPIResponse<UserEmail>> user_email = apiTracking.get_user_call(preferences.getIntValue(Constants.USER_ID, 0), mCall.getCall_user_id(), preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.PARTNER_ID, 0));
+        Call<MAPIResponse<UserEmail>> user_email = apiTracking.get_user_call(preferences.getIntValue(Constants.USER_ID, 0), mCall.getUser_call_id(), preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.PARTNER_ID, 0));
         user_email.enqueue(new Callback<MAPIResponse<UserEmail>>() {
             @Override
             public void onResponse(Call<MAPIResponse<UserEmail>> call, Response<MAPIResponse<UserEmail>> response) {
                 LogUtils.api("", call, response);
                 listTracking_userCall = response.body().getResult().getValuesDefault();
+                check = response.body().getResult().getUserId();
                 ValueDefautAdapter adapte = new ValueDefautAdapter(CallActivity.this, listTracking_userCall);
                 lvTracking.setAdapter(adapte);
             }
@@ -232,11 +286,18 @@ public class CallActivity extends BaseAppCompatActivity implements Callback<MAPI
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_done, menu);
-        if (mCall.getCall_user_id() > 0) {
+        if (isHide == false) {
             for (int i = 0; i < menu.size(); i++) {
                 if (menu.getItem(i).getItemId() == R.id.done)
                     menu.getItem(i).setVisible(false);
+                if (menu.getItem(i).getItemId() == R.id.edit)
+                    menu.getItem(i).setVisible(true);
             }
+        } else for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getItemId() == R.id.done)
+                menu.getItem(i).setVisible(true);
+            if (menu.getItem(i).getItemId() == R.id.edit)
+                menu.getItem(i).setVisible(false);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -269,6 +330,7 @@ public class CallActivity extends BaseAppCompatActivity implements Callback<MAPI
                 mCall.setLatitude(mLastLocation.getLatitude());
                 mCall.setLongitude(mLastLocation.getLongitude());
                 mCall.setOrder_contract_id(order_contract_id);
+                mCall.setUser_call_id(mCall.getUser_call_id());
                 mCall.setDisplay_type(0);
                 mCall.setActivity_type(0);
                 GetRetrofit().create(ServiceAPI.class)
@@ -285,7 +347,19 @@ public class CallActivity extends BaseAppCompatActivity implements Callback<MAPI
             case android.R.id.home:
                 onBackPressed();
                 return true;
-
+            case R.id.edit:
+                if (preferences.getIntValue(Constants.USER_ID, 0) == check) {
+                    tvShow.setVisibility(View.GONE);
+                    etContent.setFocusable(true);
+                    etContent.setFocusableInTouchMode(true);
+                    etContent.requestFocus();
+                    isHide = true;
+                    invalidateOptionsMenu();
+                    getTracking_value_default();
+                    getOrder();
+                    layout_order.setVisibility(View.GONE);
+                    return true;
+                }else Toast.makeText(mContext, R.string.edit_activity, Toast.LENGTH_SHORT).show();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -317,6 +391,7 @@ public class CallActivity extends BaseAppCompatActivity implements Callback<MAPI
 
     @Override
     public void Click(int id) {
+        this.id = id;
         order_contract_id = id;
     }
 }

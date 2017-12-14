@@ -181,6 +181,7 @@ public class MOrders {
     private List<Object> orderDetailContracts = null;
     @SerializedName("debts")
     @Expose
+
     private List<Object> debts = null;
 
     public boolean isCheck() {

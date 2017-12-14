@@ -132,6 +132,12 @@ public class ActivitySalesStatus extends BaseAppCompatActivity implements adapte
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_done, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getItemId() == R.id.done)
+                menu.getItem(i).setVisible(true);
+            if (menu.getItem(i).getItemId() == R.id.edit)
+                menu.getItem(i).setVisible(false);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -141,7 +147,7 @@ public class ActivitySalesStatus extends BaseAppCompatActivity implements adapte
         switch (id) {
             case R.id.done:
                 if (id == 0) {
-                    Toast.makeText(mContext, "Chọn trạng thái", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Chọn trạng thái.", Toast.LENGTH_SHORT).show();
                 } else {
                     if (contract_order_id == 1) {
                         setResult(Constants.RESULT_GROUP_BY_GROUP, new Intent().putExtra("idByGroup", idGroup).putExtra("name", name).putExtra("percent", percent));

@@ -65,8 +65,11 @@ public class Contract_debt extends BaseAppCompatActivity implements DatePickerDi
     TextView tvClientName;
     private Toolbar toolbar;
     int add = 1;
+    int edit = 0;
+    int check = 0;
     MOrder mOrder = new MOrder();
     MActivityItem mActivityItem;
+    MDebt mDebt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +122,7 @@ public class Contract_debt extends BaseAppCompatActivity implements DatePickerDi
             });
         } else {
             getDebt();
+            edit = mActivityItem.getOrder_contract_debt_id();
         }
 
         radioButton1 = (RadioButton) findViewById(R.id.radioButton1);
@@ -184,8 +188,9 @@ public class Contract_debt extends BaseAppCompatActivity implements DatePickerDi
         call.enqueue(new Callback<MAPIResponse<MDebt>>() {
             @Override
             public void onResponse(Call<MAPIResponse<MDebt>> call, Response<MAPIResponse<MDebt>> response) {
-                MDebt mDebt = response.body().getResult();
+                mDebt = response.body().getResult();
                 LogUtils.api("", call, response);
+                check = mDebt.getUser_id();
                 value.setText(Utils.formatCurrency(mDebt.getValue_debt()) + "");
                 if (mDebt.getNote() != null && mDebt.getNote().length() > 0) {
                     note.setText(mDebt.getNote());
@@ -224,27 +229,28 @@ public class Contract_debt extends BaseAppCompatActivity implements DatePickerDi
     }
 
     public void funcAddDebt() {
-        MDebt mDebt = new MDebt();
-        mDebt.setOrder_contract_id(mOrder.getOrder_contract_id());
-        mDebt.setUser_id(preferences.getIntValue(Constants.USER_ID, 0));
+        MDebt mDebt1 = new MDebt();
+        mDebt1.setOrder_contract_debt_transaction_id(edit);
+        mDebt1.setOrder_contract_id(mOrder.getOrder_contract_id());
+        mDebt1.setUser_id(preferences.getIntValue(Constants.USER_ID, 0));
         if (radioButton1.isChecked()) {
-            mDebt.setDebt_type_id(1);
+            mDebt1.setDebt_type_id(1);
         } else if (radioButton2.isChecked()) {
-            mDebt.setDebt_type_id(2);
+            mDebt1.setDebt_type_id(2);
         } else if (radioButton3.isChecked()) {
-            mDebt.setDebt_type_id(3);
-        } else mDebt.setDebt_type_id(0);
-        if (mDebt.getDebt_type_id() > 0 && value.getText().toString() != null) {
-            mDebt.setDate_debt(date.getText().toString());
-            mDebt.setValue_debt(Utils.tryParseDouble(value.getText().toString()));
-            mDebt.setNote((note.getText().toString()));
-            mDebt.setDisplay_type(0);
-            mDebt.setActivity_type(1);
+            mDebt1.setDebt_type_id(3);
+        } else mDebt1.setDebt_type_id(0);
+        if (mDebt1.getDebt_type_id() > 0 && value.getText().toString() != null) {
+            mDebt1.setDate_debt(date.getText().toString());
+            mDebt1.setValue_debt(Utils.tryParseDouble(value.getText().toString()));
+            mDebt1.setNote((note.getText().toString()));
+            mDebt1.setDisplay_type(0);
+            mDebt1.setActivity_type(1);
             ServiceAPI api = retrofit.create(ServiceAPI.class);
             Call<MAPIResponse<MDebt>> call = api.setOrderDebt(preferences.getStringValue(Constants.TOKEN, "")
                     , preferences.getIntValue(Constants.USER_ID, 0)
                     , preferences.getIntValue(Constants.PARTNER_ID, 0)
-                    , mDebt
+                    , mDebt1
             );
             call.enqueue(new Callback<MAPIResponse<MDebt>>() {
                 @Override
@@ -253,29 +259,44 @@ public class Contract_debt extends BaseAppCompatActivity implements DatePickerDi
                     TokenUtils.checkToken(mContext, response.body().getErrors());
                     Utils.showDialogSuccess(mContext, R.string.srtDone);
                 }
+
                 @Override
                 public void onFailure(Call<MAPIResponse<MDebt>> call, Throwable t) {
                     Utils.showDialogSuccess(mContext, R.string.srtFalse);
                 }
             });
-        } else if(value.getText().toString() == null && value.getText().length()==0){
-            Toast.makeText(mContext,R.string.srtAmount, Toast.LENGTH_SHORT).show();
-        }else Toast.makeText(mContext,R.string.srtPayment, Toast.LENGTH_SHORT).show();
+        } else if (value.getText().toString() == null && value.getText().length() == 0) {
+            Toast.makeText(mContext, R.string.srtAmount, Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(mContext, R.string.srtPayment, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_edit_history_order, menu);
         if (add == 0) {
-            menu.getItem(0).setVisible(false);
             value.setEnabled(false);
             note.setEnabled(false);
             value.setTextColor(getResources().getColor(R.color.colorBlack));
             note.setTextColor(getResources().getColor(R.color.color));
+            for (int i = 0; i < menu.size(); i++) {
+                if (menu.getItem(i).getItemId() == R.id.actionDone) {
+                    menu.getItem(i).setVisible(false);
+                }
+                if (menu.getItem(i).getItemId() == R.id.edit) {
+                    menu.getItem(i).setVisible(true);
+                }
+            }
         } else {
-            menu.getItem(0).setVisible(true);
             value.setEnabled(true);
             note.setEnabled(true);
+            for (int i = 0; i < menu.size(); i++) {
+                if (menu.getItem(i).getItemId() == R.id.actionDone) {
+                    menu.getItem(i).setVisible(true);
+                }
+                if (menu.getItem(i).getItemId() == R.id.edit) {
+                    menu.getItem(i).setVisible(false);
+                }
+            }
         }
         return true;
 
@@ -289,6 +310,54 @@ public class Contract_debt extends BaseAppCompatActivity implements DatePickerDi
                 break;
             case R.id.actionDone:
                 funcAddDebt();
+                break;
+            case R.id.edit:
+                if (preferences.getIntValue(Constants.USER_ID, 0) == check) {
+                    add = 1;
+                    invalidateOptionsMenu();
+                    radioButton1.setVisibility(View.VISIBLE);
+                    radioButton2.setVisibility(View.VISIBLE);
+                    radioButton3.setVisibility(View.VISIBLE);
+                    // funcAddDebt();
+                    if (mDebt.getDebt_type_id() == 1) {
+                        radioButton1.setChecked(true);
+                        radioButton2.setChecked(false);
+                        radioButton3.setChecked(false);
+
+                    } else if (mDebt.getDebt_type_id() == 2) {
+                        radioButton2.setChecked(true);
+                        radioButton1.setChecked(false);
+                        radioButton3.setChecked(false);
+                    } else if (mDebt.getDebt_type_id() == 3) {
+                        radioButton3.setChecked(true);
+                        radioButton1.setChecked(false);
+                        radioButton2.setChecked(false);
+                    }
+                    date.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Calendar calendar = Calendar.getInstance();
+
+                            Year = calendar.get(Calendar.YEAR);
+                            Month = calendar.get(Calendar.MONTH);
+                            Day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                            DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(
+                                    Contract_debt.this, Year, Month, Day);
+                            datePickerDialog.setThemeDark(false);
+
+                            datePickerDialog.showYearPickerFirst(false);
+
+                            datePickerDialog.setAccentColor(getResources().getColor(R.color.colorApp));
+                            datePickerDialog.setCancelText(getString(R.string.no));
+                            datePickerDialog.setOkText(getString(R.string.yes));
+                            datePickerDialog.setTitle(getString(R.string.choose_date));
+                            datePickerDialog.show(getFragmentManager(), "DatePickerDialog");
+                        }
+                    });
+                } else {
+                    Toast.makeText(mContext, R.string.edit_activity, Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);

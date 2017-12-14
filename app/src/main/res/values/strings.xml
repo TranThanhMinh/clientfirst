@@ -551,6 +551,7 @@
     <string name="title_activity_check_inventory">Kiểm tra tồn kho</string>
     <string name="detail">Chi tiết</string>
     <string name="activity">Hoạt động</string>
+    <string name="edit_activity">Bạn không có quyền sửa hoạt đồng này</string>
     <string name="label">Nhãn</string>
     <string name="comment">Bình luận</string>
     <string name="work">Công việc</string>
@@ -640,8 +641,12 @@
     <string name="email_done">Email thành công</string>
     <string name="call_fail">Thêm điện thoại không thành công</string>
     <string name="call_done">Thêm điện thoại thành công</string>
+    <string name="call_fail1">Sửa điện thoại không thành công</string>
+    <string name="call_done1">Sửa điện thoại thành công</string>
     <string name="checkin_client_done">Thêm gặp mặt thành công</string>
     <string name="checkin_client_fail">Thêm gặp mặt không thành công</string>
+    <string name="checkin_client_done1">Sửa gặp mặt thành công</string>
+    <string name="checkin_client_fail1">Sửa gặp mặt không thành công</string>
     <string name="work_fail">Thêm công việc không thành công</string>
     <string name="work_done">Thêm công việc thành công</string>
     <string name="work_edit_fail">Sửa công việc không thành công</string>

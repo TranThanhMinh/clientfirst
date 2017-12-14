@@ -555,6 +555,7 @@
     <string name="title_activity_check_inventory">Audits</string>
     <string name="detail">Details</string>
     <string name="activity">Activity</string>
+    <string name="edit_activity">You do not have permission to edit this activity</string>
     <string name="label">Lable</string>
     <string name="work">Task</string>
     <string name="detail_information">Information</string>
@@ -637,8 +638,12 @@
     <string name="email_done">Add email content successful</string>
     <string name="call_fail">Additional phone content fails</string>
     <string name="call_done">Additional phone content successfully</string>
+    <string name="call_fail1">Edit phone content fails</string>
+    <string name="call_done1">Edit phone content successfully</string>
     <string name="checkin_client_done">Add check-in success</string>
     <string name="checkin_client_fail">Add check-in not success</string>
+    <string name="checkin_client_done1">Edit check-in success</string>
+    <string name="checkin_client_fail1">Edit check-in not success</string>
     <string name="work_fail">Add task not success</string>
     <string name="work_done">Add task success</string>
     <string name="work_edit_fail">Edit task not success</string>

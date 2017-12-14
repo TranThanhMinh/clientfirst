@@ -92,7 +92,6 @@ public class ActivitySalesProcess extends BaseAppCompatActivity implements adapt
 
             @Override
             public void onFailure(Call<MAPIResponse<List<OrderContractStatusGroup>>> call, Throwable t) {
-
             }
         });
     }
@@ -100,6 +99,12 @@ public class ActivitySalesProcess extends BaseAppCompatActivity implements adapt
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_done, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getItemId() == R.id.done)
+                menu.getItem(i).setVisible(true);
+            if (menu.getItem(i).getItemId() == R.id.edit)
+                menu.getItem(i).setVisible(false);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -109,7 +114,7 @@ public class ActivitySalesProcess extends BaseAppCompatActivity implements adapt
         switch (id) {
             case R.id.done:
                 if (idGroup == 0)
-                    Toast.makeText(mContext, "Chon quy trình án hàng", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Chọn quy trình bán hàng.", Toast.LENGTH_SHORT).show();
                 else {
                     setResult(Constants.RESULT_GROUP_BY, new Intent().putExtra("idGroup", idGroup).putExtra("name", name).putExtra("lvByGroup", (Serializable) lvByGroup));
                     finish();

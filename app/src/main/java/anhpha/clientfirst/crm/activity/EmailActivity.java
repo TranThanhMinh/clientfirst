@@ -78,6 +78,11 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
     private List<Tracking_value_defaults> listTracking_userEmail = new ArrayList<>();
     private RecyclerView lvOrder;
     private int order_contract_id = 0;
+    private int id = 0;
+    private int check = 0;
+    private boolean isHide = false;
+    adapter_orders adapter;
+    LinearLayout layout_order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +90,7 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
         box = new DynamicBox(this, R.layout.activity_email);
         lvTracking = (RecyclerView) findViewById(R.id.lvTracking);
         lvOrder = (RecyclerView) findViewById(R.id.lvOrder);
-        LinearLayout layout_order = (LinearLayout) findViewById(R.id.layout_order);
+        layout_order = (LinearLayout) findViewById(R.id.layout_order);
         ButterKnife.bind(this);
         preferences = new Preferences(mContext);
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
@@ -116,13 +121,16 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
         retrofit = getConnect();
 
         if (mEmail == null) {
+            isHide = true;
+            order_contract_id = 0;
             mEmail = new MEmail();
             getOrder();
             getTracking_value_default();
             tvShow.setVisibility(View.GONE);
 
         }
-        if (mEmail.getEmail_user_id() > 0) {
+        if (mEmail.getUser_email_id() > 0) {
+            isHide = false;
             tvShow.setVisibility(View.VISIBLE);
             tvShow.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -134,6 +142,9 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
             etContent.setFocusable(false);
             getUserEmail();
             if (mEmail.getOrder_contract_id() > 0) {
+                id = mEmail.getOrder_contract_id();
+                order_contract_id = mEmail.getOrder_contract_id();
+                Log.d("idid",mEmail.getOrder_contract_id()+"");
                 tvContract.setText(mEmail.getOrder_contract_name());
                 layout_order.setVisibility(View.VISIBLE);
                 switchCompat.setChecked(true);
@@ -145,6 +156,7 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b == true) {
                     lvOrder.setVisibility(View.VISIBLE);
+                    order_contract_id = id;
                     //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
                 } else {
                     //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
@@ -169,10 +181,26 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
                 TokenUtils.checkToken(EmailActivity.this, response.body().getErrors());
                 LogUtils.api("", call, response);
                 List<MOrders> orders = response.body().getResult();
+                List<MOrders> orders1 = new ArrayList<MOrders>();
                 if (orders != null && orders.size() > 0) {
                     orders.get(0).getOrderContractName();
-                    adapter_orders adapter = new adapter_orders(EmailActivity.this, orders, EmailActivity.this);
-                    lvOrder.setAdapter(adapter);
+                    if (order_contract_id > 0) {
+                        lvOrder.setVisibility(View.VISIBLE);
+                        for (MOrders mOrders : orders) {
+                            if (mOrders.getOrderContractId() == order_contract_id) {
+                                mOrders.setCheck(true);
+                            } else {
+                                mOrders.setCheck(false);
+                            }
+                            orders1.add(mOrders);
+                        }
+                        adapter = new adapter_orders(EmailActivity.this, orders1, EmailActivity.this);
+                        lvOrder.setAdapter(adapter);
+                    } else {
+                        adapter = new adapter_orders(EmailActivity.this, orders, EmailActivity.this);
+                        lvOrder.setAdapter(adapter);
+                    }
+
                 }
             }
 
@@ -187,11 +215,18 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_done, menu);
-        if (mEmail.getEmail_user_id() > 0) {
+        if (isHide == false) {
             for (int i = 0; i < menu.size(); i++) {
                 if (menu.getItem(i).getItemId() == R.id.done)
                     menu.getItem(i).setVisible(false);
+                if (menu.getItem(i).getItemId() == R.id.edit)
+                    menu.getItem(i).setVisible(true);
             }
+        } else for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getItemId() == R.id.done)
+                menu.getItem(i).setVisible(true);
+            if (menu.getItem(i).getItemId() == R.id.edit)
+                menu.getItem(i).setVisible(false);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -226,6 +261,7 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
                 mEmail.setDisplay_type(0);
                 mEmail.setActivity_type(0);
                 mEmail.setOrder_contract_id(order_contract_id);
+                mEmail.setUser_email_id(mEmail.getUser_email_id());
                 GetRetrofit().create(ServiceAPI.class)
                         .setUserEmail(preferences.getStringValue(Constants.TOKEN, "")
                                 , preferences.getIntValue(Constants.USER_ID, 0)
@@ -240,7 +276,22 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.edit:
+                if (preferences.getIntValue(Constants.USER_ID, 0) == check) {
+                tvShow.setVisibility(View.GONE);
+                etContent.setFocusable(true);
+                etContent.setFocusableInTouchMode(true);
+                etContent.requestFocus();
+                isHide = true;
+                invalidateOptionsMenu();
+                getTracking_value_default();
+                getOrder();
+                layout_order.setVisibility(View.GONE);
 
+                } else {
+                    Toast.makeText(mContext, R.string.edit_activity, Toast.LENGTH_SHORT).show();
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -262,8 +313,33 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
             public void onResponse(Call<MAPIResponse<List<Tracking_value_defaults>>> call, Response<MAPIResponse<List<Tracking_value_defaults>>> response) {
                 listTracking = response.body().getResult();
                 LogUtils.api("", call, response);
-                TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(EmailActivity.this, listTracking);
-                lvTracking.setAdapter(adapte);
+//                TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(EmailActivity.this, listTracking);
+//                lvTracking.setAdapter(adapte);
+                if (listTracking_userEmail != null && listTracking_userEmail.size() > 0) {
+                    List<Tracking_value_defaults> list = new ArrayList<>();
+                    for (Tracking_value_defaults email : listTracking) {
+                        for (int i = 0; i < listTracking_userEmail.size(); i++) {
+                            if (email.getTracking_value_default_id() == listTracking_userEmail.get(i).getTracking_value_default_id()) {
+                                email.setTracking(true);
+                                list.add(email);
+                                i = listTracking_userEmail.size();
+                            } else {
+                                if (i == listTracking_userEmail.size() - 1) {
+                                    email.setTracking(false);
+                                    list.add(email);
+                                }
+
+                            }
+                        }
+
+                    }
+                    listTracking = list;
+                    TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(EmailActivity.this, listTracking);
+                    lvTracking.setAdapter(adapte);
+                } else {
+                    TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(EmailActivity.this, listTracking);
+                    lvTracking.setAdapter(adapte);
+                }
             }
 
             @Override
@@ -275,12 +351,13 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
 
     public void getUserEmail() {
         ServiceAPI apiTracking = retrofit.create(ServiceAPI.class);
-        Call<MAPIResponse<UserEmail>> user_email = apiTracking.get_user_email(preferences.getIntValue(Constants.USER_ID, 0), mEmail.getEmail_user_id(), preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.PARTNER_ID, 0));
+        Call<MAPIResponse<UserEmail>> user_email = apiTracking.get_user_email(preferences.getIntValue(Constants.USER_ID, 0), mEmail.getUser_email_id(), preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.PARTNER_ID, 0));
         user_email.enqueue(new Callback<MAPIResponse<UserEmail>>() {
             @Override
             public void onResponse(Call<MAPIResponse<UserEmail>> call, Response<MAPIResponse<UserEmail>> response) {
                 LogUtils.api("", call, response);
                 listTracking_userEmail = response.body().getResult().getValuesDefault();
+                check = response.body().getResult().getUserId();
                 ValueDefautAdapter adapte = new ValueDefautAdapter(EmailActivity.this, listTracking_userEmail);
                 lvTracking.setAdapter(adapte);
             }
@@ -319,6 +396,8 @@ public class EmailActivity extends BaseAppCompatActivity implements Callback<MAP
 
     @Override
     public void Click(int id) {
+        Log.d("click",id+"");
         order_contract_id = id;
+        this.id = id;
     }
 }

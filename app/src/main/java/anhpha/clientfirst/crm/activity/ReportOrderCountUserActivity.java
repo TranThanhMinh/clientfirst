@@ -144,7 +144,7 @@ public class ReportOrderCountUserActivity extends BaseAppCompatActivity implemen
         }
 
         PieDataSet dataSet = new PieDataSet(entries, "AP DMS");
-        dataSet.setSliceSpace(3f);
+        dataSet.setSliceSpace(1f);
         dataSet.setSelectionShift(5f);
 
         // add a lot of colors

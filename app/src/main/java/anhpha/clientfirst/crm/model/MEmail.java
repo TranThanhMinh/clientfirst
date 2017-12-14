@@ -7,7 +7,8 @@ import java.util.List;
  * Created by mc975 on 2/9/17.
  */
 public class MEmail implements Serializable {
-    private int email_user_id;
+
+    private int user_email_id;
     private int  client_id;
     private int client_delivery_id;
     private String content_email;
@@ -16,6 +17,13 @@ public class MEmail implements Serializable {
     private List<Tracking_value_defaults> values_default;
     private int user_id;
     private String user_name;
+    public int getUser_email_id() {
+        return user_email_id;
+    }
+
+    public void setUser_email_id(int user_email_id) {
+        this.user_email_id = user_email_id;
+    }
 
     public String getOrder_contract_name() {
         return order_contract_name;
@@ -65,13 +73,6 @@ public class MEmail implements Serializable {
 
 
 
-    public int getEmail_user_id() {
-        return email_user_id;
-    }
-
-    public void setEmail_user_id(int email_user_id) {
-        this.email_user_id = email_user_id;
-    }
 
     public int getClient_id() {
         return client_id;

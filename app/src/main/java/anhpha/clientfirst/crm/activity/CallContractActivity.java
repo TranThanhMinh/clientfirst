@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,14 +62,17 @@ public class CallContractActivity extends BaseAppCompatActivity implements Callb
     RecyclerView lvTracking;
     @Bind(R.id.tvShow)
     TextView tvShow;
+    boolean isHide =false;
+    boolean edit =false;
     private List<Tracking_value_defaults> listTracking;
     private List<Tracking_value_defaults> listTracking_userCall = new ArrayList<>();
     MCall mCall = new MCall();
     MOrder mClient = new MOrder();
     Retrofit retrofit;
+    UserEmail userEmail;
     Preferences preferences;
     int color_id, display = 1;
-
+    SwitchCompat switchCompat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,11 +99,13 @@ public class CallContractActivity extends BaseAppCompatActivity implements Callb
 //        if(mClient.getAddress()!=null && !mClient.getAddress().isEmpty()){
 //            tvAddress.setVisibility(View.VISIBLE);
 //        }
-        SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
+         switchCompat = (SwitchCompat) findViewById(R.id
                 .switchButton);
 
         retrofit = getConnect();
         if (mCall == null) {
+             isHide =true;
+            edit =true;
             tvShow.setVisibility(View.GONE);
             mCall = new MCall();
             getTracking_value_default();
@@ -115,8 +121,11 @@ public class CallContractActivity extends BaseAppCompatActivity implements Callb
                     }
                 }
             });
+
         }
-        if (mCall.getCall_user_id() > 0) {
+        if (mCall.getUser_call_id() > 0) {
+             isHide = false;
+            edit = false;
             tvShow.setVisibility(View.VISIBLE);
             tvShow.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -129,6 +138,7 @@ public class CallContractActivity extends BaseAppCompatActivity implements Callb
                 switchCompat.setChecked(true);
             else switchCompat.setChecked(false);
             etContent.setFocusable(false);
+            display= mCall.getDisplay_type();
             getUserCall();
         }
 
@@ -151,8 +161,34 @@ public class CallContractActivity extends BaseAppCompatActivity implements Callb
             public void onResponse(Call<MAPIResponse<List<Tracking_value_defaults>>> call, Response<MAPIResponse<List<Tracking_value_defaults>>> response) {
                 listTracking = response.body().getResult();
                 LogUtils.api("", call, response);
-                TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CallContractActivity.this, listTracking);
-                lvTracking.setAdapter(adapte);
+                //TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CallContractActivity.this, listTracking);
+                //lvTracking.setAdapter(adapte);
+                if (listTracking_userCall != null && listTracking_userCall.size() > 0) {
+                    List<Tracking_value_defaults> list = new ArrayList<>();
+                    for (Tracking_value_defaults email : listTracking) {
+                        for (int i = 0; i < listTracking_userCall.size(); i++) {
+                            if (email.getTracking_value_default_id() == listTracking_userCall.get(i).getTracking_value_default_id()) {
+                                email.setTracking(true);
+                                list.add(email);
+                                i = listTracking_userCall.size();
+                            }
+                            else {
+                                if(i == listTracking_userCall.size()-1) {
+                                    email.setTracking(false);
+                                    list.add(email);
+                                }
+
+                            }
+                        }
+
+                    }
+                    listTracking = list;
+                    TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CallContractActivity.this, listTracking);
+                    lvTracking.setAdapter(adapte);
+                } else {
+                    TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CallContractActivity.this, listTracking);
+                    lvTracking.setAdapter(adapte);
+                }
             }
 
             @Override
@@ -164,14 +200,17 @@ public class CallContractActivity extends BaseAppCompatActivity implements Callb
 
     public void getUserCall() {
         ServiceAPI apiTracking = retrofit.create(ServiceAPI.class);
-        Call<MAPIResponse<UserEmail>> user_email = apiTracking.get_user_call(preferences.getIntValue(Constants.USER_ID, 0), mCall.getCall_user_id(), preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.PARTNER_ID, 0));
+        Call<MAPIResponse<UserEmail>> user_email = apiTracking.get_user_call(preferences.getIntValue(Constants.USER_ID, 0), mCall.getUser_call_id(), preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.PARTNER_ID, 0));
         user_email.enqueue(new Callback<MAPIResponse<UserEmail>>() {
             @Override
             public void onResponse(Call<MAPIResponse<UserEmail>> call, Response<MAPIResponse<UserEmail>> response) {
                 LogUtils.api("", call, response);
+                userEmail = response.body().getResult();
+
                 listTracking_userCall = response.body().getResult().getValuesDefault();
                 ValueDefautAdapter adapte = new ValueDefautAdapter(CallContractActivity.this, listTracking_userCall);
                 lvTracking.setAdapter(adapte);
+
             }
 
             @Override
@@ -185,11 +224,18 @@ public class CallContractActivity extends BaseAppCompatActivity implements Callb
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_done, menu);
-        if (mCall.getCall_user_id() > 0) {
+        if (isHide == false) {
             for (int i = 0; i < menu.size(); i++) {
                 if (menu.getItem(i).getItemId() == R.id.done)
                     menu.getItem(i).setVisible(false);
+                if (menu.getItem(i).getItemId() == R.id.edit)
+                    menu.getItem(i).setVisible(true);
             }
+        } else for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getItemId() == R.id.done)
+                menu.getItem(i).setVisible(true);
+            if (menu.getItem(i).getItemId() == R.id.edit)
+                menu.getItem(i).setVisible(false);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -222,6 +268,7 @@ public class CallContractActivity extends BaseAppCompatActivity implements Callb
                 mCall.setLatitude(mLastLocation.getLatitude());
                 mCall.setLongitude(mLastLocation.getLongitude());
                 mCall.setOrder_contract_id(mClient.getOrder_contract_id());
+                mCall.setUser_call_id(mCall.getUser_call_id());
                 mCall.setDisplay_type(display);
                 mCall.setActivity_type(1);
                 GetRetrofit().create(ServiceAPI.class)
@@ -238,7 +285,30 @@ public class CallContractActivity extends BaseAppCompatActivity implements Callb
             case android.R.id.home:
                 onBackPressed();
                 return true;
-
+            case R.id.edit:
+                if (preferences.getIntValue(Constants.USER_ID, 0) == userEmail.getUserId()) {
+                    tvShow.setVisibility(View.GONE);
+                    etContent.setFocusable(true);
+                    etContent.setFocusableInTouchMode(true);
+                    etContent.requestFocus();
+                    isHide = true;
+                    invalidateOptionsMenu();
+                    getTracking_value_default();
+                    switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            if (b == true) {
+                                display = 0;
+                                //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
+                            } else {
+                                //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
+                                display = 1;
+                            }
+                        }
+                    });
+                }else
+                    Toast.makeText(mContext, R.string.edit_activity, Toast.LENGTH_SHORT).show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -249,11 +319,20 @@ public class CallContractActivity extends BaseAppCompatActivity implements Callb
         LogUtils.api(TAG, call, (response.body()));
         box.hideAll();
         TokenUtils.checkToken(mContext, response.body().getErrors());
-        if (response.body().isHasErrors()) {
-            Utils.showError(coordinatorLayout, R.string.call_fail);
-        } else {
-            Utils.showDialogSuccess(mContext, R.string.call_done);
+        if(edit==true) {
+            if (response.body().isHasErrors()) {
+                Utils.showError(coordinatorLayout, R.string.call_fail);
+            } else {
+                Utils.showDialogSuccess(mContext, R.string.call_done);
 
+            }
+        }else {
+            if (response.body().isHasErrors()) {
+                Utils.showError(coordinatorLayout, R.string.call_fail1);
+            } else {
+                Utils.showDialogSuccess(mContext, R.string.call_done1);
+
+            }
         }
 
     }

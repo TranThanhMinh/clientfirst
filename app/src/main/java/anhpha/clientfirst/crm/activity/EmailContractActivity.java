@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +67,10 @@ public class EmailContractActivity extends BaseAppCompatActivity implements Call
     Preferences preferences;
     private List<Tracking_value_defaults> listTracking = new ArrayList<>();
     private List<Tracking_value_defaults> listTracking_userEmail = new ArrayList<>();
+    UserEmail userEmail;
     int display = 1;
-
+    boolean isHide = true;
+    SwitchCompat switchCompat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,37 +98,41 @@ public class EmailContractActivity extends BaseAppCompatActivity implements Call
 //            tvAddress.setVisibility(View.VISIBLE);
 //        }
         retrofit = getConnect();
-        SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
+         switchCompat = (SwitchCompat) findViewById(R.id
                 .switchButton);
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b == true) {
-                    display = 0;
-                    //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
-                } else {
-                    //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
-                    display = 1;
-                }
-            }
-        });
+
         if (mEmail == null) {
             mEmail = new MEmail();
             tvShow.setVisibility(View.GONE);
             getTracking_value_default();
+            isHide = true;
+            switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b == true) {
+                        display = 0;
+                        //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
+                        display = 1;
+                    }
+                }
+            });
         }
-        if (mEmail.getEmail_user_id() > 0) {
+        if (mEmail.getUser_email_id() > 0) {
+            Log.d("id_mail", mEmail.getOrder_contract_id() + "");
+            isHide = false;
             tvShow.setVisibility(View.VISIBLE);
             tvShow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                 }
             });
             etContent.setText(mEmail.getContent_email());
             if (mEmail.getDisplay_type() == 0)
                 switchCompat.setChecked(true);
             else switchCompat.setChecked(false);
+            display=mEmail.getDisplay_type();
             etContent.setFocusable(false);
             getUserEmail();
         }
@@ -137,11 +144,18 @@ public class EmailContractActivity extends BaseAppCompatActivity implements Call
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_done, menu);
-        if (mEmail.getEmail_user_id() > 0) {
+        if (isHide == false) {
             for (int i = 0; i < menu.size(); i++) {
                 if (menu.getItem(i).getItemId() == R.id.done)
                     menu.getItem(i).setVisible(false);
+                if (menu.getItem(i).getItemId() == R.id.edit)
+                    menu.getItem(i).setVisible(true);
             }
+        } else for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getItemId() == R.id.done)
+                menu.getItem(i).setVisible(true);
+            if (menu.getItem(i).getItemId() == R.id.edit)
+                menu.getItem(i).setVisible(false);
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -173,6 +187,7 @@ public class EmailContractActivity extends BaseAppCompatActivity implements Call
                 mEmail.setLongitude(mLastLocation.getLongitude());
                 mEmail.setValues_default(list);
                 mEmail.setOrder_contract_id(mClient.getOrder_contract_id());
+                mEmail.setUser_email_id(mEmail.getUser_email_id());
                 mEmail.setDisplay_type(display);
                 mEmail.setActivity_type(1);
                 GetRetrofit().create(ServiceAPI.class)
@@ -189,7 +204,31 @@ public class EmailContractActivity extends BaseAppCompatActivity implements Call
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.edit:
+                if (preferences.getIntValue(Constants.USER_ID, 0) == userEmail.getUserId()) {
+                    tvShow.setVisibility(View.GONE);
+                    etContent.setFocusable(true);
+                    etContent.setFocusableInTouchMode(true);
+                    etContent.requestFocus();
+                    isHide = true;
+                    invalidateOptionsMenu();
+                    getTracking_value_default();
+                    switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            if (b == true) {
+                                display = 0;
+                                //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
+                            } else {
+                                //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
+                                display = 1;
+                            }
+                        }
+                    });
 
+                }else
+                    Toast.makeText(mContext, R.string.edit_activity, Toast.LENGTH_SHORT).show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -211,8 +250,32 @@ public class EmailContractActivity extends BaseAppCompatActivity implements Call
             public void onResponse(Call<MAPIResponse<List<Tracking_value_defaults>>> call, Response<MAPIResponse<List<Tracking_value_defaults>>> response) {
                 listTracking = response.body().getResult();
                 LogUtils.api("", call, response);
-                TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(EmailContractActivity.this, listTracking);
-                lvTracking.setAdapter(adapte);
+                if (listTracking_userEmail != null && listTracking_userEmail.size() > 0) {
+                    List<Tracking_value_defaults> list = new ArrayList<>();
+                    for (Tracking_value_defaults email : listTracking) {
+                        for (int i = 0; i < listTracking_userEmail.size(); i++) {
+                            if (email.getTracking_value_default_id() == listTracking_userEmail.get(i).getTracking_value_default_id()) {
+                                email.setTracking(true);
+                                list.add(email);
+                                i = listTracking_userEmail.size();
+                            }
+                            else {
+                                if(i == listTracking_userEmail.size()-1) {
+                                    email.setTracking(false);
+                                    list.add(email);
+                                }
+
+                            }
+                        }
+
+                    }
+                    listTracking = list;
+                    TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(EmailContractActivity.this, listTracking);
+                    lvTracking.setAdapter(adapte);
+                } else {
+                    TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(EmailContractActivity.this, listTracking);
+                    lvTracking.setAdapter(adapte);
+                }
             }
 
             @Override
@@ -221,14 +284,17 @@ public class EmailContractActivity extends BaseAppCompatActivity implements Call
             }
         });
     }
+
     public void getUserEmail() {
         ServiceAPI apiTracking = retrofit.create(ServiceAPI.class);
-        Call<MAPIResponse<UserEmail>> user_email = apiTracking.get_user_email(preferences.getIntValue(Constants.USER_ID, 0), mEmail.getEmail_user_id(), preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.PARTNER_ID, 0));
+        Call<MAPIResponse<UserEmail>> user_email = apiTracking.get_user_email(preferences.getIntValue(Constants.USER_ID, 0), mEmail.getUser_email_id(), preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.PARTNER_ID, 0));
         user_email.enqueue(new Callback<MAPIResponse<UserEmail>>() {
             @Override
             public void onResponse(Call<MAPIResponse<UserEmail>> call, Response<MAPIResponse<UserEmail>> response) {
                 LogUtils.api("", call, response);
+                userEmail=response.body().getResult();
                 listTracking_userEmail = response.body().getResult().getValuesDefault();
+                // listTracking = response.body().getResult().getValuesDefault();
                 ValueDefautAdapter adapte = new ValueDefautAdapter(EmailContractActivity.this, listTracking_userEmail);
                 lvTracking.setAdapter(adapte);
             }

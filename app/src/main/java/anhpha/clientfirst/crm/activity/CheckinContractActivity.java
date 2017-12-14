@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,7 +62,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CheckinContractActivity extends BaseAppCompatActivity implements Callback<MAPIResponse<MCheckin>>, View.OnClickListener  {
+public class CheckinContractActivity extends BaseAppCompatActivity implements Callback<MAPIResponse<MCheckin>>, View.OnClickListener {
     @Bind(R.id.rvActivities)
     RecyclerView rvActivities;
     @Bind(R.id.etContent)
@@ -90,22 +91,29 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
     private Uri mImageCaptureUri;
     private Retrofit retrofit;
     int display = 1;
+    int user_id = 0;
+    int user = 0;
+    LinearLayout layCamera;
     List<Tracking_value_defaults> listTracking;
     private List<Tracking_value_defaults> listTracking_userCheckin = new ArrayList<>();
+    private boolean isHide = false;
+    private boolean edit = false;
+    UserEmail userEmail;
+    SwitchCompat switchCompat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         box = new DynamicBox(this, R.layout.activity_checkin);
         ButterKnife.bind(this);
         preferences = new Preferences(mContext);
-
+        layCamera = (LinearLayout) findViewById(R.id.layCamera);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.meet);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
-        LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         lvTracking.setHasFixedSize(true);
         lvTracking.setLayoutManager(manager);
@@ -122,21 +130,23 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
         rvActivities.setAdapter(photosAdapter);
 
         tvClientName.setText(mClient.getOrder_contract_name());
-        SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
+         switchCompat = (SwitchCompat) findViewById(R.id
                 .switchButton);
-        retrofit =getConnect();
-        if(mCheckin == null) {
+        retrofit = getConnect();
+        if (mCheckin == null) {
+            isHide = true;
+            edit = true;
             tvShow.setVisibility(View.GONE);
             mCheckin = new MCheckin();
             getTracking_value_default();
+            user =0;
             switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     if (b == true) {
                         display = 0;
                         //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                    } else {
                         //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
                         display = 1;
                     }
@@ -146,7 +156,10 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
 
 
         ivCamera.setOnClickListener(this);
-        if(mCheckin.getUser_checkin_id() > 0){
+        if (mCheckin.getUser_checkin_id() > 0) {
+            user =mCheckin.getUser_checkin_id();
+            isHide = false;
+            edit = false;
             tvShow.setVisibility(View.VISIBLE);
             tvShow.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -155,9 +168,10 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
                 }
             });
             getUserCheckin();
-            if(mCheckin.getDisplay_type()== 0)
+            if (mCheckin.getDisplay_type() == 0)
                 switchCompat.setChecked(true);
             else switchCompat.setChecked(false);
+            display=mCheckin.getDisplay_type();
             etContent.setText(mCheckin.getContent_checkin());
             etContent.setFocusable(false);
             ivCamera.setVisibility(View.GONE);
@@ -169,11 +183,14 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
                     .enqueue(new Callback<MAPIResponse<MCheckin>>() {
                         @Override
                         public void onResponse(Call<MAPIResponse<MCheckin>> call, Response<MAPIResponse<MCheckin>> response) {
-                            TokenUtils.checkToken(mContext,response.body().getErrors());
-                            mCheckin= response.body().getResult();
+                            TokenUtils.checkToken(mContext, response.body().getErrors());
+                            mCheckin = response.body().getResult();
                             photos = mCheckin.getPhotos();
-                            photosAdapter.setPhotoList(photos);
-                            photosAdapter.notifyDataSetChanged();
+                            if (photos != null && photos.size() > 0) {
+                                photosAdapter.setPhotoList(photos);
+                                photosAdapter.notifyDataSetChanged();
+                                layCamera.setVisibility(View.VISIBLE);
+                            } else layCamera.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -188,17 +205,18 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
         photosAdapter = new PhotosAdapter(this, photos, new PhotosAdapter.IPhotoCallback() {
             @Override
             public void select(int position) {
-                String photo= photos.get(position).url + photos.get(position).name;
-                if(photos.get(position).local != null) {
-                    photo = photos.get(position).local ;
-                    LogUtils.d(photo,"local","photo");
+                String photo = photos.get(position).url + photos.get(position).name;
+                if (photos.get(position).local != null) {
+                    photo = photos.get(position).local;
+                    LogUtils.d(photo, "local", "photo");
                 }
-                startActivity(new Intent(mContext, ViewImageActivity.class).putExtra("url",photo));
+                startActivity(new Intent(mContext, ViewImageActivity.class).putExtra("url", photo));
 
             }
         });
         rvActivities.setAdapter(photosAdapter);
     }
+
     public Retrofit getConnect() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Url.URL_user)
@@ -215,8 +233,33 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
             public void onResponse(Call<MAPIResponse<List<Tracking_value_defaults>>> call, Response<MAPIResponse<List<Tracking_value_defaults>>> response) {
                 listTracking = response.body().getResult();
                 LogUtils.api("", call, response);
-                TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CheckinContractActivity.this, listTracking);
-                lvTracking.setAdapter(adapte);
+//                TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CheckinContractActivity.this, listTracking);
+//                lvTracking.setAdapter(adapte);
+                if (listTracking_userCheckin != null && listTracking_userCheckin.size() > 0) {
+                    List<Tracking_value_defaults> list = new ArrayList<>();
+                    for (Tracking_value_defaults email : listTracking) {
+                        for (int i = 0; i < listTracking_userCheckin.size(); i++) {
+                            if (email.getTracking_value_default_id() == listTracking_userCheckin.get(i).getTracking_value_default_id()) {
+                                email.setTracking(true);
+                                list.add(email);
+                                i = listTracking_userCheckin.size();
+                            } else {
+                                if (i == listTracking_userCheckin.size() - 1) {
+                                    email.setTracking(false);
+                                    list.add(email);
+                                }
+
+                            }
+                        }
+
+                    }
+                    listTracking = list;
+                    TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CheckinContractActivity.this, listTracking);
+                    lvTracking.setAdapter(adapte);
+                } else {
+                    TrackingValueDefautAdapter adapte = new TrackingValueDefautAdapter(CheckinContractActivity.this, listTracking);
+                    lvTracking.setAdapter(adapte);
+                }
             }
 
             @Override
@@ -225,16 +268,19 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
             }
         });
     }
+
     public void getUserCheckin() {
         ServiceAPI apiTracking = retrofit.create(ServiceAPI.class);
-        Call<MAPIResponse<UserEmail>> user_email = apiTracking.get_user_meeting(preferences.getIntValue(Constants.USER_ID, 0),mCheckin.getUser_checkin_id(), preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.PARTNER_ID, 0));
+        Call<MAPIResponse<UserEmail>> user_email = apiTracking.get_user_meeting(preferences.getIntValue(Constants.USER_ID, 0), mCheckin.getUser_checkin_id(), preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.PARTNER_ID, 0));
         user_email.enqueue(new Callback<MAPIResponse<UserEmail>>() {
             @Override
             public void onResponse(Call<MAPIResponse<UserEmail>> call, Response<MAPIResponse<UserEmail>> response) {
                 LogUtils.api("", call, response);
-                listTracking_userCheckin =response.body().getResult().getValuesDefault();
+                userEmail = response.body().getResult();
+                listTracking_userCheckin = response.body().getResult().getValuesDefault();
                 ValueDefautAdapter adapte = new ValueDefautAdapter(CheckinContractActivity.this, listTracking_userCheckin);
                 lvTracking.setAdapter(adapte);
+
             }
 
             @Override
@@ -243,18 +289,27 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
             }
         });
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_done, menu);
-        if(mCheckin.getUser_checkin_id()>0){
+        if (isHide == false) {
             for (int i = 0; i < menu.size(); i++) {
-                if(menu.getItem(i).getItemId() == R.id.done)
+                if (menu.getItem(i).getItemId() == R.id.done)
                     menu.getItem(i).setVisible(false);
+                if (menu.getItem(i).getItemId() == R.id.edit)
+                    menu.getItem(i).setVisible(true);
             }
+        } else for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getItemId() == R.id.done)
+                menu.getItem(i).setVisible(true);
+            if (menu.getItem(i).getItemId() == R.id.edit)
+                menu.getItem(i).setVisible(false);
         }
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -275,7 +330,6 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
                         tracking.setTracking(false);
                     }
                 }
-
                 mCheckin.setValues_default(list);
                 mCheckin.setClient_id(mClient.getClient_id());
                 mCheckin.setUser_id(preferences.getIntValue(Constants.USER_ID, 0));
@@ -283,6 +337,7 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
                 mCheckin.setLatitude(mLastLocation.getLatitude());
                 mCheckin.setLongitude(mLastLocation.getLongitude());
                 mCheckin.setOrder_contract_id(mClient.getOrder_contract_id());
+                mCheckin.setUser_checkin_id(user);
                 mCheckin.setDisplay_type(display);
                 mCheckin.setActivity_type(1);
                 GetRetrofit().create(ServiceAPI.class)
@@ -298,18 +353,47 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.edit:
+                if (preferences.getIntValue(Constants.USER_ID, 0) == userEmail.getUserId()) {
+                    tvShow.setVisibility(View.GONE);
+                    etContent.setFocusable(true);
+                    etContent.setFocusableInTouchMode(true);
+                    etContent.requestFocus();
+                    isHide = true;
+                    invalidateOptionsMenu();
+                    getTracking_value_default();
+                    layCamera.setVisibility(View.VISIBLE);
+                    ivCamera.setVisibility(View.VISIBLE);
 
+                    switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            if (b == true) {
+                                display = 0;
+                                //  Toast.makeText(mContext, " chon", Toast.LENGTH_SHORT).show();
+                            } else {
+                                //Toast.makeText(mContext, "khong chon", Toast.LENGTH_SHORT).show();
+                                display = 1;
+                            }
+                        }
+                    });
+                } else
+                    Toast.makeText(mContext, R.string.edit_activity, Toast.LENGTH_SHORT).show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-    private void uploadImage(final List<MPhoto> photos ){
-        if(photos.size() == 0){
-            Utils.showDialogSuccess(mContext, R.string.checkin_client_done);
+
+    private void uploadImage(final List<MPhoto> photos) {
+        if (photos.size() == 0) {
+            if (edit == true)
+                Utils.showDialogSuccess(mContext, R.string.checkin_client_done);
+            else Utils.showDialogSuccess(mContext, R.string.checkin_client_done1);
         }
 
-        for (final MPhoto p : photos){
-            if(p.local != null) {
+        for (final MPhoto p : photos) {
+            if (p.local != null) {
                 File file = new File(p.local);
                 RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
                 MultipartBody.Part imagenPerfil = null;
@@ -328,7 +412,7 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
                             @Override
                             public void onResponse(Call<MAPIResponse<MPhoto>> call, Response<MAPIResponse<MPhoto>> response) {
                                 LogUtils.api(TAG, call, (response.body()));
-                                TokenUtils.checkToken(mContext,response.body().getErrors());
+                                TokenUtils.checkToken(mContext, response.body().getErrors());
                                 photos.remove(p);
                                 uploadImage(photos);
                             }
@@ -343,20 +427,21 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
                 box.showLoadingLayout();
                 LogUtils.d(TAG, "getUserActivities ", "start");
                 break;
-            }else {
+            } else {
                 photos.remove(p);
                 uploadImage(photos);
                 break;
             }
         }
     }
+
     @Override
     public void onResponse(Call<MAPIResponse<MCheckin>> call, Response<MAPIResponse<MCheckin>> response) {
         LogUtils.api(TAG, call, (response.body()));
         box.hideAll();
-        TokenUtils.checkToken(mContext,response.body().getErrors());
+        TokenUtils.checkToken(mContext, response.body().getErrors());
         mCheckin = response.body().getResult();
-        if(!response.body().isHasErrors()){
+        if (!response.body().isHasErrors()) {
             uploadImage(photos);
         }
 
@@ -366,12 +451,14 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
     public void onFailure(Call<MAPIResponse<MCheckin>> call, Throwable t) {
         LogUtils.d(TAG, "getUserActivities ", t.toString());
         box.hideAll();
-        Utils.showError(coordinatorLayout, R.string.checkin_client_fail);
+        if (edit == true)
+            Utils.showError(coordinatorLayout, R.string.checkin_client_fail);
+        else Utils.showError(coordinatorLayout, R.string.checkin_client_fail1);
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
 
             case R.id.ivCamera:
                 CharSequence[] charSequences = new CharSequence[2];
@@ -380,10 +467,10 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 builder.setTitle(getResources().getString(R.string.choose_image));
                 builder.setCancelable(true);
-                builder.setItems(charSequences, new  DialogInterface.OnClickListener() {
+                builder.setItems(charSequences, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        switch (i){
+                        switch (i) {
                             case 0:
                                 openCamera();
                                 break;
@@ -422,6 +509,7 @@ public class CheckinContractActivity extends BaseAppCompatActivity implements Ca
             LogUtils.e(TAG, "openCamera", e);
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

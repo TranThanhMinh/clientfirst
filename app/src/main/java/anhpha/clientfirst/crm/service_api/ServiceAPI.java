@@ -299,13 +299,16 @@ public interface ServiceAPI {
 
     @Multipart
     @POST("upload_file")
-    Call<Result_upload_photo> upload_file ( @Header("object_id") int object_id, @Header("token") String token, @Header("user_id") int user_id, @Header("device") String device, @Header("partner_id") int partner_id, @Header("type") String type, @Part MultipartBody.Part photo);
+    Call<Result_upload_photo> upload_file(@Header("object_id") int object_id, @Header("token") String token, @Header("user_id") int user_id, @Header("device") String device, @Header("partner_id") int partner_id, @Header("type") String type, @Part MultipartBody.Part photo);
 
 
     @DELETE("delete_photo ")
     Call<Result_upload_photo> getDelete_photo(@Header("name") String name, @Header("code") String code, @Header("object_id") int object_id, @Header("token") String token, @Header("user_id") int user_id, @Header("device") String device, @Header("partner_id") int partner_id, @Header("type") String type, @Header("order_id") int order_id);
-//        @GET("get_users ")
+
+    //        @GET("get_users ")
 //        Call<Result_user> getUser(@Header("user_id") int user_id, @Header("partner_id") int partner_id, @Header("token") String token);
+    @DELETE("delete_file ")
+    Call<Result_upload_photo> delete_file(@Header("object_id") int object_id, @Header("token") String token, @Header("user_id") int user_id, @Header("partner_id") int partner_id);
 
     //Focus
     @GET("get_clients_focus")
@@ -356,6 +359,7 @@ public interface ServiceAPI {
 
     @GET("get_clients_by_parent")
     Call<MAPIResponse<List<CompanyExist>>> get_clients_by_parent(@Header("token") String token, @Header("user_id") int user_id, @Header("partner_id") int partner_id, @Header("object_id") int object_id, @Header("type") int type);
+
     @GET("get_clients")
     Call<MAPIResponse<List<CompanyExist>>> get_clients(@Header("token") String token, @Header("user_id") int user_id, @Header("partner_id") int partner_id, @Header("object_id") int object_id, @Header("type") int type);
 

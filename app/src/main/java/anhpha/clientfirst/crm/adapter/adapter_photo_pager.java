@@ -1,7 +1,6 @@
 package anhpha.clientfirst.crm.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,18 +10,16 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.Serializable;
 import java.util.List;
 
 import anhpha.clientfirst.crm.R;
-import anhpha.clientfirst.crm.activity.Show_photo_activity;
 import anhpha.clientfirst.crm.model.Photo;
 
 /**
  * Created by Administrator on 9/6/2017.
  */
 
-public class adapter_photo_expend extends RecyclerView.Adapter<adapter_photo_expend.MyViewHolder> {
+public class adapter_photo_pager extends RecyclerView.Adapter<adapter_photo_pager.MyViewHolder> {
     Context context;
     List<Photo> list;
     public interface funcDelete_lvImage{
@@ -30,7 +27,7 @@ public class adapter_photo_expend extends RecyclerView.Adapter<adapter_photo_exp
         void Delete_photo_onl(int pos);
     }
     private funcDelete_lvImage delete_lvImage;
-    public adapter_photo_expend(Context context, List<Photo> list,funcDelete_lvImage delete_lvImage) {
+    public adapter_photo_pager(Context context, List<Photo> list, funcDelete_lvImage delete_lvImage) {
         this.list = list;
         this.context = context;
         this.delete_lvImage = delete_lvImage;
@@ -39,7 +36,7 @@ public class adapter_photo_expend extends RecyclerView.Adapter<adapter_photo_exp
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_photo, parent, false);
+                .inflate(R.layout.item_photo_pager, parent, false);
 
         return new MyViewHolder(itemView);
     }

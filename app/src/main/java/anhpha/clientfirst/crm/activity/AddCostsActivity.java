@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +35,7 @@ import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.io.File;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,6 +62,8 @@ import anhpha.clientfirst.crm.model.MExpend;
 import anhpha.clientfirst.crm.model.MOrder;
 import anhpha.clientfirst.crm.model.MOrders;
 import anhpha.clientfirst.crm.model.Photo;
+import anhpha.clientfirst.crm.model.Photo1;
+import anhpha.clientfirst.crm.model.Photo2;
 import anhpha.clientfirst.crm.model.Result_upload_photo;
 import anhpha.clientfirst.crm.service_api.ServiceAPI;
 import anhpha.clientfirst.crm.utils.LogUtils;
@@ -74,6 +78,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static anhpha.clientfirst.crm.adapter.adapter_History_orders.lvImage;
 
 
 /**
@@ -95,6 +101,8 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
     MActivityItem mActivityItem = new MActivityItem();
     private double prePay;
     private List<Photo> lvImage = new ArrayList<>();
+    private List<Photo1> lvImage_copy = new ArrayList<>();
+    private List<Photo2> lvImage_crop = new ArrayList<>();
     private boolean result;
     private TextView tvName, tvAddress, tvImage;
     EditText tvDate;
@@ -309,6 +317,15 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
                 }
                 tvDate.setText(expend.getExpendDate());
                 lvImage = expend.getPhotos();
+
+                for(Photo p:lvImage){
+                    Photo1 photo1 = new Photo1();
+                    photo1.setPhotoId(p.getPhotoId());
+                    photo1.setObjectId(p.getObjectId());
+                    photo1.setName(p.getName());
+                    photo1.setUrl(p.getUrl());
+                    lvImage_copy.add(photo1);
+                }
                 if (lvImage != null && lvImage.size() > 0) {
                     lvPhoto.setVisibility(View.VISIBLE);
                     tvImage.setVisibility(View.VISIBLE);
@@ -461,6 +478,97 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
         });
     }
 
+    //xóa photo chưa được gửi lên.
+    @Override
+    public void Delete_photo_off(final int pos) {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_delete_show_photo);
+        Button btDelete = (Button) dialog.findViewById(R.id.btDelete);
+        Button btShow = (Button) dialog.findViewById(R.id.btShow);
+        btShow.setVisibility(View.GONE);
+//        btShow.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(getApplicationContext(), Show_photo_activity1.class).putExtra("crop", (ArrayList<Photo2>) lvImage_crop).putExtra("list", (Serializable) lvImage_copy));
+//                dialog.dismiss();
+//            }
+//        });
+        btDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+              //  final Photo photo = lvImage.get(pos);
+                lvImage.remove(pos);
+//                for(int i =0;i<lvImage_crop.size();i++){
+//                    if(lvImage_crop.get(i).getFilePart()==photo.getFilePart()){
+//                        lvImage_crop.remove(i);
+//                    }
+//                }
+                getLoad_photo();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    //xóa photo đã oline.
+    @Override
+    public void Delete_photo_onl(final int pos) {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_delete_show_photo);
+        Button btDelete = (Button) dialog.findViewById(R.id.btDelete);
+        Button btShow = (Button) dialog.findViewById(R.id.btShow);
+        if(add==1){
+            btShow.setVisibility(View.GONE);
+            btDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Photo photo = lvImage.get(pos);
+                    ServiceAPI history_orders = retrofit_photo.create(ServiceAPI.class);
+                    Call<Result_upload_photo> call = history_orders.getDelete_photo(photo.getName(), "avarta", photo.getPhotoId(), preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.USER_ID, 0), "a", preferences.getIntValue(Constants.PARTNER_ID, 0), "ep", photo.getObjectId());
+                    call.enqueue(new Callback<Result_upload_photo>() {
+                        public void onResponse(Call<Result_upload_photo> call, Response<Result_upload_photo> response) {
+                            LogUtils.api("", call, response);
+                            if (response.body().getHasErrors() == false) {
+                                lvImage.remove(pos);
+//                                for(Photo1 photo1:lvImage_copy){
+//                                    if(photo1.getPhotoId()==photo.getPhotoId()){
+//                                        lvImage_copy.remove(photo1);
+//                                    }
+//                                }
+//                                for(int i =0;i<lvImage_copy.size();i++){
+//                                    if(lvImage_copy.get(i).getFilePart()==photo.getFilePart()){
+//                                        lvImage_copy.remove(i);
+//                                    }
+//                                }
+                                getLoad_photo();
+                                dialog.dismiss();
+                                Toast.makeText(AddCostsActivity.this, R.string.srtDone, Toast.LENGTH_SHORT).show();
+                            } else
+                                Toast.makeText(AddCostsActivity.this, R.string.srtFalse, Toast.LENGTH_SHORT).show();
+                        }
+                        @Override
+                        public void onFailure(Call<Result_upload_photo> call, Throwable t) {
+                            Log.d("Update_staus2222", call.toString());
+                        }
+                    });
+                }
+            });
+
+        }else {
+            btDelete.setVisibility(View.GONE);
+            btShow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(), Show_photo_activity1.class).putExtra("list", (Serializable) lvImage));
+                    dialog.dismiss();
+                }
+            });
+        }
+        dialog.show();
+    }
     public void funcNotification(int im) {
 
         if (im == 1) {
@@ -659,7 +767,24 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
                 photo.setName("");
                 photo.setUrl("");
                 photo.setFilePart(selectedImage);
+
+
+
+//                Photo2 photo1 = new Photo2();
+//                photo1.setCode("");
+//                photo1.setHeight(0);
+//                photo1.setWidth(0);
+//                photo1.setObjectId(0);
+//                photo1.setOrderNo(0);
+//                photo1.setPhotoId(0);
+//                photo1.setType(0);
+//                photo1.setName("");
+//                photo1.setUrl("");
+//                photo1.setFilePart(selectedImage);
+
                 lvImage.add(photo);
+//
+//                lvImage_crop.add(photo1);
                 getLoad_photo();
 
                 Log.d("result.getUri", result.getUri().toString());
@@ -700,23 +825,7 @@ public class AddCostsActivity extends BaseAppCompatActivity implements View.OnCl
         Status_id = status_id;
     }
 
-    //xóa photo chưa được gửi lên.
-    @Override
-    public void Delete_photo_off(final int pos) {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.activity_delete_photo);
-        Button btDelete = (Button) dialog.findViewById(R.id.btDelete);
-        btDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                lvImage.remove(pos);
-                getLoad_photo();
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
+
 
     @Override
     public void onDateSet(DatePickerDialog view, int Year, int Month, int Day) {

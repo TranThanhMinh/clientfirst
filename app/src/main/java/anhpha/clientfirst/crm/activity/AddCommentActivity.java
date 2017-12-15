@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import anhpha.clientfirst.crm.R;
 import anhpha.clientfirst.crm.configs.Constants;
@@ -42,7 +43,7 @@ public class AddCommentActivity extends BaseAppCompatActivity {
     private Preferences preferences;
     private Retrofit retrofit;
     MActivityItem mActivityItem;
-
+    MComment comment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +86,7 @@ public class AddCommentActivity extends BaseAppCompatActivity {
             @Override
             public void onResponse(Call<MAPIResponse<MComment>> call, Response<MAPIResponse<MComment>> response) {
                 LogUtils.api("", call, response);
-                MComment comment = response.body().getResult();
+                 comment = response.body().getResult();
                 tvNote.setText(comment.getContent_comment());
             }
 
@@ -163,8 +164,12 @@ public class AddCommentActivity extends BaseAppCompatActivity {
                 funcAddComment();
                 break;
             case R.id.edit:
+                if (preferences.getIntValue(Constants.USER_ID, 0) == comment.getUser_id()) {
                 add = 1;
                 invalidateOptionsMenu();
+                } else {
+                    Toast.makeText(mContext, R.string.edit_activity, Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);

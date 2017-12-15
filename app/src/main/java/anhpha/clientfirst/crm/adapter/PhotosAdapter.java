@@ -14,6 +14,7 @@ import java.util.List;
 
 import anhpha.clientfirst.crm.R;
 import anhpha.clientfirst.crm.model.MPhoto;
+import anhpha.clientfirst.crm.model.Photo;
 
 /**
  * Created by Nguyen on 6/9/2015.
@@ -24,15 +25,19 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     private Context mContext;
 
-    private List<MPhoto> photoList;
-
-    public PhotosAdapter(Context context, List<MPhoto> photos, IPhotoCallback callback) {
+    private List<Photo> photoList;
+    public interface funcDelete_lvImage{
+        void Delete_photo_off(int pos);
+        void Delete_photo_onl(int pos);
+    }
+    private funcDelete_lvImage delete_lvImage;
+    public PhotosAdapter(Context context, List<Photo> photos,funcDelete_lvImage delete_lvImage) {
         mContext = context;
         photoList = photos;
-        mCallback = callback;
+        this.delete_lvImage = delete_lvImage;
     }
 
-    public void setPhotoList(List<MPhoto> photos) {
+    public void setPhotoList(List<Photo> photos) {
         photoList = photos;
     }
 
@@ -43,35 +48,32 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        MPhoto o = photoList.get(position);
-        if(o.local != null)
-            Picasso.with(mContext).load(new File(o.local)).resize(200, 200).into(holder.ivPhoto, new com.squareup.picasso.Callback() {
+        Photo photo = photoList.get(position);
+        if(photo.getUrl().contains("http")) {
+            Picasso.with(mContext)
+                    .load(photo.getUrl() + photo.getName())
+                    .fit().centerCrop()
+                    .into(holder.ivPhoto);
+            holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onSuccess() {
-                }
-
-                @Override
-                public void onError() {
-
-                }
-            });
-        else
-            Picasso.with(mContext).load((o.url + o.name)).resize(200, 200).into(holder.ivPhoto, new com.squareup.picasso.Callback() {
-                @Override
-                public void onSuccess() {
-                }
-
-                @Override
-                public void onError() {
-
+                public void onClick(View view) {
+                    delete_lvImage.Delete_photo_onl(position);
                 }
             });
-        holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mCallback.select(position);
-            }
-        });
+        }
+
+        else {
+            Picasso.with(mContext)
+                    .load(photo.getFilePart())
+                    .fit().centerCrop()
+                    .into(holder.ivPhoto);
+            holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    delete_lvImage.Delete_photo_off(position);
+                }
+            });
+        }
     }
 
     @Override
@@ -88,6 +90,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             ivPhoto = (ImageView) v.findViewById(R.id.ivPhoto);
         }
     }
+
     public interface IPhotoCallback {
 
         void select(int i);

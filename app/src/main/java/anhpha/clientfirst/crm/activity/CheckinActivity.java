@@ -1,13 +1,19 @@
 package anhpha.clientfirst.crm.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -20,6 +26,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,12 +49,17 @@ import anhpha.clientfirst.crm.adapter.adapter_orders;
 import anhpha.clientfirst.crm.configs.Constants;
 import anhpha.clientfirst.crm.configs.Preferences;
 import anhpha.clientfirst.crm.cropper.Crop;
+import anhpha.clientfirst.crm.cropper.CropImage.CropImage;
+import anhpha.clientfirst.crm.cropper.CropImage.CropImage_View;
+import anhpha.clientfirst.crm.cropper.CropImage.FileUtils;
 import anhpha.clientfirst.crm.interfaces.Url;
 import anhpha.clientfirst.crm.model.MAPIResponse;
 import anhpha.clientfirst.crm.model.MCheckin;
 import anhpha.clientfirst.crm.model.MClient;
 import anhpha.clientfirst.crm.model.MOrders;
 import anhpha.clientfirst.crm.model.MPhoto;
+import anhpha.clientfirst.crm.model.Photo;
+import anhpha.clientfirst.crm.model.Result_upload_photo;
 import anhpha.clientfirst.crm.model.Tracking_value_defaults;
 import anhpha.clientfirst.crm.model.UserEmail;
 import anhpha.clientfirst.crm.service_api.ServiceAPI;
@@ -64,7 +78,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CheckinActivity extends BaseAppCompatActivity implements Callback<MAPIResponse<MCheckin>>, View.OnClickListener, adapter_orders.Onclick {
+public class CheckinActivity extends BaseAppCompatActivity implements Callback<MAPIResponse<MCheckin>>, View.OnClickListener, adapter_orders.Onclick, PhotosAdapter.funcDelete_lvImage {
     @Bind(R.id.rvActivities)
     RecyclerView rvActivities;
     @Bind(R.id.etContent)
@@ -90,7 +104,8 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
     @Bind(R.id.tvContract)
     TextView tvContract;
     Preferences preferences;
-    protected List<MPhoto> photos;
+    protected List<Photo> photos;
+    private Uri selectedImage;
     protected PhotosAdapter photosAdapter;
     private String filePath = null;
     private Uri mImageCaptureUri;
@@ -103,13 +118,17 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
     private int order_contract_id = 0;
     private int id = 0;
     int user = 0;
+    int check_edit = 0;
+
     @Bind(R.id.tvShow)
     TextView tvShow;
     private boolean isHide = false;
+    private boolean result;
     LinearLayout layout_order;
     LinearLayout layCamera;
     adapter_orders adapter;
     private boolean edit = false;
+    private Retrofit retrofit_photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +168,7 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
             tvAddress.setVisibility(View.VISIBLE);
         }
         retrofit = getConnect();
+        retrofit_photo = func_Upload_photo();
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id
                 .switchButton);
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -167,6 +187,8 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
         });
         if (mCheckin == null) {
             user = 0;
+            check_edit = 1;
+
             isHide = true;
             edit = true;
             mCheckin = new MCheckin();
@@ -177,6 +199,7 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
         ivCamera.setOnClickListener(this);
         if (mCheckin.getUser_checkin_id() > 0) {
             edit = false;
+            check_edit = 0;
             user = mCheckin.getUser_checkin_id();
             isHide = false;
             tvShow.setVisibility(View.VISIBLE);
@@ -212,7 +235,10 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                                 photosAdapter.setPhotoList(photos);
                                 photosAdapter.notifyDataSetChanged();
                                 layCamera.setVisibility(View.VISIBLE);
-                            } else layCamera.setVisibility(View.GONE);
+                            } else {
+                                layCamera.setVisibility(View.GONE);
+                                photos=new ArrayList<>();
+                            }
                         }
 
                         @Override
@@ -222,21 +248,18 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                     });
         }
         photos = new ArrayList<>();
-        photosAdapter = new PhotosAdapter(this, photos, new PhotosAdapter.IPhotoCallback() {
-            @Override
-            public void select(int position) {
-                String photo = photos.get(position).url + photos.get(position).name;
-                if (photos.get(position).local != null) {
-                    photo = photos.get(position).local;
-                    LogUtils.d(photo, "local", "photo");
-                }
-                startActivity(new Intent(mContext, ViewImageActivity.class).putExtra("url", photo));
-
-            }
-        });
+        photosAdapter = new PhotosAdapter(this, photos, CheckinActivity.this);
         rvActivities.setAdapter(photosAdapter);
 
 
+    }
+
+    public Retrofit func_Upload_photo() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Url.URL_utils)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return retrofit;
     }
 
     public Retrofit getConnect() {
@@ -415,6 +438,7 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                 return true;
             case R.id.edit:
                 Log.d("User_id1", check + "");
+                check_edit = 1;
                 if (preferences.getIntValue(Constants.USER_ID, 0) == check) {
                     tvShow.setVisibility(View.GONE);
                     etContent.setFocusable(true);
@@ -424,6 +448,7 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                     invalidateOptionsMenu();
                     getTracking_value_default();
                     getOrder();
+
                     ivCamera.setVisibility(View.VISIBLE);
                     layCamera.setVisibility(View.VISIBLE);
                     layout_order.setVisibility(View.GONE);
@@ -435,19 +460,60 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                 return super.onOptionsItemSelected(item);
         }
     }
-    private void uploadImage(final List<MPhoto> photos) {
+
+    //upload photo đệ quy
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public boolean funcUpload_photo(final int id, final int i) {
+        if (photos.get(i).getUrl().contains("http")) {
+            if (i == 0)
+                result = false;
+            else funcUpload_photo(id, i - 1);
+        } else {
+            ServiceAPI history_orders = retrofit_photo.create(ServiceAPI.class);
+            File file = FileUtils.getFile(this, photos.get(i).getFilePart());
+            if (file != null) {
+                RequestBody requestFile =
+                        RequestBody.create(
+                                MediaType.parse(getContentResolver().getType(photos.get(i).getFilePart())),
+                                file
+                        );
+                // create RequestBody instance from file
+                MultipartBody.Part filePart = MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
+                Call<Result_upload_photo> call = history_orders.upload_file(id, preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.USER_ID, 0), "a", preferences.getIntValue(Constants.PARTNER_ID, 0), "ct", filePart);
+                call.enqueue(new Callback<Result_upload_photo>() {
+                    @Override
+                    public void onResponse(Call<Result_upload_photo> call, Response<Result_upload_photo> response) {
+                        LogUtils.api("", call, response);
+                        if (i == 0)
+                            result = false;
+                        else funcUpload_photo(id, i - 1);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Result_upload_photo> call, Throwable t) {
+                        result = true;
+                    }
+                });
+            } else result = false;
+
+        }
+
+        return result;
+    }
+
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        private void uploadImage(final List<Photo> photos) {
         if (photos.size() == 0) {
             if (edit == true)
                 Utils.showDialogSuccess(mContext, R.string.checkin_client_done);
             else Utils.showDialogSuccess(mContext, R.string.checkin_client_done1);
         }
-        for (final MPhoto p : photos) {
-            if (p.local != null) {
-                File file = new File(p.local);
+        for (final Photo p : photos) {
+            if (p.getFilePart() != null) {
+                File file = FileUtils.getFile(this, p.getFilePart());
                 RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
                 MultipartBody.Part imagenPerfil = null;
                 imagenPerfil = MultipartBody.Part.createFormData("image", file.getName(), requestBody);
-
                 GetRetrofit().create(ServiceAPI.class)
                         .upLoadPhoto(preferences.getStringValue(Constants.TOKEN, "")
                                 , preferences.getIntValue(Constants.USER_ID, 0)
@@ -465,7 +531,6 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
                                 photos.remove(p);
                                 uploadImage(photos);
                             }
-
                             @Override
                             public void onFailure(Call<MAPIResponse<MPhoto>> call, Throwable t) {
                                 LogUtils.d(TAG, "getUserActivities ", t.toString());
@@ -483,7 +548,7 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
             }
         }
     }
-
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onResponse(Call<MAPIResponse<MCheckin>> call, Response<MAPIResponse<MCheckin>> response) {
         LogUtils.api(TAG, call, (response.body()));
@@ -491,7 +556,11 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
         TokenUtils.checkToken(mContext, response.body().getErrors());
         mCheckin = response.body().getResult();
         if (!response.body().isHasErrors()) {
-            uploadImage(photos);
+              uploadImage(photos);
+//            result = funcUpload_photo(mCheckin.getUser_checkin_id(), photos.size() - 1);
+//            if (result == false)
+//                Utils.showDialogSuccess(mContext, R.string.checkin_client_done);
+//            else Utils.showDialogSuccess(mContext, R.string.checkin_client_done1);
         }
     }
 
@@ -508,28 +577,30 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivCamera:
-                CharSequence[] charSequences = new CharSequence[2];
-                charSequences[0] = getString(R.string.camera);
-                charSequences[1] = getString(R.string.library);
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle(getResources().getString(R.string.choose_image));
-                builder.setCancelable(true);
-                builder.setItems(charSequences, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        switch (i) {
-                            case 0:
-                                openCamera();
-                                break;
-                            case 1:
-                                openPictures();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                });
-                builder.show();
+//                CharSequence[] charSequences = new CharSequence[2];
+//                charSequences[0] = getString(R.string.camera);
+//                charSequences[1] = getString(R.string.library);
+//                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+//                builder.setTitle(getResources().getString(R.string.choose_image));
+//                builder.setCancelable(true);
+//                builder.setItems(charSequences, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        switch (i) {
+//                            case 0:
+//                                openCamera();
+//                                break;
+//                            case 1:
+//                                openPictures();
+//                                break;
+//                            default:
+//                                break;
+//                        }
+//                    }
+//                });
+//                builder.show();
+                CropImage.activity(null).setGuidelines(CropImage_View.Guidelines.ON)
+                        .start(CheckinActivity.this);
                 break;
             default:
                 break;
@@ -556,24 +627,101 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // handle result of CropImageActivity
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                String a;
+//                ((ImageView) findViewById(R.id.quick_start_cropped_image)).setImageURI(result.getUri());
+                if (result.getUri().toString().contains("file")) {
+                    a = result.getUri().toString().replace("file://", "");
+                    selectedImage = getImageContentUri(this, new File(Uri.parse(a).toString()));
+                    Log.d("uri", getImageContentUri(this, new File(Uri.parse(a).toString())) + "");
+                }
+                Photo photo = new Photo();
+                photo.setCode("");
+                photo.setHeight(0);
+                photo.setWidth(0);
+                photo.setObjectId(0);
+                photo.setOrderNo(0);
+                photo.setPhotoId(0);
+                photo.setType(0);
+                photo.setName("");
+                photo.setUrl("");
+                photo.setFilePart(selectedImage);
+                photos.add(photo);
+                photosAdapter = new PhotosAdapter(this, photos, CheckinActivity.this);
+                rvActivities.setAdapter(photosAdapter);
+
+                Log.d("result.getUri", result.getUri().toString());
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(this, "Lỗi file: " + result.getError(), Toast.LENGTH_LONG).show();
+            }
+        }
         if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
             if (data != null) {
                 beginCrop(data.getData());
             }
         } else if (requestCode == Crop.REQUEST_CROP) {
+
             if (data != null) {
-                filePath = data.getStringExtra("file").toString();
-                MPhoto p = new MPhoto();
-                p.local = filePath;
-                photos.add(p);
-                photosAdapter.setPhotoList(photos);
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//                filePath = data.getStringExtra("file").toString();
+//                MPhoto p = new MPhoto();
+//                p.local = filePath;
+//                photos.add(p);
+//                photosAdapter.setPhotoList(photos);
+//                photosAdapter.notifyDataSetChanged();
+//                layCamera.setVisibility(View.VISIBLE);
+                String a;
+//                ((ImageView) findViewById(R.id.quick_start_cropped_image)).setImageURI(result.getUri());
+                if (result.getUri().toString().contains("file")) {
+                    a = result.getUri().toString().replace("file://", "");
+                    selectedImage = getImageContentUri(this, new File(Uri.parse(a).toString()));
+                    Log.d("uri", getImageContentUri(this, new File(Uri.parse(a).toString())) + "");
+                }
+                Photo photo = new Photo();
+                photo.setCode("");
+                photo.setHeight(0);
+                photo.setWidth(0);
+                photo.setObjectId(0);
+                photo.setOrderNo(0);
+                photo.setPhotoId(0);
+                photo.setType(0);
+                photo.setName("");
+                photo.setUrl("");
+                photo.setFilePart(selectedImage);
+                photos.add(photo);
                 photosAdapter.notifyDataSetChanged();
-                layCamera.setVisibility(View.VISIBLE);
+
 
             }
         } else if (requestCode == Constants.PICK_FROM_CAMERA) {
             if (mImageCaptureUri != null) {
                 beginCrop(mImageCaptureUri);
+            }
+        }
+    }
+
+    public static Uri getImageContentUri(Context context, File imageFile) {
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Images.Media._ID},
+                MediaStore.Images.Media.DATA + "=? ",
+                new String[]{filePath}, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+            cursor.close();
+            return Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return context.getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
             }
         }
     }
@@ -588,5 +736,79 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
     public void Click(int id) {
         this.id = id;
         order_contract_id = id;
+    }
+    //xóa photo chưa được gửi lên.
+    @Override
+    public void Delete_photo_off(final int pos) {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_delete_show_photo);
+        Button btDelete = (Button) dialog.findViewById(R.id.btDelete);
+        Button btShow = (Button) dialog.findViewById(R.id.btShow);
+        btShow.setVisibility(View.GONE);
+        btDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                photos.remove(pos);
+
+                photosAdapter = new PhotosAdapter(CheckinActivity.this, photos, CheckinActivity.this);
+                rvActivities.setAdapter(photosAdapter);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    //xóa photo đã oline.
+    @Override
+    public void Delete_photo_onl(final int pos) {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_delete_show_photo);
+        Button btDelete = (Button) dialog.findViewById(R.id.btDelete);
+        Button btShow = (Button) dialog.findViewById(R.id.btShow);
+        if(isHide == true){
+            btShow.setVisibility(View.GONE);
+            btDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Photo photo = photos.get(pos);
+                    ServiceAPI history_orders = retrofit_photo.create(ServiceAPI.class);
+                    Call<Result_upload_photo> call = history_orders.getDelete_photo(photo.getName(), "avarta", photo.getPhotoId(), preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.USER_ID, 0), "a", preferences.getIntValue(Constants.PARTNER_ID, 0), "ci", photo.getObjectId());
+                    call.enqueue(new Callback<Result_upload_photo>() {
+                        public void onResponse(Call<Result_upload_photo> call, Response<Result_upload_photo> response) {
+                            LogUtils.api("", call, response);
+                            if (response.body().getHasErrors() == false) {
+                                photos.remove(pos);
+
+
+                                photosAdapter = new PhotosAdapter(CheckinActivity.this, photos, CheckinActivity.this);
+                                rvActivities.setAdapter(photosAdapter);
+                                dialog.dismiss();
+                                Toast.makeText(CheckinActivity.this, R.string.srtDone, Toast.LENGTH_SHORT).show();
+                            } else
+                                Toast.makeText(CheckinActivity.this, R.string.srtFalse, Toast.LENGTH_SHORT).show();
+                        }
+                        @Override
+                        public void onFailure(Call<Result_upload_photo> call, Throwable t) {
+                            Log.d("Update_staus2222", call.toString());
+                        }
+                    });
+                }
+            });
+
+        }else {
+            btDelete.setVisibility(View.GONE);
+            btShow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(), Show_photo_activity1.class).putExtra("list", (Serializable) photos));
+                    dialog.dismiss();
+                }
+            });
+        }
+        dialog.show();
     }
 }

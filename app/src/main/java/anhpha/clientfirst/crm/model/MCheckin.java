@@ -53,7 +53,7 @@ public class MCheckin  implements Serializable{
     }
 
 
-    private List<MPhoto> photos;
+    private List<Photo> photos;
 
     public List<Tracking_value_defaults> getValues_default() {
         return values_default;
@@ -120,11 +120,11 @@ public class MCheckin  implements Serializable{
         this.user_id = user_id;
     }
 
-    public List<MPhoto> getPhotos() {
+    public List<Photo> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<MPhoto> photos) {
+    public void setPhotos(List<Photo> photos) {
         this.photos = photos;
     }
 }

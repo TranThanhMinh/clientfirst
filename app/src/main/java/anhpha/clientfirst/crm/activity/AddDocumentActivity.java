@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
     private EditText etContent;
     MActivityItem mActivityItem;
     private List<Photo> lvImage = new ArrayList<>();
-
+    Document mDocument;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,7 +145,7 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
             @Override
             public void onResponse(Call<MAPIResponse<Document>> call, Response<MAPIResponse<Document>> response) {
                 LogUtils.api("", call, response);
-                Document mDocument = response.body().getResult();
+                 mDocument = response.body().getResult();
                 etContent.setText(mDocument.getDocumentSubject());
 
                 List<MDocuments> image = mDocument.getDocuments();
@@ -156,7 +157,7 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
                         photo.setWidth(0);
                         photo.setObjectId(0);
                         photo.setOrderNo(0);
-                        photo.setPhotoId(0);
+                        photo.setPhotoId(image.get(i).getDocumetId());
                         photo.setType(0);
                         photo.setName( image.get(i).getName());
                         photo.setUrl(image.get(i).getUrl());
@@ -303,11 +304,15 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
                 funcAddDocument();
                 break;
             case R.id.edit:
+                if (preferences.getIntValue(Constants.USER_ID, 0) == mDocument.getUserId()) {
                 add = 1;
                 invalidateOptionsMenu();
                 lvPhoto.setVisibility(View.VISIBLE);
                 tvImage.setVisibility(View.VISIBLE);
                 imSelect_upload_photo.setVisibility(View.VISIBLE);
+                } else {
+                    Toast.makeText(mContext, R.string.edit_activity, Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -384,20 +389,88 @@ public class AddDocumentActivity extends BaseAppCompatActivity implements View.O
         }
     }
 
+    //xóa photo chưa được gửi lên.
     @Override
     public void Delete_photo_off(final int pos) {
+
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.activity_delete_photo);
+        dialog.setContentView(R.layout.activity_delete_show_photo);
         Button btDelete = (Button) dialog.findViewById(R.id.btDelete);
+        Button btShow = (Button) dialog.findViewById(R.id.btShow);
+        btShow.setVisibility(View.GONE);
+//        btShow.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(getApplicationContext(), Show_photo_activity1.class).putExtra("crop", (ArrayList<Photo2>) lvImage_crop).putExtra("list", (Serializable) lvImage_copy));
+//                dialog.dismiss();
+//            }
+//        });
         btDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //  final Photo photo = lvImage.get(pos);
                 lvImage.remove(pos);
+//                for(int i =0;i<lvImage_crop.size();i++){
+//                    if(lvImage_crop.get(i).getFilePart()==photo.getFilePart()){
+//                        lvImage_crop.remove(i);
+//                    }
+//                }
                 getLoad_photo();
                 dialog.dismiss();
             }
         });
+        dialog.show();
+    }
+
+    //xóa photo đã oline.
+    @Override
+    public void Delete_photo_onl(final int pos) {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_delete_show_photo);
+        Button btDelete = (Button) dialog.findViewById(R.id.btDelete);
+        Button btShow = (Button) dialog.findViewById(R.id.btShow);
+        if(add==1){
+            btShow.setVisibility(View.GONE);
+            btDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Photo photo = lvImage.get(pos);
+                    ServiceAPI history_orders = retrofit_photo.create(ServiceAPI.class);
+                    Call<Result_upload_photo> call = history_orders.delete_file(photo.getPhotoId(),preferences.getStringValue(Constants.TOKEN, ""), preferences.getIntValue(Constants.USER_ID, 0),  preferences.getIntValue(Constants.PARTNER_ID, 0) );
+                    call.enqueue(new Callback<Result_upload_photo>() {
+                        public void onResponse(Call<Result_upload_photo> call, Response<Result_upload_photo> response) {
+                            LogUtils.api("", call, response);
+                            if (response.body().getHasErrors() == false) {
+                                lvImage.remove(pos);
+                                getLoad_photo();
+                                dialog.dismiss();
+                                Toast.makeText(AddDocumentActivity.this, R.string.srtDone, Toast.LENGTH_SHORT).show();
+                            } else
+                                Toast.makeText(AddDocumentActivity.this, R.string.srtFalse, Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<Result_upload_photo> call, Throwable t) {
+                            Log.d("Update_staus2222", call.toString());
+                        }
+                    });
+
+                }
+            });
+
+        }else {
+            btDelete.setVisibility(View.GONE);
+            btShow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(), Show_photo_activity1.class).putExtra("list", (Serializable) lvImage));
+                    dialog.dismiss();
+                }
+            });
+        }
         dialog.show();
     }
 }

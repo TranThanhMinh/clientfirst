@@ -30,13 +30,12 @@
 
             <ImageView
                 android:id="@+id/ivCamera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="40dp"
                 android:layout_alignParentRight="true"
                 android:clickable="true"
-                android:padding="10dp"
                 android:scaleType="centerInside"
-                android:src="@mipmap/ic_dms_64" />
+                android:src="@drawable/ic_camera" />
 
         </RelativeLayout>
 

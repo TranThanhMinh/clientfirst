@@ -20,11 +20,11 @@ import anhpha.clientfirst.crm.model.Photo1;
 /**
  * Created by MinhTran on 7/12/2016.
  */
-public class Pager_Photo_adapter extends PagerAdapter {
+public class Pager_Photo_adapter1 extends PagerAdapter {
     Context context;
-    List<Photo> lvPhotop;
+    List<Photo1> lvPhotop;
     LayoutInflater lay;
-    public Pager_Photo_adapter(Context context, List<Photo> lvPhotop){
+    public Pager_Photo_adapter1(Context context, List<Photo1> lvPhotop){
         this.context =context;
         this.lvPhotop =lvPhotop;
         lay = LayoutInflater.from(context);
@@ -44,28 +44,23 @@ public class Pager_Photo_adapter extends PagerAdapter {
         View v =lay.inflate(R.layout.item_show_photo,null);
         ImageView imPhoto = (ImageView) v.findViewById(R.id.imShow_photo);
 
-        Photo photo = lvPhotop.get(position);
-
+        Photo1 photo = lvPhotop.get(position);
 
 
         if(photo.getUrl().contains("http")) {
-            Log.d("image",photo.getUrl() + photo.getName());
             Picasso.with(context)
                     .load(photo.getUrl() + photo.getName())
                     .fit().centerCrop()
                     .into(imPhoto);
 
         }
-
         else {
             Log.d("image",photo.getFilePart().toString());
             Picasso.with(context)
                     .load(photo.getFilePart())
                     .fit().centerCrop()
                     .into(imPhoto);
-//            Uri uri = Uri.fromFile(mImageFile);
-//            Toast.makeText(getApplicationContext(), ""+uri, Toast.LENGTH_LONG).show();
-            imPhoto.setImageURI(photo.getFilePart());
+
         }
         container.addView(v);
         return v;

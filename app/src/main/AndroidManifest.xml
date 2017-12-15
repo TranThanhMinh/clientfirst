@@ -592,6 +592,13 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan">
         </activity>
+        <activity
+            android:name=".activity.Show_photo_activity1"
+            android:label="@string/email"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
     </application>
 
 </manifest>

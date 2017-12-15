@@ -814,6 +814,7 @@
     <string name="srtHistory_order">Lịch sử giao dịch </string>
     <string name="srtHistory_focus">Lịch sử</string>
     <string name="srtHistory_contract">Lịch sử hợp đồng </string>
+    <string name="srtSee">Xem </string>
     <string name="srtDelete">Xóa </string>
     <string name="srtCancel">Hủy </string>
     <string name="srtEmployees">Liên hệ đã tồn tại</string>

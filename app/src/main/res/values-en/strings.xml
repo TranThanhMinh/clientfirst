@@ -808,6 +808,7 @@
     <string name="srtHistory_focus">History </string>
     <string name="srtHistory_contract">Contract history </string>
     <string name="srtDelete">Delete </string>
+    <string name="srtSee">See </string>
     <string name="srtSelect">Choose </string>
     <string name="srtCancel">Cancel </string>
     <string name="srtEmployees">Contact exist </string>

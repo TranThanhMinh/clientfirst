@@ -63,8 +63,7 @@ public class Pager_Photo_adapter extends PagerAdapter {
                     .load(photo.getFilePart())
                     .fit().centerCrop()
                     .into(imPhoto);
-//            Uri uri = Uri.fromFile(mImageFile);
-//            Toast.makeText(getApplicationContext(), ""+uri, Toast.LENGTH_LONG).show();
+
             imPhoto.setImageURI(photo.getFilePart());
         }
         container.addView(v);

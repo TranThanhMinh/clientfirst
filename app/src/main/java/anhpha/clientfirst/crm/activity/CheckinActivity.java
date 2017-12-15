@@ -673,25 +673,7 @@ public class CheckinActivity extends BaseAppCompatActivity implements Callback<M
 //                photosAdapter.setPhotoList(photos);
 //                photosAdapter.notifyDataSetChanged();
 //                layCamera.setVisibility(View.VISIBLE);
-                String a;
-//                ((ImageView) findViewById(R.id.quick_start_cropped_image)).setImageURI(result.getUri());
-                if (result.getUri().toString().contains("file")) {
-                    a = result.getUri().toString().replace("file://", "");
-                    selectedImage = getImageContentUri(this, new File(Uri.parse(a).toString()));
-                    Log.d("uri", getImageContentUri(this, new File(Uri.parse(a).toString())) + "");
-                }
-                Photo photo = new Photo();
-                photo.setCode("");
-                photo.setHeight(0);
-                photo.setWidth(0);
-                photo.setObjectId(0);
-                photo.setOrderNo(0);
-                photo.setPhotoId(0);
-                photo.setType(0);
-                photo.setName("");
-                photo.setUrl("");
-                photo.setFilePart(selectedImage);
-                photos.add(photo);
+
                 photosAdapter.notifyDataSetChanged();
 
 

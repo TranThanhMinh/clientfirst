@@ -48,22 +48,7 @@ public class Show_photo_activity1 extends Activity implements ViewPager.OnPageCh
         vpPhoto.setOnPageChangeListener(this);
         imClose.setOnClickListener(this);
         list_all = (List<Photo>) getIntent().getSerializableExtra("list");
-//        list = (List<Photo1>) getIntent().getSerializableExtra("list");
-//        list_crop = getIntent().getParcelableArrayListExtra("crop");
-//        for (Photo1 photo1 : list) {
-//            Photo photo = new Photo();
-//            photo.setUrl(photo1.getUrl());
-//            photo.setName(photo1.getName());
-//            photo.setFilePart(photo1.getFilePart());
-//            list_all.add(photo);
-//        }
-//        for (Photo2 photo2 : list_crop) {
-//            Photo photo1 = new Photo();
-//            photo1.setUrl("");
-//            photo1.setName("");
-//            photo1.setFilePart(photo2.getFilePart());
-//            list_all.add(photo1);
-//        }
+
 
         getPhoto();
         setUiPageViewController();
@@ -73,7 +58,6 @@ public class Show_photo_activity1 extends Activity implements ViewPager.OnPageCh
         pager_photo_adapter = new Pager_Photo_adapter(Show_photo_activity1.this, list_all);
         vpPhoto.setAdapter(pager_photo_adapter);
     }
-
     private void setUiPageViewController() {
         dotsCount = pager_photo_adapter.getCount();
         dots = new ImageView[dotsCount];
